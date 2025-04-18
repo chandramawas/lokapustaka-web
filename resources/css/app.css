@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scrollbar custom */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #a3a3a3;
+    /* warna abu */
+    border-radius: 6px;
+}
