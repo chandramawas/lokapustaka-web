@@ -3,8 +3,7 @@
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
         <!-- Left: Logo / Brand -->
         <div class="flex items-center space-x-2">
-            {{-- LOGO --}}
-            <x-icon.logo class="h-4" />
+            <x-icons.logo class="h-4" />
 
             <div class="flex flex-col">
                 <span class="font-medium text-body-md tracking-wide">Lokapustaka</span>

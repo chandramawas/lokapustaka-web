@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\icon;
+namespace App\View\Components\icons;
 
 use Closure;
 use Illuminate\Contracts\View\View;
@@ -21,6 +21,6 @@ class logo extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.icon.logo');
+        return view('components.icons.logo');
     }
 }

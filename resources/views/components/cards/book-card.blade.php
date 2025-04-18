@@ -15,7 +15,7 @@
     {{-- POSTER --}}
     <div class="relative">
         <img src="{{ $poster }}"
-            class="w-full rounded-md aspect-[2/3] object-cover">
+            class="w-full aspect-[2/3] object-cover">
         
         {{-- Badge --}}
         @if ($badge)

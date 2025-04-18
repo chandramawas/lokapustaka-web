@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\ui;
+namespace App\View\Components\buttons;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class featureCard extends Component
+class themeToggle extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class featureCard extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.feature-card');
+        return view('components.buttons.theme-toggle');
     }
 }

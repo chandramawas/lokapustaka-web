@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
-})->name('home');
+    return view('landing');
+})->name('landing');
 
 Route::get('/register', function () {
     return ('Register Page');

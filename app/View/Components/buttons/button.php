@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\ui;
+namespace App\View\Components\buttons;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class iconButton extends Component
+class button extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class iconButton extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.icon-button');
+        return view('components.buttons.button');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components\ui;
+namespace App\View\Components\cards;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class themeToggle extends Component
+class bookCard extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class themeToggle extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.theme-toggle');
+        return view('components.cards.book-card');
     }
 }
