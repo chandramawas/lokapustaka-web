@@ -71,10 +71,10 @@
                     </span>
                 </x-buttons.button>
 
-                <x-ui.dropdown minWidth="200px" right>
+                <x-ui.dropdown minWidth="200px" maxHeight="none" right>
                     {{-- SEC 1 --}}
                     <div
-                        class="p-2 space-y-1 bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark">
+                        class="p-2 space-y-2 bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark">
                         <x-buttons.text-button hoverColor="on-secondary" icon>
                             <x-icons.subscribe />
                             <span>Belum Berlangganan</span>
@@ -82,8 +82,22 @@
                     </div>
 
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
-                    {{-- SEC 1 --}}
-                    <div class="p-2 space-y-1">
+                    {{-- SEC 2 --}}
+                    <div class="p-2 space-y-2">
+                        <x-buttons.text-button icon>
+                            <x-icons.bookmark />
+                            <span>Disimpan</span>
+                        </x-buttons.text-button>
+
+                        <x-buttons.text-button icon>
+                            <x-icons.history />
+                            <span>Riwayat Baca</span>
+                        </x-buttons.text-button>
+                    </div>
+
+                    <hr class="border-outline-variant dark:border-outline-variant-dark">
+                    {{-- SEC 3 --}}
+                    <div class="p-2 space-y-2">
                         <x-buttons.text-button icon>
                             <x-icons.account />
                             <span>Akun Saya</span>
@@ -91,8 +105,8 @@
                     </div>
 
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
-                    {{-- SEC 2 --}}
-                    <div class="p-2 space-y-1">
+                    {{-- SEC 4 --}}
+                    <div class="p-2 space-y-2">
                         {{-- CHANGE THEME --}}
                         <x-buttons.theme-toggle variant="text" />
                         {{-- LOGOUT BUTTON --}}
