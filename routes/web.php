@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HelloWorldController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/welcome', function () {
+    return view('welcome');
+})->name('welcome');
+
+Route::get('register', [AuthController::class, 'showRegisterForm'])
+    ->name('register');
+Route::post('register', [AuthController::class, 'register']);
+
+Route::get('login', [AuthController::class, 'showLoginForm'])
+    ->name('login');
+Route::post('login', [AuthController::class, 'login']);
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect()->route('welcome');
+})->name('logout');
+
 Route::get('/', function () {
-    return view('landing');
-})->name('landing');
-
-Route::get('/register', function () {
-    return ('Register Page');
-})->name('register');
-
-Route::get('/login', function () {
-    return ('Login Page');
-})->name('login');
+    return view('home');
+})->name('home')->middleware('auth');

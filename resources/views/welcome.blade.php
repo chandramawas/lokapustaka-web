@@ -8,12 +8,15 @@
         {{-- KIRI --}}
         <div class="p-3 md:p-4 lg:p-5 xl:p-6 space-y-3 lg:space-y-5">
             {{-- WELCOME --}}
-            <div class="flex flex-col space-y-1">
-                <h1 class="font-bold text-center md:text-start text-heading-md md:text-heading-lg lg:text-heading-xl">
-                    Selamat Datang di Lokapustaka</h1>
+            <div class="flex flex-col space-y-3">
+                <div class="flex flex-col space-y-1 text-center md:text-start">
+                    <h1 class="font-bold text-heading-md md:text-heading-lg lg:text-heading-xl">
+                        Selamat Datang di Lokapustaka</h1>
+                    <p class="font-medium text-body-lg md:text-body-xl lg:text-heading-sm">
+                        Baca buku sepuasnya. Kapan aja, dimana aja.</p>
+                </div>
                 <p class="text-label md:text-body-sm lg:text-body-md">
-                    Baca buku sepuasnya, kapan aja. Langganan mulai dari Rp20.000/bulan.
-                    Hemat hingga 69% dengan langganan tahunan hanya Rp75.000/tahun.</p>
+                    Langganan mulai dari Rp20.000/bulan. Hemat hingga 69% dengan langganan tahunan hanya Rp75.000/tahun.</p>
             </div>
             {{-- PRICING --}}
             <div class="flex flex-col justify-center space-y-2 lg:space-y-2">
@@ -32,9 +35,6 @@
                     <x-buttons.button :href="route('register')" variant="primary-lg"
                         aria-label="Langganan Tahunan">Rp75.000/tahun</x-buttons.button>
                 </div>
-                <x-buttons.button :href="route('register')" variant="text" aria-label="Lihat Katalog Lokapustaka">Lihat
-                    Katalog
-                    Dulu</x-buttons.button>
             </div>
 
             <p class="text-label">Anggota Lokapustaka?

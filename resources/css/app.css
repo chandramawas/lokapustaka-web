@@ -2,17 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Scrollbar custom */
-.scrollbar-thin::-webkit-scrollbar {
-    width: 2px;
+/* Bisa taro di global CSS kalau mau */
+.dropdown-scroll::-webkit-scrollbar {
+    width: 6px;
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #a3a3a3;
-    /* warna abu */
-    border-radius: 6px;
+.dropdown-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.3);
+    border-radius: 4px;
 }

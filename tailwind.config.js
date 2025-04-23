@@ -94,6 +94,8 @@ module.exports = {
       },
 
     colors: {
+      'transparent': 'transparent',
+      'current': 'currentColor',
         // NEUTRAL COLORS
         'surface': {
           DEFAULT: '#FCF8F8',

@@ -1,0 +1,1 @@
+<p class="text-label text-error dark:text-error-dark text-right mt-1">{{ $slot }}</p>
