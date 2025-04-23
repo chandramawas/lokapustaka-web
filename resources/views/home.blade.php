@@ -2,7 +2,7 @@
 
 @section('navbar', view('layouts.navbar'))
 
-@section('hero')
+@section('carousel')
 
 @endsection
 

@@ -24,8 +24,8 @@
             @yield('navbar')
         </header>
 
-        <section id="hero" class="hidden md:block">
-            @yield('hero')
+        <section id="carousel" class="hidden md:block">
+            @yield('carousel')
         </section>
 
         <section id="breadcrumbs">
