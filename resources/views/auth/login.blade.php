@@ -33,9 +33,9 @@
                     {{-- LOGIN FORM --}}
                     <form action="{{ route('login') }}" method="post" class="flex flex-col gap-2">
                         @csrf
-                        <x-forms.input type="email" name="email" placeholder="Email" required autofocus />
+                        <x-forms.input type="email" name="email" placeholder="Email" autofocus />
 
-                        <x-forms.input type="password" name="password" placeholder="Password" required />
+                        <x-forms.input type="password" name="password" placeholder="Password" />
 
                         <a href="#" class="text-right text-label text-primary dark:text-primary-dark hover:underline">Lupa
                             Kata Sandi?</a>

@@ -1,7 +1,7 @@
 @props(['variant' => 'error', 'textAlign' => 'right'])
 
 @php
-    $base = 'text-label mt-1';
+    $base = 'text-label';
 
     $aligns = [
         'left' => 'text-left',
