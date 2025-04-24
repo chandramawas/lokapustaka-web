@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Verifikasi Email')
+
 @section('content')
     <div class="min-h-screen flex items-center justify-center">
         <div

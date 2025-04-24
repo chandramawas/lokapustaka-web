@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Masuk')
+@section('title', 'Reset Kata Sandi')
 
 @section('content')
     <div class="relative flex flex-col items-center justify-center min-h-screen">
@@ -21,26 +21,28 @@
 
             {{-- KANAN --}}
             <div class="space-y-2">
-                {{-- LOGIN CONTAINER --}}
+                {{-- CONTAINER --}}
                 <div
                     class="flex flex-col gap-3 p-2 rounded-lg shadow-lg text-body-md md:text-body-lg bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark">
                     {{-- TITLE --}}
                     <div class="flex flex-col items-center">
                         <x-icons.logo />
-                        <h3 class="font-bold">Masuk</h3>
+                        <h3 class="font-bold">Reset Kata Sandi</h3>
                     </div>
 
-                    {{-- LOGIN FORM --}}
-                    <form action="{{ route('login') }}" method="post" class="flex flex-col gap-2">
+                    {{-- FORM --}}
+                    <form method="POST" action="{{ route('password.update') }}" class="flex flex-col gap-2">
                         @csrf
+                        <input type="hidden" name="token" value="{{ $token }}">
+
                         <x-forms.input type="email" name="email" placeholder="Email" autofocus />
 
-                        <x-forms.input type="password" name="password" placeholder="Password" />
+                        <x-forms.input type="password" name="password" placeholder="Password Baru" autofocus />
 
-                        <a href="{{ route('password.request') }}"
-                            class="text-right text-label text-primary dark:text-primary-dark hover:underline">Lupa
-                            Kata Sandi?</a>
-                        <x-buttons.button type="submit" variant="primary-lg">Masuk</x-buttons.button>
+                        <x-forms.input type="password" name="password_confirmation" placeholder="Konfirmasi Password"
+                            autofocus />
+
+                        <x-buttons.button type="submit" variant="primary-lg">Reset Password</x-buttons.button>
                     </form>
                 </div>
 

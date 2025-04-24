@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar - Lokapustaka')
+@section('title', 'Daftar')
 
 @section('content')
     <div class="relative flex flex-col items-center justify-center min-h-screen">
