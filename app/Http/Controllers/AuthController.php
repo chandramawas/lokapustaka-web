@@ -38,8 +38,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        Auth::login($user);
+
+        //Kirim email verifikasi
+        $user->sendEmailVerificationNotification();
+
         //Redirect ke halaman setelah berhasil login
-        return redirect()->route('login');
+        return redirect()->route('verification.notice');
     }
 
     //Show Login Form

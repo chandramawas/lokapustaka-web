@@ -98,10 +98,25 @@
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
                     {{-- SEC 3 --}}
                     <div class="p-2 space-y-2">
-                        <x-buttons.text-button icon>
-                            <x-icons.account />
-                            <span>Akun Saya</span>
-                        </x-buttons.text-button>
+                        @if (!auth()->user()->hasVerifiedEmail())
+                            <form method="POST" action="{{ route('verification.send') }}">
+                                @csrf
+                                <x-buttons.text-button type="submit" hoverColor="primary" icon>
+                                    <x-icons.account />
+                                    <span>Verifikasi Email</span>
+                                </x-buttons.text-button>
+                            </form>
+                            @if (session('new-verif-link'))
+                                <x-forms.label variant="success" textAlign="left">
+                                    Link verifikasi baru sudah dikirim ke email.
+                                </x-forms.label>
+                            @endif
+                        @else
+                            <x-buttons.text-button icon>
+                                <x-icons.account />
+                                <span>Akun Saya</span>
+                            </x-buttons.text-button>
+                        @endif
                     </div>
 
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
