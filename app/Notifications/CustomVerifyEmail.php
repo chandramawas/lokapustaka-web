@@ -40,19 +40,21 @@ class CustomVerifyEmail extends Notification
 
         return (new MailMessage)
             ->subject('Verifikasi Email Anda - Lokapustaka')
-            ->greeting('Halo, ' . $notifiable->name . ' 👋')
-            ->line('Terima kasih telah mendaftar di Lokapustaka!')
-            ->line('Klik tombol di bawah ini untuk memverifikasi email kamu dan mulai membaca buku digital favoritmu:')
+            ->greeting('Hai, ' . $notifiable->name . ' 👋')
+            ->line('Selamat datang di Lokapustaka! Kami senang kamu bergabung 🙌')
+            ->line('Untuk mulai menggunakan akunmu dan menikmati koleksi buku digital kami, silakan verifikasi email kamu dengan menekan tombol di bawah ini.')
             ->action('Verifikasi Sekarang', $verificationUrl)
-            ->line('Kalau kamu tidak mendaftar akun, abaikan saja email ini.')
-            ->salutation('Salam hangat, Tim Lokapustaka ❤️');
+            ->line('Tautan ini akan kedaluwarsa dalam 30 menit demi keamanan akunmu.')
+            ->line('Jika kamu tidak merasa membuat akun di Lokapustaka, kamu bisa abaikan email ini.')
+            ->salutation('Salam hangat,  
+    Tim Lokapustaka 📚');
     }
 
     protected function verificationUrl($notifiable)
     {
         return URL::temporarySignedRoute(
             'verification.verify',
-            Carbon::now()->addMinutes(60),
+            Carbon::now()->addMinutes(30),
             ['id' => $notifiable->getKey(), 'hash' => sha1($notifiable->getEmailForVerification())],
         );
     }
