@@ -2,10 +2,6 @@
 
 @section('navbar', view('layouts.navbar'))
 
-@section('carousel')
-
-@endsection
-
 @section('breadcrumbs')
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],

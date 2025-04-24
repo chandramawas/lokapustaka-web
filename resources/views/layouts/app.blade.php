@@ -24,10 +24,6 @@
             @yield('navbar')
         </header>
 
-        <section id="carousel" class="hidden md:block">
-            @yield('carousel')
-        </section>
-
         <section id="breadcrumbs">
             @yield('breadcrumbs')
         </section>
