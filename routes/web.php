@@ -1,12 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,46 +17,39 @@ use Illuminate\Http\Request;
 |
 */
 
-// Landing Page
+// Welcome Page
 Route::get('/welcome', function () {
     return view('welcome');
 })->name('welcome');
 
-// Register
+// Auth Routes
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('/register', [AuthController::class, 'showRegisterForm'])
     ->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-
-// Login
+Route::post('/login', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])
     ->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-
-//Logout
-Route::post('/logout', function () {
-    Auth::logout();
-    return redirect()->route('login');
-})->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
 
 // Email Verification
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->route('home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
+Route::get('/email/verify', [EmailVerificationController::class, 'notice'])
+    ->middleware('auth')
+    ->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+    ->middleware(['auth', 'throttle:6,1'])
+    ->name('verification.send');
 
-    return back()->with('new-verif-link', 'Link verifikasi sudah dikirim ulang!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-// Forgot Password
+// Forgot Password Routes
 Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
     ->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
     ->name('password.email');
+
+// Reset Password Routes
 Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])
     ->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])

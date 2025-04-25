@@ -61,6 +61,7 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
+    // Handle Login
     public function login(Request $request)
     {
         $request->validate([
@@ -91,5 +92,12 @@ class AuthController extends Controller
 
         // Login sukses
         return redirect()->route('home');
+    }
+
+    // Handle Logout
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('login');
     }
 }
