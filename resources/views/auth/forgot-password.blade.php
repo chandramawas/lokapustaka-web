@@ -1,55 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.app-auth')
 
 @section('title', 'Lupa Kata Sandi')
 
-@section('content')
-    <div class="relative flex flex-col items-center justify-center min-h-screen">
-        <div class="absolute top-2 left-2">
-            <x-buttons.theme-toggle />
-        </div>
+@section('auth-title', 'Lupa Kata Sandi')
 
-        {{-- CONTENT CENTER --}}
-        <div class="p-4 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-6">
-            {{-- KIRI --}}
-            <div class="flex flex-col justify-center items-center md:items-start">
-                <a href="{{ route('home') }}"
-                    class="font-bold text-heading-lg md:text-heading-xl lg:text-display-md text-primary dark:text-primary-dark hover:scale-105 transition">
-                    Lokapustaka</a>
-                <p class="text-body-xl md:text-heading-sm lg:text-heading-md">Baca buku sepuasnya. Kapan aja, dimana
-                    aja.</p>
-            </div>
+@section('auth-form')
+    <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-2">
+        @csrf
+        <x-forms.input type="email" name="email" placeholder="Email" autofocus />
+        @if (session('reset-link-sent'))
+            <x-forms.label variant="success" textAlign="center">
+                {{ session('reset-link-sent') }}
+            </x-forms.label>
+        @endif
+        <x-buttons.button type="submit" variant="primary-lg">Kirim Link Reset Password</x-buttons.button>
+    </form>
+@endsection
 
-            {{-- KANAN --}}
-            <div class="space-y-2">
-                {{-- CONTAINER --}}
-                <div
-                    class="flex flex-col gap-3 p-2 rounded-lg shadow-lg text-body-md md:text-body-lg bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark">
-                    {{-- TITLE --}}
-                    <div class="flex flex-col items-center">
-                        <x-icons.logo />
-                        <h3 class="font-bold">Lupa Kata Sandi</h3>
-                    </div>
-
-                    {{-- FORM --}}
-                    <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-2">
-                        @csrf
-                        <x-forms.input type="email" name="email" placeholder="Email" autofocus />
-                        @if (session('reset-link-sent'))
-                            <x-forms.label variant="success" textAlign="center">
-                                {{ session('reset-link-sent') }}
-                            </x-forms.label>
-                        @endif
-                        <x-buttons.button type="submit" variant="primary-lg">Kirim Link Reset Password</x-buttons.button>
-                    </form>
-                </div>
-
-                {{-- REDIR REGISTER --}}
-                <div class="space-y-1">
-                    <p class="text-label text-center">Baru di Lokapustaka?</p>
-                    <x-buttons.button href="{{ route('register') }}" variant="outline">Daftar Akun
-                        Sekarang</x-buttons.button>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('auth-redirect')
+    <p class="text-label text-center">Baru di Lokapustaka?</p>
+    <x-buttons.button href="{{ route('register') }}" variant="outline">Daftar Akun
+        Sekarang</x-buttons.button>
 @endsection
