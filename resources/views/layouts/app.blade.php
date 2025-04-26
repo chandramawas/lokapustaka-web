@@ -14,15 +14,7 @@ Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
 * - Untuk menampilkan navbar di atas halaman.
 * - Bersifat opsional. Kalau tidak diisi, navbar tidak akan muncul.
 *
-* 3. @section('breadcrumbs')
-* - Untuk menampilkan breadcrumb navigasi di bawah navbar.
-* - Bersifat opsional.
-*
-* 4. @section('main-class', 'class-tambahan')
-* - Untuk menambahkan class tambahan pada elemen main misalnya padding.
-* - Bersifat opsional.
-*
-* 5. @section('content')
+* 3. @section('content')
 * - Ini adalah konten utama halaman.
 * - Wajib diisi di setiap page yang extend layout ini.
 *
@@ -57,10 +49,7 @@ Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
             @yield('navbar')
         </header>
 
-        <main class="flex-grow flex flex-col @hasSection('breadcrumbs') space-y-2 @endif @yield('main-class')">
-            <section id="breadcrumbs">
-                @yield('breadcrumbs')
-            </section>
+        <main class="flex-grow">
             @yield('content')
         </main>
     </div>
