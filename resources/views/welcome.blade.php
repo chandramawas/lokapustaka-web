@@ -37,12 +37,12 @@
                 </div>
             </div>
 
-            <p class="text-label">Anggota Lokapustaka?
-                <a href="{{ route('login') }}" class="underline hover:text-on-surface/80 dark:hover:text-on-surface-dark/80"
-                    aria-label="Login">
-                    Login
-                </a>
-            </p>
+            @guest
+                <p class="text-label">Anggota Lokapustaka?
+                    <span class="inline-flex"><x-buttons.text-button :href="route('login')"
+                            underlineHover>Masuk</x-buttons.text-button></span>
+                </p>
+            @endguest
         </div>
 
         {{-- KANAN --}}
