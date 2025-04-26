@@ -8,12 +8,11 @@
 ])
 
 @php
-$base = 'ring-1 ring-outline-variant dark:ring-outline-variant-dark focus:outline-none focus:ring-primary
-dark:focus:ring-primary-dark bg-transparent rounded-lg p-2 transition';
+$base = 'ring-1 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark bg-transparent rounded-lg p-2 transition';
 
 $errorClass = $errors->has($name) 
-    ? 'ring-error dark:ring-error-dark focus:ring-error dark:focus:ring-error-dark' 
-    : '';
+    ? 'ring-error dark:ring-error-dark' 
+    : 'ring-outline-variant dark:ring-outline-variant-dark';
 @endphp
 
 <div class="flex flex-col space-y-0.5">
