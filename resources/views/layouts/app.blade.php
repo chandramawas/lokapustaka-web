@@ -1,3 +1,36 @@
+{{--
+Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
+*
+* Cara Pakai:
+* @extends('layouts.app')
+*
+* Bagian yang bisa diisi:
+*
+* 1. @section('title', 'Judul Halaman')
+* - Ini akan jadi title di tab browser.
+* - Jika tidak diisi, akan pakai default: 'Baca Buku Digital Tanpa Batas'.
+*
+* 2. @section('navbar')
+* - Untuk menampilkan navbar di atas halaman.
+* - Bersifat opsional. Kalau ga diisi, navbar ga akan muncul.
+*
+* 3. @section('breadcrumbs')
+* - Untuk menampilkan breadcrumb navigasi di bawah navbar.
+* - Bersifat opsional.
+*
+* 4. @section('sidebar')
+* - Untuk menampilkan sidebar di sebelah kiri halaman.
+* - Bersifat opsional. Kalau ga diisi, layout tetap rapi.
+*
+* 5. @section('content')
+* - Ini adalah konten utama halaman.
+* - Wajib diisi di setiap page yang extend layout ini.
+*
+* Footer:
+* - Footer otomatis ditampilkan di bawah semua halaman.
+* - Tidak perlu diisi manual.
+--}}
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -5,7 +38,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>@yield('title', 'Baca Buku Digital Tanpa Batas') - Lokapustaka</title>
+    <title>@yield('title', 'Baca Buku Digital Tanpa Batas') - {{ config('app.name') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     {{-- VITE --}}
@@ -29,7 +62,18 @@
         </section>
 
         <main class="flex-grow">
-            @yield('content')
+            @hasSection('sidebar')
+                <div class="flex gap-6">
+                    <aside class="w-1/4">
+                        @yield('sidebar')
+                    </aside>
+                    <div class="flex-1">
+                        @yield('content')
+                    </div>
+                </div>
+            @else
+                @yield('content')
+            @endif
         </main>
     </div>
     <footer>

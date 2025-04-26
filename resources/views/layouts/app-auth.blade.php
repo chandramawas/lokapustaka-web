@@ -1,3 +1,33 @@
+{{--
+Layout ini adalah template khusus untuk halaman-halaman otentikasi (login, register, reset password) Lokapustaka.
+Layout ini mewarisi struktur dari layouts.app, jadi beberapa bagian dari app.blade.php tetap tersedia.
+*
+* Cara Pakai:
+* @extends('layouts.app-auth')
+*
+* Bagian dari app.blade.php yang masih bisa digunakan:
+* 1. @section('title')
+* - Untuk mengatur title tab browser.
+* - Default: 'Baca Buku Digital Tanpa Batas'.
+*
+* Bagian spesifik app-auth yang bisa diisi:
+* 2. @section('auth-title')
+* - Judul besar di atas form auth (contoh: "Masuk ke Akun Anda").
+* - Wajib diisi.
+*
+* 3. @section('auth-form')
+* - Kontainer form untuk login, register, dll.
+* - Wajib diisi.
+*
+* 4. @section('auth-redirect')
+* - Link navigasi tambahan (contoh: "Belum punya akun? Daftar").
+* - Opsional.
+*
+* Fitur tambahan:
+* - Tombol toggle tema di pojok kiri atas.
+* - Branding Lokapustaka + tagline di sisi kiri untuk tampilan desktop.
+--}}
+
 @extends('layouts.app')
 
 @section('content')
