@@ -11,7 +11,11 @@
 @php
     $base = 'flex items-center transition';
 
-    $base .= $icon ? ' space-x-0.5' : '';
+    if($icon && $variant === 'lg') {
+        $base .= ' space-x-1';
+    } elseif($icon && $variant === 'default') {
+        $base .= ' space-x-0.5';
+    }
 
     $hoverColors = [
     'primary' => 'hover:text-primary/80 dark:hover:text-primary-dark/80',

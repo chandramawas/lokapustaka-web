@@ -63,8 +63,8 @@ Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
 
         <main class="flex-grow">
             @hasSection('sidebar')
-                <div class="flex gap-6">
-                    <aside class="w-1/4">
+                <div class="flex gap-3 md:gap-6">
+                    <aside>
                         @yield('sidebar')
                     </aside>
                     <div class="flex-1">

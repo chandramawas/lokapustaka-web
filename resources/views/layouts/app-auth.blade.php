@@ -55,7 +55,7 @@ Layout ini mewarisi struktur dari layouts.app, jadi beberapa bagian dari app.bla
                     {{-- TITLE --}}
                     <div class="flex flex-col items-center">
                         <x-icons.logo />
-                        <h3 class="font-bold">@yield('auth-title')</h3>
+                        <h3 class="font-bold">@yield('auth-title', 'Auth')</h3>
                     </div>
 
                     {{-- FORM --}}

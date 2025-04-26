@@ -1,30 +1,17 @@
 <nav
-    class="bg-surface-container dark:bg-surface-container-dark shadow-md text-on-surface dark:text-on-surface-dark px-3 py-2 lg:px-6 flex items-center justify-between">
+    class="bg-surface-container dark:bg-surface-container-dark shadow-md text-on-surface dark:text-on-surface-dark px-3 py-2 lg:px-5 flex items-center justify-between">
     {{-- LEFT --}}
-    <div class="flex space-x-3 md:space-x-6 items-center">
+    <div class="flex space-x-2 lg:space-x-5 items-center">
         <x-buttons.text-button href="{{ route('home') }}">
             <x-icons.logo />
         </x-buttons.text-button>
         @auth
             {{-- MENU --}}
-            <span class="hidden md:flex space-x-3 font-medium">
+            <span class="hidden md:flex space-x-2 font-medium">
                 <x-buttons.text-button href="#">Menu 1</x-buttons.text-button>
                 <x-buttons.text-button href="#">Menu 2</x-buttons.text-button>
                 <x-buttons.text-button href="#">Menu 3</x-buttons.text-button>
             </span>
-            {{-- HAMBURGER MENU (for MOBILE) --}}
-            <div x-data="{ open: false }" class="md:hidden">
-                <x-buttons.icon-button variant="text" @click="open = !open">
-                    <x-icons.menu />
-                </x-buttons.icon-button>
-                <x-ui.dropdown>
-                    <div class="p-2 space-y-1">
-                        <x-buttons.text-button href="#">Menu 1</x-buttons.text-button>
-                        <x-buttons.text-button href="#">Menu 2</x-buttons.text-button>
-                        <x-buttons.text-button href="#">Menu 3</x-buttons.text-button>
-                    </div>
-                </x-ui.dropdown>
-            </div>
         @endauth
     </div>
 
@@ -112,7 +99,7 @@
                                 </x-forms.label>
                             @endif
                         @else
-                            <x-buttons.text-button icon>
+                            <x-buttons.text-button icon :href="route('account.index')">
                                 <x-icons.account />
                                 <span>Akun Saya</span>
                             </x-buttons.text-button>
