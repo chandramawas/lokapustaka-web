@@ -68,8 +68,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('account.change-password');
     Route::post('/account/change-password', [AccountController::class, 'updatePassword'])
         ->name('account.update-password');
-    Route::get('/account/subscription', [AccountController::class, 'showSubscription'])
-        ->name('account.subscription');
+    Route::get('/account/subscription-info', [AccountController::class, 'showSubscription'])
+        ->name('account.subscription-info');
 });
 
 //Homepage

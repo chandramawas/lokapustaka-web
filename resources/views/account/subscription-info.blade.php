@@ -6,7 +6,7 @@
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
             ['label' => 'Akun Saya', 'url' => route('account.index')],
-            ['label' => 'Info Langganan', 'url' => route('account.subscription')],
+            ['label' => 'Info Langganan', 'url' => route('account.subscription-info')],
         ]" />
 @endsection
 

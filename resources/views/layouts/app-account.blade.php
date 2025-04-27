@@ -60,7 +60,7 @@
             ],
             [
                 'label' => 'Info Langganan',
-                'url' => 'account.subscription',
+                'url' => 'account.subscription-info',
                 'icon' => 'icons.subscribe',
             ],
         ]" />

@@ -85,6 +85,6 @@ class AccountController extends Controller
         $subscriptions = auth()->user()->subscriptions()->orderBy('start_date', 'desc')->get();
         $currentSubscription = $subscriptions->firstWhere('is_active', true);
 
-        return view('account.subscription', compact('subscriptions', 'currentSubscription'));
+        return view('account.subscription-info', compact('subscriptions', 'currentSubscription'));
     }
 }
