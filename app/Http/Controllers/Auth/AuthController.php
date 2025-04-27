@@ -23,7 +23,7 @@ class AuthController extends Controller
         //Validasi data dari form
         $request->validate([
             'email' => 'required|email|unique:users,email',
-            'name' => 'required|string|max:100',
+            'name' => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
             'password_confirmation' => 'required',
         ], [
@@ -32,7 +32,7 @@ class AuthController extends Controller
             'email.required' => 'Email tidak boleh kosong.',
             'email.email' => 'Format email tidak valid.',
             'name.required' => 'Nama tidak boleh kosong.',
-            'name.max' => 'Nama maksimal 100 karakter.',
+            'name.max' => 'Nama maksimal 255 karakter.',
             'password.required' => 'Password tidak boleh kosong.',
             'password.min' => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',

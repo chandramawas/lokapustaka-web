@@ -13,7 +13,7 @@
         'error' => 'text-error dark:text-error-dark',
         'success' => 'text-success dark:text-success-dark',
         'warning' => 'text-warning dark:text-warning-dark',
-        'info' => 'text-info dark:text-info-dark',
+        'inherit' => '',
     ]
 @endphp
 

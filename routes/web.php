@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -54,6 +55,22 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
     ->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
+
+// Account Routes
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/account', [AccountController::class, 'index'])
+        ->name('account.index');
+    Route::get('/account/settings', [AccountController::class, 'showSettings'])
+        ->name('account.settings');
+    Route::post('/account/settings', [AccountController::class, 'update'])
+        ->name('account.update');
+    Route::get('/account/change-password', [AccountController::class, 'showChangePassword'])
+        ->name('account.change-password');
+    Route::post('/account/change-password', [AccountController::class, 'updatePassword'])
+        ->name('account.update-password');
+    Route::get('/account/subscription', [AccountController::class, 'showSubscription'])
+        ->name('account.subscription');
+});
 
 //Homepage
 Route::get('/', function () {

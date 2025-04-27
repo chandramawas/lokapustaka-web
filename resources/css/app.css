@@ -11,3 +11,20 @@
     background-color: rgba(100, 100, 100, 0.3);
     border-radius: 4px;
 }
+
+input,
+select {
+    color-scheme: light;
+}
+
+.dark input,
+.dark select {
+    color-scheme: dark;
+}
+
+.dark select option {
+    background-color: #333;
+    /* Background gelap untuk option */
+    color: #fff;
+    /* Teks terang untuk option */
+}

@@ -1,3 +1,14 @@
+{{--
+|
+| Penggunaan:
+
+<x-ui.breadcrumbs :items="[
+    ['label' => 'Beranda', 'url' => route('home')],
+    ['label' => 'Akun Saya', 'url' => route('account.index')],
+]" />
+
+|-------------------------------------------------------------------}}
+
 @props(['items' => []])
 
 <nav class="text-label" aria-label="Breadcrumbs">

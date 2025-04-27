@@ -1,14 +1,22 @@
 @props([
-'type' => 'text',
-'name',
-'placeholder' => '',
-'value' => '',
-'leadingIcon' => false,
-'autofocus' => false,
+    'type' => 'text',
+    'name',
+    'placeholder' => '',
+    'value' => '',
+    'leadingIcon' => false,
+    'autofocus' => false,
+    'size' => 'default',
+    'label' => null,
 ])
 
 @php
-$base = 'ring-1 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark bg-transparent rounded-lg p-2 transition';
+$base = 'ring-1 focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-primary-dark bg-transparent transition';
+
+if ($size === 'default') {
+    $base .= ' rounded-lg p-2';
+} elseif ($size === 'sm') {
+    $base .= ' rounded-md px-2 py-1';
+}
 
 $errorClass = $errors->has($name) 
     ? 'ring-error dark:ring-error-dark' 
@@ -16,10 +24,13 @@ $errorClass = $errors->has($name)
 @endphp
 
 <div class="flex flex-col space-y-0.5">
+    @if ($label)
+    <label for="{{ $name }}" class="font-medium text-on-surface-variant dark:text-on-surface-variant-dark">{{ $label }}</label>
+    @endif
     <div class="relative flex flex-col">
         <input type="{{ $type }}" name="{{ $name }}" id="{{ $name }}" placeholder="{{ $placeholder }}"
     value="{{ old($name, $value) }}" {{ $autofocus ? 'autofocus' : '' }}
-    class="{{ $base }} {{ $errorClass }} 
+    class="{{ $base }} {{ $errorClass }}
         @if ($type === 'password') pr-6 @endif
         @if ($leadingIcon) pl-6 @endif" />
 

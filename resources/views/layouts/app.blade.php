@@ -1,27 +1,31 @@
 {{--
-Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
-*
-* Cara Pakai:
-* @extends('layouts.app')
-*
-* Bagian yang bisa diisi:
-*
-* 1. @section('title', 'Judul Halaman')
-* - Ini akan jadi title di tab browser.
-* - Jika tidak diisi, akan pakai default: 'Baca Buku Digital Tanpa Batas'.
-*
-* 2. @section('navbar')
-* - Untuk menampilkan navbar di atas halaman.
-* - Bersifat opsional. Kalau tidak diisi, navbar tidak akan muncul.
-*
-* 3. @section('content')
-* - Ini adalah konten utama halaman.
-* - Wajib diisi di setiap page yang extend layout ini.
-*
-* Footer:
-* - Footer otomatis ditampilkan di bawah semua halaman.
-* - Tidak perlu diisi manual.
---}}
+|--------------------------------------------------------------------------------
+| Lokapustaka - Layout Template
+|--------------------------------------------------------------------------------
+| Deskripsi:
+| Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
+|--------------------------------------------------------------------------------
+| Cara Pakai:
+| @extends('layouts.app')
+|
+| Bagian yang bisa diisi:
+|
+| 1. @section('title', 'Judul Halaman')
+| - Ini akan jadi title di tab browser.
+| - Jika tidak diisi, akan pakai default: 'Baca Buku Digital Tanpa Batas'.
+|
+| 2. @section('navbar', 'view('layouts.navbar'))
+| - Untuk menampilkan navbar di atas halaman.
+| - Bersifat opsional. Kalau tidak diisi, navbar tidak akan muncul.
+|
+| 3. @section('content')
+| - Ini adalah konten utama halaman.
+| - Wajib diisi di setiap page yang extend layout ini.
+|
+| Footer:
+| - Footer otomatis ditampilkan di bawah semua halaman.
+| - Tidak perlu diisi manual.
+|---------------------------------------------------------------------------------}}
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
