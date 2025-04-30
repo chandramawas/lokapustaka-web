@@ -53,7 +53,7 @@
             @yield('navbar')
         </header>
 
-        <main class="flex-grow">
+        <main class="flex flex-col flex-grow">
             @yield('content')
         </main>
     </div>

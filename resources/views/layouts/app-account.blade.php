@@ -63,6 +63,11 @@
                 'url' => 'account.subscription-info',
                 'icon' => 'icons.subscribe',
             ],
+            [
+                'label' => 'Riwayat Pembayaran',
+                'url' => 'account.payment-history',
+                'icon' => 'icons.receipt',
+            ],
         ]" />
         </aside>
 

@@ -4,7 +4,7 @@
 
 @section('content')
     {{-- HERO --}}
-    <section id="hero" class="grid grid-cols-1 md:grid-cols-2">
+    <section id="hero" class="md:min-h-[calc(100vh-4rem)] grid grid-cols-1 md:grid-cols-2">
         {{-- KIRI --}}
         <div class="p-3 md:p-4 lg:p-5 xl:p-6 space-y-3 lg:space-y-5">
             {{-- WELCOME --}}
@@ -21,7 +21,7 @@
             {{-- PRICING --}}
             <div class="flex flex-col justify-center space-y-2 lg:space-y-2">
                 <div class="hover:scale-105 transition">
-                    <x-buttons.button :href="route('register')" variant="secondary-lg"
+                    <x-buttons.button @auth :href="route('subscription.index')" @endauth @guest :href="route('register')" @endguest variant="secondary-lg"
                         aria-label="Langganan Bulanan">Bergabung
                         dengan Lokapustaka di
                         Rp20.000/bulan</x-buttons.button>
@@ -32,7 +32,7 @@
                         class="absolute -top-2 -right-1 translate-x-1 bg-secondary text-on-secondary dark:bg-secondary-dark dark:text-on-secondary-dark text-label p-1 rounded-full shadow">
                         -69%
                     </span>
-                    <x-buttons.button :href="route('register')" variant="primary-lg"
+                    <x-buttons.button @auth :href="route('subscription.index')" @endauth @guest :href="route('register')" @endguest variant="primary-lg"
                         aria-label="Langganan Tahunan">Rp75.000/tahun</x-buttons.button>
                 </div>
             </div>

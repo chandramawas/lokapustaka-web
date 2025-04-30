@@ -83,8 +83,15 @@ class AccountController extends Controller
     public function showSubscription()
     {
         $subscriptions = auth()->user()->subscriptions()->orderBy('start_date', 'desc')->get();
-        $currentSubscription = $subscriptions->firstWhere('is_active', true);
+        $currentSubscription = auth()->user()->activeSubscription();
 
         return view('account.subscription-info', compact('subscriptions', 'currentSubscription'));
+    }
+
+    public function showPayment()
+    {
+        $payments = auth()->user()->payments()->orderBy('created_at', 'desc')->get();
+
+        return view('account.payment-history', compact('payments'));
     }
 }

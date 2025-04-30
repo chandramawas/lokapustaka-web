@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,8 +57,9 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
 
-// Account Routes
+// Route APP User
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Account Routes
     Route::get('/account', [AccountController::class, 'index'])
         ->name('account.index');
     Route::get('/account/settings', [AccountController::class, 'showSettings'])
@@ -70,9 +72,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('account.update-password');
     Route::get('/account/subscription-info', [AccountController::class, 'showSubscription'])
         ->name('account.subscription-info');
-});
+    Route::get('/account/payment-history', [AccountController::class, 'showPayment'])
+        ->name('account.payment-history');
 
-//Homepage
-Route::get('/', function () {
-    return view('home');
-})->name('home')->middleware(['auth', 'verified']);
+    // Subscription Routes
+    Route::get('/subscription', [SubscriptionController::class, 'index'])
+        ->name('subscription.index');
+    Route::get('/subscription/checkout/{type}', [SubscriptionController::class, 'checkout'])
+        ->name('subscription.checkout');
+    Route::post('/subscription/pay', [SubscriptionController::class, 'pay'])
+        ->name('subscription.pay');
+
+    //Homepage
+    Route::get('/', function () {
+        return view('home');
+    })->name('home');
+});

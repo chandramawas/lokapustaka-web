@@ -25,19 +25,37 @@ class UserSeeder extends Seeder
             'email_verified_at' => Carbon::now(),
         ]);
 
-        Subscription::create([
-            'user_id' => $user->id,
-            'type' => 'bulanan',
-            'start_date' => now(),
-            'end_date' => now()->addMonth(),
-            'is_active' => true,
+        $user2 = User::create([
+            'name' => 'Maulana Yusup Ibrahim',
+            'email' => 'myusupibrahim00@gmail.com',
+            'password' => Hash::make('sufajaya'),
+            'gender' => 'Laki-Laki',
+            'birthdate' => '2004-07-21',
+            'email_verified_at' => Carbon::now(),
         ]);
+
+        Subscription::create([
+            'user_id' => $user2->id,
+            'type' => 'tahunan',
+            'start_date' => now()->subYear()->subMonth(),
+            'end_date' => now()->subMonth(),
+            'is_active' => false,
+        ]);
+
         Subscription::create([
             'user_id' => $user->id,
             'type' => 'bulanan',
             'start_date' => now()->subMonths(2),
             'end_date' => now()->subMonth(),
             'is_active' => false,
+        ]);
+
+        Subscription::create([
+            'user_id' => $user->id,
+            'type' => 'bulanan',
+            'start_date' => now(),
+            'end_date' => now()->addMonth(),
+            'is_active' => true,
         ]);
     }
 }

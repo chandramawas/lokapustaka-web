@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Notifications\CustomVerifyEmail;
 use App\Notifications\CustomResetPasswordEmail;
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,8 +57,23 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notify(new CustomResetPasswordEmail($token, $this->email));
     }
 
+    // Relasi ke model Subcription
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->subscriptions()
+            ->where('is_active', true)
+            ->orderBy('start_date', 'desc')
+            ->first();
+    }
+
+    // Relasi ke model Payment
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

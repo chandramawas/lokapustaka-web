@@ -36,20 +36,22 @@
             </div>
         </div>
 
-        {{-- TODO: Tambahkan route ke halaman pembelian/pembaruan langganan --}}
-        <x-buttons.button href="#">Perbarui Langganan</x-buttons.button>
+        <x-buttons.button :href="route('subscription.index')">Perbarui Langganan</x-buttons.button>
     @else
-        <p class="text-center">Kamu tidak memiliki langganan aktif.</p>
-        <x-buttons.button href="#">Mulai Berlangganan</x-buttons.button>
+        <div class="text-center text-on-surface-variant dark:text-on-surface-variant-dark py-4">
+            Kamu tidak memiliki langganan aktif.
+        </div>
+        <x-buttons.button :href="route('subscription.index')">Mulai Berlangganan</x-buttons.button>
     @endif
 
     {{-- BAGIAN RIWAYAT LANGGANAN --}}
     @if ($subscriptions->isNotEmpty())
         <h2 class="text-body-md md:text-body-lg font-bold">Riwayat Langganan</h2>
-        <table class="w-full border table-fixed">
+        <table class="w-full border">
             <thead
                 class="bg-tertiary-container dark:bg-tertiary-container-dark text-on-tertiary-container dark:text-on-tertiary-dark">
                 <tr class="text-left font-medium">
+                    <th class="border border-on-surface-variant dark:border-on-surface-variant-dark py-1 px-2">ID</th>
                     <th class="border border-on-surface-variant dark:border-on-surface-variant-dark py-1 px-2">Jenis</th>
                     <th class="border border-on-surface-variant dark:border-on-surface-variant-dark py-1 px-2">Tanggal Mulai
                     </th>
@@ -61,6 +63,9 @@
             <tbody>
                 @foreach ($subscriptions as $subscription)
                     <tr>
+                        <td class="border border-on-surface-variant dark:border-on-surface-variant-dark py-1 px-2">
+                            {{ $subscription->id }}
+                        </td>
                         <td class="border border-on-surface-variant dark:border-on-surface-variant-dark py-1 px-2">
                             {{ ucfirst($subscription->type) }}
                         </td>

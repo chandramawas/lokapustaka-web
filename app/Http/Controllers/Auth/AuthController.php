@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
@@ -90,6 +91,11 @@ class AuthController extends Controller
             ]);
         }
 
+        Subscription::where('user_id', $user->id)
+            ->where('is_active', true)
+            ->where('end_date', '<', now())
+            ->update(['is_active' => false]);
+
         // Login sukses
         return redirect()->route('home');
     }
@@ -100,4 +106,7 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+    // Auto nonaktif langganan yang udah expired
+    protected function authenticated(Request $request, $user) {}
 }

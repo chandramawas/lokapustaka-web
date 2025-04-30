@@ -53,20 +53,47 @@
             <div x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative">
                 <x-buttons.button variant="primary" icon @click="open = !open">
                     <x-icons.account />
-                    <span class="hidden md:flex">
+                    <span class="hidden md:block truncate max-w-[150px]">
                         {{ auth()->user()->name }}
                     </span>
                 </x-buttons.button>
 
                 <x-ui.dropdown minWidth="200px" maxHeight="none" right>
                     {{-- SEC 1 --}}
-                    <div
-                        class="p-2 space-y-2 bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark">
-                        <x-buttons.text-button hoverColor="on-secondary" icon>
+                    @if (auth()->user()->activeSubscription() && auth()->user()->activeSubscription()->is_active)
+                        @if (\Carbon\Carbon::now()->diffInDays(auth()->user()->activeSubscription()->end_date, false) <= 6 && \Carbon\Carbon::now()->diffInDays(auth()->user()->activeSubscription()->end_date, false) > 0)
+                            {{-- Warning: Sisa sedikit --}}
+                            <a href="{{ route('account.subscription-info') }}"
+                                class="flex space-x-0.5 p-2 items-center bg-warning-container dark:bg-warning-container-dark text-on-warning-container dark:text-on-warning-container-dark hover:bg-warning-container/80 dark:hover:bg-warning-container-dark/80 hover:text-on-warning-container/80 dark:hover:text-on-warning-container-dark/80">
+                                <x-icons.subscribe />
+                                <span class="flex flex-col">
+                                    <span class="font-bold">Berlangganan</span>
+                                    <span>Sisa
+                                        {{ \Carbon\Carbon::now()->diffInDays(auth()->user()->activeSubscription()->end_date, false) }}
+                                        Hari lagi</span>
+                                </span>
+                            </a>
+                        @else
+                            {{-- Berlangganan --}}
+                            <a href="{{ route('account.subscription-info') }}"
+                                class="flex space-x-0.5 p-2 items-center bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark hover:bg-secondary/80 dark:hover:bg-secondary-dark/80 hover:text-on-secondary/80 dark:hover:text-on-secondary-dark/80">
+                                <x-icons.subscribe />
+                                <span class="flex flex-col">
+                                    <span class="font-bold">Berlangganan</span>
+                                    <span>Aktif Sampai
+                                        {{ \Carbon\Carbon::parse(auth()->user()->activeSubscription()->end_date)->translatedFormat('d/m/y') }}
+                                    </span>
+                                </span>
+                            </a>
+                        @endif
+                    @else
+                        {{-- Tidak Berlangganan --}}
+                        <a href="{{ route('subscription.index') }}"
+                            class="flex space-x-0.5 p-2 bg-tertiary dark:bg-tertiary-dark text-on-tertiary dark:text-on-tertiary-dark hover:bg-tertiary/80 dark:hover:bg-tertiary-dark/80 hover:text-on-tertiary/80 dark:hover:text-on-tertiary-dark/80">
                             <x-icons.subscribe />
-                            <span>Belum Berlangganan</span>
-                        </x-buttons.text-button>
-                    </div>
+                            <span>Tidak Berlangganan</span>
+                        </a>
+                    @endif
 
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
                     {{-- SEC 2 --}}

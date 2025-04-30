@@ -17,8 +17,15 @@ class Subscription extends Model
         'is_active',
     ];
 
+    // Relasi ke model user
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Relasi ke model Payment
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }
