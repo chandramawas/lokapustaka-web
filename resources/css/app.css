@@ -28,3 +28,27 @@ select {
     color: #fff;
     /* Teks terang untuk option */
 }
+
+.bookSwiper .swiper-button-prev,
+.bookSwiper .swiper-button-next {
+    @apply bg-tertiary dark:bg-tertiary-dark shadow-sm rounded-full opacity-20 hover:opacity-100 hover:scale-125 transition;
+}
+
+.bookSwiper .swiper-button-prev::after,
+.bookSwiper .swiper-button-next::after {
+    @apply text-on-tertiary dark:text-on-tertiary-dark text-label font-bold;
+}
+
+.highlightSwiper .swiper-button-prev,
+.highlightSwiper .swiper-button-next {
+    @apply shadow-sm rounded-full scale-75 hover:scale-100 md:scale-100 md:hover:scale-125 transition;
+}
+
+.highlightSwiper .swiper-button-prev::after,
+.highlightSwiper .swiper-button-next::after {
+    @apply text-on-surface-dark text-label shadow-lg font-bold;
+}
+
+.highlightSwiper .swiper-pagination-bullet {
+    @apply bg-surface;
+}

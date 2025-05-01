@@ -21,10 +21,14 @@
             {{-- PRICING --}}
             <div class="flex flex-col justify-center space-y-2 lg:space-y-2">
                 <div class="hover:scale-105 transition">
-                    <x-buttons.button @auth :href="route('subscription.index')" @endauth @guest :href="route('register')" @endguest variant="secondary-lg"
-                        aria-label="Langganan Bulanan">Bergabung
-                        dengan Lokapustaka di
-                        Rp20.000/bulan</x-buttons.button>
+                    @auth
+                        <x-buttons.button :href="route('subscription.index')" variant="secondary-lg"
+                            aria-label="Langganan Bulanan">Bergabung dengan Lokapustaka di Rp20.000/bulan</x-buttons.button>
+                    @endauth
+                    @guest
+                        <x-buttons.button :href="route('register')" variant="secondary-lg"
+                            aria-label="Langganan Bulanan">Bergabung dengan Lokapustaka di Rp20.000/bulan</x-buttons.button>
+                    @endguest
                 </div>
                 <p class="text-center">atau</p>
                 <div class="relative hover:scale-105 transition">
@@ -32,15 +36,22 @@
                         class="absolute -top-2 -right-1 translate-x-1 bg-secondary text-on-secondary dark:bg-secondary-dark dark:text-on-secondary-dark text-label p-1 rounded-full shadow">
                         -69%
                     </span>
-                    <x-buttons.button @auth :href="route('subscription.index')" @endauth @guest :href="route('register')" @endguest variant="primary-lg"
-                        aria-label="Langganan Tahunan">Rp75.000/tahun</x-buttons.button>
+                    @auth
+                        <x-buttons.button :href="route('subscription.index')" variant="primary-lg"
+                            aria-label="Langganan Tahunan">Rp75.000/tahun</x-buttons.button>
+                    @endauth
+                    @guest
+                        <x-buttons.button :href="route('register')" variant="primary-lg"
+                            aria-label="Langganan Tahunan">Rp75.000/tahun</x-buttons.button>
+                    @endguest
                 </div>
             </div>
 
             @guest
                 <p class="text-label">Anggota Lokapustaka?
                     <span class="inline-flex"><x-buttons.text-button :href="route('login')"
-                            underlineHover>Masuk</x-buttons.text-button></span>
+                            underlineHover>Masuk</x-buttons.text-button>
+                    </span>
                 </p>
             @endguest
         </div>
@@ -97,15 +108,18 @@
     <hr class="md:hidden my-3 border-outline-variant dark:border-outline-variant-dark">
 
     {{-- FEATURED BOOKS --}}
-    <section id="featured-books" class="max-w-6xl mx-auto p-3 md:p-4 lg:p-5 xl:p-6 space-y-2 md:space-y-3">
-        <h3 class="font-bold text-heading-sm md:text-heading-md">Koleksi Unggulan</h3>
-
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
-            @for ($i = 1; $i <= 6; $i++)
-                <x-cards.book-card :title="'Judul Buku ' . $i" :author="'Penulis ' . $i" :category="'Kategori Buku ' . $i"
-                    :poster="'https://placehold.co/150x220?text=Poster+' . $i" :href="'#buku-nomor-' . $i" />
-            @endfor
-        </div>
-    </section>
+    <div class="max-w-6xl mx-auto p-3 md:p-4 lg:p-5 xl:p-6 space-y-2 md:space-y-3">
+        @php
+            $books = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $books[] = [
+                    'author' => 'Penulis ' . $i,
+                    'title' => 'Judul Buku ' . $i,
+                    'category' => 'Genre',
+                ];
+            }
+        @endphp
+        <x-ui.book-carousel sectionName="featured" title="Koleksi Unggulan" :books="$books" />
+    </div>
 
 @endsection
