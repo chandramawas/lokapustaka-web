@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -84,7 +86,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('subscription.pay');
 
     //Homepage
-    Route::get('/', function () {
-        return view('home');
-    })->name('home');
+    Route::get('/', [HomeController::class, 'index'])
+        ->name('home');
+
+    // Book Routes
+    Route::get('/book/{book}', [BookController::class, 'detail'])
+        ->name('book.detail');
 });

@@ -4,7 +4,7 @@
     $swiperId = 'bookSwiper-' . $sectionName;
 @endphp
 
-<section id="{{ $sectionName }}-books" class="space-y-1">
+<section id="{{ $sectionName }}-books" class="space-y-1 md:space-y-2">
     {{-- Title --}}
     @if ($title)
         <div class="flex justify-between items-end px-1">

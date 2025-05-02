@@ -7,7 +7,7 @@
 
     {{-- Pop-up box --}}
     <div
-        class="relative bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark p-4 rounded-lg shadow-sm w-[90%] max-w-md">
+        class="relative bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark px-4 py-3 rounded-lg shadow-sm w-[90%] max-w-md max-h-[70vh] overflow-y-auto dropdown-scroll">
         {{ $slot }}
 
         @if ($showClose)

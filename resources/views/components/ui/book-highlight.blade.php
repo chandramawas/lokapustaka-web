@@ -1,4 +1,4 @@
-@props(['sectionName' => null, 'badges' => [], 'href' => '#', 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
+@props(['sectionName' => null, 'badges' => [], 'id' => '1', 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
 
 @php
 
@@ -71,12 +71,17 @@
             </div>
             {{-- Button --}}
             <div class="flex gap-1">
-                <x-buttons.button href="{{ $href }}" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
-                <x-buttons.icon-button variant="secondary"><x-icons.add /></x-buttons.icon-button>
-                <x-buttons.icon-button variant="secondary"><x-icons.information /></x-buttons.icon-button>
+                <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
+                <x-buttons.button href="#" variant="custom" icon
+                    class="shadow-sm hover:shadow-md bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark hover:bg-secondary/80 dark:hover:bg-secondary-dark/80 hover:text-on-secondary/80 dark:hover:text-on-secondary-dark/80">
+                    <x-icons.star /><span>4.7</span>
+                </x-buttons.button>
+                <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
+                <x-buttons.icon-button :href="route('book.detail', $id)"
+                    variant="secondary"><x-icons.information /></x-buttons.icon-button>
             </div>
         </div>
         {{-- Poster --}}
-        <img src="{{ $poster }}" class="rounded-md object-cover">
+        <img src="{{ $poster }}" loading="lazy" class="rounded-md object-cover">
     </div>
 </section>

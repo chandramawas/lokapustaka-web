@@ -33,7 +33,7 @@
                 </x-ui.modal>
             </div>
 
-            {{-- SEARCH BY CATEGORY BUTTON --}}
+            {{-- SEARCH BY CATEGORY/GENRE BUTTON --}}
             <div x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" class="relative">
                 <x-buttons.icon-button variant="text" @click="open = !open">
                     <x-icons.more />
@@ -41,10 +41,16 @@
 
                 <x-ui.dropdown minWidth="200px" center>
                     <div class="p-2 grid grid-cols-2 gap-2">
-                        @for ($category = 1; $category <= 20; $category++)
-                            <x-buttons.text-button href="#{{ $category }}" class="break-all">Kategori
-                                {{ $category }}</x-buttons.text-button>
-                        @endfor
+                        @foreach($categories as $category)
+                            <x-buttons.text-button href="#{{ $category->name }}" class="break-all">
+                                {{ $category->name }}
+                            </x-buttons.text-button>
+                        @endforeach
+                        @foreach($genres as $genre)
+                            <x-buttons.text-button href="#{{ $genre->name }}" class="break-all">
+                                {{ $genre->name }}
+                            </x-buttons.text-button>
+                        @endforeach
                     </div>
                 </x-ui.dropdown>
             </div>

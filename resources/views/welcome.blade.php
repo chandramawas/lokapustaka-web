@@ -30,7 +30,7 @@
                             aria-label="Langganan Bulanan">Bergabung dengan Lokapustaka di Rp20.000/bulan</x-buttons.button>
                     @endguest
                 </div>
-                <p class="text-center">atau</p>
+                <p class="text-center text-body-lg">atau</p>
                 <div class="relative hover:scale-105 transition">
                     <span
                         class="absolute -top-2 -right-1 translate-x-1 bg-secondary text-on-secondary dark:bg-secondary-dark dark:text-on-secondary-dark text-label p-1 rounded-full shadow">

@@ -19,6 +19,8 @@
         'outline-lg' => "px-4 py-2 text-body-sm md:text-body-md border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark",
         'text' => "px-3 py-1 text-label hover:text-primary/80 dark:hover:text-primary-dark/80",
         'text-lg' => "px-4 py-2 text-body-sm md:text-body-md hover:text-primary/80 dark:hover:text-primary-dark/80",
+        'custom' => 'px-3 py-1 text-label',
+        'custom-lg' => 'px-4 py-2 text-body-sm md:text-body-md',
     ];
 
     $disabledStyle = "opacity-50 pointer-events-none";

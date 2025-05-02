@@ -6,18 +6,25 @@
     {{-- Highlight --}}
     <section id="highlight" class="swiper highlightSwiper w-full">
         <div class="swiper-wrapper">
+
             {{-- Trending --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight :badges="[['content' => 'Trending #1', 'color' => 'secondary']]" />
+                <x-ui.book-highlight />
             </div>
+
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
                 <x-ui.book-highlight title="Halo" />
             </div>
+
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight title="Pengepungan di Bukit Duri" />
+                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['color' => 'tertiary', 'content' => 'Rekomendasi Tim Loka #1']]" :id="$recommendationBook->id" :author="$recommendationBook->author"
+                    :title="$recommendationBook->title"
+                    description="{{ $recommendationBook->description ?? 'Deskripsi tidak tersedia.' }}"
+                    poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}" />
             </div>
+
         </div>
 
         <!-- Navigation buttons -->
@@ -62,7 +69,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const swiper = new Swiper('.highlightSwiper', {
-                slidesPerView: 'auto',
+                slidesPerView: 1,
                 centeredSlides: true,
                 loop: true,
                 pagination: {

@@ -1,4 +1,4 @@
-@props(['color' => 'primary'])
+@props(['color' => 'primary', 'href' => null])
 
 @php
     $colors = [
@@ -8,6 +8,6 @@
     ]
 @endphp
 
-<p class="font-medium text-label w-fit px-2 py-0.5 rounded-full animate-pulse {{ $colors[$color] }}">
+<a @if ($href) href="{{ $href }}" @endif class="font-medium text-label w-fit px-2 py-0.5 rounded-full animate-pulse {{ $colors[$color] }}">
     {{ $slot }}
-</p>
+</a>
