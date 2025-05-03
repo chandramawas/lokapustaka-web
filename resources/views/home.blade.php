@@ -9,17 +9,22 @@
 
             {{-- Trending --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight />
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'secondary', 'content' => 'Trending #1']]" />
             </div>
 
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight title="Halo" />
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'primary', 'content' => 'Baru']]" />
+            </div>
+
+            {{-- Rating Tertinggi --}}
+            <div class="swiper-slide">
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'secondary', 'content' => 'Rating #1']]" />
             </div>
 
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['color' => 'tertiary', 'content' => 'Rekomendasi Tim Loka #1']]" :id="$recommendationBook->id" :author="$recommendationBook->author"
+                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['color' => 'tertiary', 'content' => 'Rekomendasi Tim Loka']]" :id="$recommendationBook->id" :author="$recommendationBook->author"
                     :title="$recommendationBook->title"
                     description="{{ $recommendationBook->description ?? 'Deskripsi tidak tersedia.' }}"
                     poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}" />
@@ -81,7 +86,7 @@
                     prevEl: '.swiper-button-prev',
                 },
                 autoplay: {
-                    delay: 3000,
+                    delay: 4000,
                     pauseOnMouseEnter: true,
                 },
             });

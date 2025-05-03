@@ -62,6 +62,6 @@ $errorClass = $errors->has($name)
     </div>
     {{-- ERROR MESSAGE --}}
     @error($name)
-        <x-forms.label>{{ $message }}</x-label>
+        <x-forms.label>{{ $message }}</x-forms.label>
     @enderror
 </div>

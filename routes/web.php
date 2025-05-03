@@ -92,4 +92,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Book Routes
     Route::get('/book/{book}', [BookController::class, 'detail'])
         ->name('book.detail');
+    Route::get('/book/{book}/reviews', [BookController::class, 'reviews'])
+        ->name('book.reviews');
+    Route::post('/book/{book}/reviews', [BookController::class, 'reviewStore'])
+        ->name('book.review.store');
+    Route::put('/book/{book}/reviews/{review}', [BookController::class, 'reviewUpdate'])
+        ->name('book.review.update');
 });

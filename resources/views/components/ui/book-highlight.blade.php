@@ -73,7 +73,7 @@
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
                 <x-buttons.button href="#" variant="custom" icon
-                    class="shadow-sm hover:shadow-md bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark hover:bg-secondary/80 dark:hover:bg-secondary-dark/80 hover:text-on-secondary/80 dark:hover:text-on-secondary-dark/80">
+                    class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
                     <x-icons.star /><span>4.7</span>
                 </x-buttons.button>
                 <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
@@ -82,6 +82,6 @@
             </div>
         </div>
         {{-- Poster --}}
-        <img src="{{ $poster }}" loading="lazy" class="rounded-md object-cover">
+        <img src="{{ $poster }}" loading="lazy" class="rounded-md object-cover aspect-[2/3]">
     </div>
 </section>
