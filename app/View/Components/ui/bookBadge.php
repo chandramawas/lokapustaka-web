@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class badge extends Component
+class bookBadge extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class badge extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.ui.badge');
+        return view('components.ui.book-badge');
     }
 }

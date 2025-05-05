@@ -1,6 +1,7 @@
-@props(['sectionName' => null, 'badges' => [], 'isbn' => '#', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
+@props(['sectionName' => null, 'badges' => [], 'isbn' => '#', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'genre' => 'Genre', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
 
-<section id="{{ $sectionName ?? '' }}" class="relative overflow-hidden bg-primary dark:bg-primary-dark">
+<section id="{{ $sectionName }}-book-highlight"
+    class="size-full relative overflow-hidden bg-primary dark:bg-primary-dark">
     <svg class="absolute opacity-90 size-full" xmlns="http://www.w3.org/2000/svg" version="1.1"
         xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" preserveAspectRatio="none"
         viewBox="0 0 1440 250">
@@ -43,24 +44,32 @@
     <div
         class="size-full py-4 px-4 md:px-8 flex gap-4 md:gap-8 justify-between backdrop-blur-sm text-on-surface-dark bg-gradient-to-t from-shadow/80 to-transparent">
         {{-- Deskripsi --}}
-        <div class="flex flex-col justify-between w-full">
+        <div class="flex flex-col justify-between w-full gap-1">
             <div class="space-y-1 md:space-y-2">
                 {{-- Badge --}}
-                @if ($badges)
+                @if ($badges || $avgRating)
                     <div class="flex gap-1">
+                        @if ($avgRating)
+                            <x-ui.book-badge variant="rating" :rank="$avgRating" :href="route('book.reviews', $isbn)" />
+                        @endif
                         @foreach ($badges as $badge)
-                            <x-ui.badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
+                            <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
                         @endforeach
                     </div>
                 @endif
                 {{-- Deskripsi --}}
-                <div class="space-y-0.5">
-                    <h3 class="font-medium text-body-sm lg:text-body-lg text-on-surface-variant-dark line-clamp-1">
-                        {{ $author }}
-                    </h3>
-                    <h2 class="font-bold text-heading-sm md:text-heading-lg line-clamp-1">
-                        {{ $title }}
-                    </h2>
+                <div class="flex flex-col gap-2">
+                    <div class="space-y-0.5">
+                        <h3 class="font-medium text-body-sm lg:text-body-lg text-on-surface-variant-dark line-clamp-1">
+                            {{ $author }}
+                        </h3>
+                        <h2 class="font-bold text-heading-sm md:text-heading-lg line-clamp-1">
+                            {{ $title }}
+                        </h2>
+                        <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-1 md:line-clamp-2">
+                            {{ $genre }}
+                        </p>
+                    </div>
                     <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-2 md:line-clamp-3">
                         {{ $description }}
                     </p>
@@ -69,12 +78,6 @@
             {{-- Button --}}
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
-                @if ($avgRating)
-                    <x-buttons.button :href="route('book.reviews', $isbn)" variant="custom" icon
-                        class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
-                        <x-icons.star /><span>{{ $avgRating }}</span>
-                    </x-buttons.button>
-                @endif
                 <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
                 <x-buttons.icon-button :href="route('book.detail', $isbn)"
                     variant="secondary"><x-icons.information /></x-buttons.icon-button>

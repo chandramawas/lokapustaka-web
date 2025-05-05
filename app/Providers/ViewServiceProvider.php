@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Category;
 use App\Models\Genre;
 
 class ViewServiceProvider extends ServiceProvider
@@ -13,12 +12,10 @@ class ViewServiceProvider extends ServiceProvider
     {
         // View Composer untuk navbar
         View::composer('layouts.navbar', function ($view) {
-            // Query kategori dan genre untuk ditampilkan di navbar
-            $categories = Category::orderBy('name')->get();
+            // Query genre untuk ditampilkan di navbar
             $genres = Genre::orderBy('name')->get();
 
             // Share data ke view
-            $view->with('categories', $categories);
             $view->with('genres', $genres);
         });
     }

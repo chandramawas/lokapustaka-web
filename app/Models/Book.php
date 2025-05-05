@@ -11,12 +11,11 @@ class Book extends Model
     use HasFactory;
 
     protected $fillable = [
-        'category_id',
+        'isbn',
         'title',
         'author',
         'publisher',
         'year',
-        'isbn',
         'pages',
         'language',
         'description',
@@ -28,14 +27,14 @@ class Book extends Model
         return 'isbn';
     }
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function genres()
     {
         return $this->belongsToMany(Genre::class);
+    }
+
+    public function getMainGenreAttribute()
+    {
+        return $this->genres()->first();
     }
 
     public function reviews()
@@ -43,7 +42,7 @@ class Book extends Model
         return $this->hasMany(Review::class);
     }
 
-    protected function ratingSummary(): Attribute
+    public function ratingSummary(): Attribute
     {
         return Attribute::get(function () {
             return [

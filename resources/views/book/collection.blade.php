@@ -39,8 +39,7 @@
         <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
             @forelse ($books as $book)
                 <x-cards.book :isbn="$book->isbn" :poster="$book->cover_url" :author="$book->author" :title="$book->title"
-                    :description="$book->description"
-                    category="{{ $book->category->name }}, {{ $book->genres->pluck('name')->join(', ') }}" />
+                    :description="$book->description" :genre="$book->genres->pluck('name')->join(', ')" />
             @empty
                 <p class="text-label">Tidak ada hasil yang ditemukan.</p>
             @endforelse

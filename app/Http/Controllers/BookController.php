@@ -10,7 +10,7 @@ class BookController extends Controller
 {
     public function detail(Book $book)
     {
-        $book->load(['category', 'genres']);
+        $book->load('genres');
 
         return view('book.index', compact('book'));
     }
@@ -18,7 +18,6 @@ class BookController extends Controller
     public function reviews(Book $book)
     {
         $book->load([
-            'category',
             'genres',
             'reviews' => function ($query) {
                 $query->latest();
@@ -61,7 +60,7 @@ class BookController extends Controller
 
     public function reviewUpdate(Request $request, Book $book, Review $review)
     {
-        $request->validate([
+        $validated = $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'review' => 'nullable|string|max:1000',
         ], [
@@ -69,10 +68,7 @@ class BookController extends Controller
             'review.max' => 'Ulasan tidak boleh lebih dari 1000 karakter.',
         ]);
 
-        $review->update([
-            'rating' => $request->rating,
-            'review' => $request->review,
-        ]);
+        $review->update($validated);
 
         return redirect()->back()->with('success', 'Ulasan kamu berhasil diperbarui!');
     }

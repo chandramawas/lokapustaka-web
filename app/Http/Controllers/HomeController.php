@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $recommendationBook = Book::recommendationBook();
+        $recommendationBook = Book::query()->first();
 
         return view('home', compact('recommendationBook'));
     }

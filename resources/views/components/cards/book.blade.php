@@ -4,7 +4,7 @@
 'badge' => null,
 'author' => 'Penulis',
 'title' => 'Judul',
-'category' => 'Kategori',
+'genre' => 'Genre',
 'description' => 'Deskripsi belum tersedia.',
 ])
 
@@ -18,7 +18,7 @@
 
         @if ($badge)
             <div class="absolute top-1 right-1">
-                <x-ui.badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
+                <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
             </div>
         @endif
     </div>
@@ -35,9 +35,9 @@
             <h4 class="font-medium text-body-sm md:text-body-md line-clamp-3 text-on-surface-dark">
                 {{ $title }}
             </h4>
-            {{-- Kategori --}}
+            {{-- Genre --}}
             <p class="text-label line-clamp-1 md:line-clamp-2 text-on-surface-variant-dark">
-                {{ $category }}
+                {{ $genre }}
             </p>
         </div>
         {{-- Deskripsi --}}

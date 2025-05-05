@@ -59,7 +59,7 @@
                 $books[] = [
                     'author' => 'Penulis ' . $i,
                     'title' => 'Judul Buku ' . $i,
-                    'category' => 'Genre',
+                    'genre' => 'Genre',
                 ];
             }
         @endphp

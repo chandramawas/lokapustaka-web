@@ -22,7 +22,7 @@
                     <x-cards.book href="{{ $book['href'] ?? '#' }}"
                         poster="{{ $book['poster'] ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
                         :badge="$book['badge'] ?? null" author="{{ $book['author'] }}" title="{{ $book['title'] }}"
-                        category="{{ $book['category'] }}"
+                        genre="{{ $book['genre'] }}"
                         description="{{ $book['description'] ?? 'Deskripsi belum tersedia.' }}" />
                 </div>
             @endforeach

@@ -12,12 +12,11 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('isbn')->unique()->nullable();
             $table->string('title');
             $table->string('author');
             $table->string('publisher')->nullable();
             $table->string('year')->nullable();
-            $table->string('isbn')->unique()->nullable();
             $table->integer('pages')->nullable();
             $table->string('language')->default('Bahasa Indonesia');
             $table->text('description')->nullable();

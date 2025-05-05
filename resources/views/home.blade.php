@@ -9,27 +9,21 @@
 
             {{-- Trending --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'trending', 'rank' => '1', 'href' => '#']]" />
+                <x-ui.book-highlight sectionName="trending" :badges="[['variant' => 'trending', 'rank' => '1', 'href' => '#']]" />
             </div>
 
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'new', 'href' => '#']]" />
-            </div>
-
-            {{-- Rating Tertinggi --}}
-            <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'rating', 'rank' => '1', 'href' => '#']]" />
+                <x-ui.book-highlight sectionName="newest" :badges="[['variant' => 'new', 'href' => '#']]" />
             </div>
 
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['variant' => 'recommend']]"
+                <x-ui.book-highlight sectionName="recommendation" :badges="[['variant' => 'recommend']]"
                     :isbn="$recommendationBook->isbn" :author="$recommendationBook->author"
-                    :title="$recommendationBook->title"
-                    description="{{ $recommendationBook->description ?? 'Deskripsi tidak tersedia.' }}"
-                    poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
-                    avgRating="{{ $recommendationBook->rating_summary['average'] ?? '' }}" />
+                    :genre="$recommendationBook->genres->pluck('name')->join(', ')" :title="$recommendationBook->title"
+                    :description="$recommendationBook->description" :poster="$recommendationBook->cover_url"
+                    avgRating="{{ $recommendationBook->rating_summary['average'] }}" />
             </div>
 
         </div>
@@ -40,8 +34,8 @@
         <div class="swiper-pagination"></div>
     </section>
 
-    {{-- Chip Kategori --}}
-    <section id="categoryChip" class="p-3 lg:px-6 grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
+    {{-- Chip Genre --}}
+    <section id="genreChip" class="p-3 lg:px-6 grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
         <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Novel</x-buttons.button>
         <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Non-Fiksi</x-buttons.button>
         <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Pendidikan</x-buttons.button>
@@ -56,7 +50,7 @@
                 $books[] = [
                     'author' => 'Penulis ' . $i,
                     'title' => 'Judul Buku ' . $i,
-                    'category' => 'Genre',
+                    'genre' => 'Genre',
                 ];
             }
         @endphp
@@ -75,7 +69,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const swiper = new Swiper('.highlightSwiper', {
+            const highlightSwiper = new Swiper('.highlightSwiper', {
                 slidesPerView: 1,
                 centeredSlides: true,
                 loop: true,
@@ -92,6 +86,28 @@
                     pauseOnMouseEnter: true,
                 },
             });
+
+            // ===== Tinggi Dinamis untuk Swiper Slide =====
+            const slides = document.querySelectorAll('.highlightSwiper .swiper-slide');
+            // Hitung tinggi konten dalam slide
+            let maxHeight = 0;
+            slides.forEach(slide => {
+                const content = slide.firstElementChild; // ambil elemen pertama (komponen highlight)
+                if (content) {
+                    const contentHeight = content.offsetHeight + parseFloat(getComputedStyle(slide).paddingTop) + parseFloat(getComputedStyle(slide).paddingBottom);
+                    if (contentHeight > maxHeight) {
+                        maxHeight = contentHeight;
+                    }
+                }
+            });
+
+            // Terapkan min-height biar padding tetap ngaruh
+            slides.forEach(slide => {
+                slide.style.minHeight = maxHeight + 'px';
+            });
+
+            // Optional: container utama juga
+            document.querySelector('.highlightSwiper').style.minHeight = maxHeight + 'px';
         });
     </script>
 @endpush

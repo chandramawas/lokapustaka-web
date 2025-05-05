@@ -5,7 +5,7 @@
 @section('breadcrumbs')
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
-            ['label' => $book->category->name, 'url' => route('account.index')],
+            ['label' => $book->mainGenre->name, 'url' => route('account.index')],
             ['label' => $book->title, 'url' => route('book.detail', $book->isbn)],
             ['label' => 'Ulasan', 'url' => route('book.reviews', $book->isbn)],
         ]" />
@@ -26,7 +26,6 @@
             {{ $book->title }}
         </h2>
         <p class="text-label text-on-surface-variant dark:text-on-surface-variant-dark line-clamp-2">
-            {{ $book->category->name }},
             {{ $book->genres->pluck('name')->join(', ') }}
         </p>
     </div>

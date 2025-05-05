@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Book;
-use App\Models\Category;
 use App\Models\Genre;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,15 +14,13 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        $nonFiction = Category::where('name', 'Non-Fiksi')->first();
-        $novel = Category::where('name', 'Novel')->first();
-
-        $drama = Genre::where('name', 'Drama')->first();
-        $thriller = Genre::where('name', 'Thriller')->first();
-        $sejarah = Genre::where('name', 'Sejarah')->first();
+        $drama = Genre::firstOrCreate(['name' => 'Drama']);
+        $thriller = Genre::firstOrCreate(['name' => 'Thriller']);
+        $sejarah = Genre::firstOrCreate(['name' => 'Sejarah']);
+        $fantasi = Genre::firstOrCreate(['name' => 'Fantasi']);
+        $motivasi = Genre::firstOrCreate(['name' => 'Motivasi']);
 
         $book1 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'Sejarah Dunia yang Disembunyikan',
             'author' => 'Jonathan Black',
             'publisher' => 'Gramedia',
@@ -37,7 +34,6 @@ class BookSeeder extends Seeder
         $book1->genres()->attach([$sejarah->id, $thriller->id, $drama->id]);
 
         $book2 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Perahu Kertas',
             'author' => 'Dee Lestari',
             'publisher' => 'Bentang Pustaka',
@@ -51,7 +47,6 @@ class BookSeeder extends Seeder
         $book2->genres()->attach([$drama->id]);
 
         $book3 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'Sapiens: Riwayat Singkat Umat Manusia',
             'author' => 'Yuval Noah Harari',
             'publisher' => 'KPG',
@@ -64,7 +59,6 @@ class BookSeeder extends Seeder
         $book3->genres()->attach([$sejarah->id]);
 
         $book4 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Laskar Pelangi',
             'author' => 'Andrea Hirata',
             'publisher' => 'Bentang Pustaka',
@@ -77,7 +71,6 @@ class BookSeeder extends Seeder
         $book4->genres()->attach([$drama->id]);
 
         $book5 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'Atomic Habits',
             'author' => 'James Clear',
             'publisher' => 'Gramedia',
@@ -90,7 +83,6 @@ class BookSeeder extends Seeder
         $book5->genres()->attach([$sejarah->id]);
 
         $book6 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Bumi Manusia',
             'author' => 'Pramoedya Ananta Toer',
             'publisher' => 'Lentera Dipantara',
@@ -103,7 +95,6 @@ class BookSeeder extends Seeder
         $book6->genres()->attach([$drama->id]);
 
         $book7 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'The Subtle Art of Not Giving a F*ck',
             'author' => 'Mark Manson',
             'publisher' => 'Gramedia',
@@ -116,7 +107,6 @@ class BookSeeder extends Seeder
         $book7->genres()->attach([$sejarah->id]);
 
         $book8 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Supernova: Ksatria, Puteri, dan Bintang Jatuh',
             'author' => 'Dee Lestari',
             'publisher' => 'Bentang Pustaka',
@@ -129,7 +119,6 @@ class BookSeeder extends Seeder
         $book8->genres()->attach([$drama->id]);
 
         $book9 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'Think and Grow Rich',
             'author' => 'Napoleon Hill',
             'publisher' => 'Gramedia',
@@ -142,7 +131,6 @@ class BookSeeder extends Seeder
         $book9->genres()->attach([$sejarah->id]);
 
         $book10 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Ayat-Ayat Cinta',
             'author' => 'Habiburrahman El Shirazy',
             'publisher' => 'Republika',
@@ -155,7 +143,6 @@ class BookSeeder extends Seeder
         $book10->genres()->attach([$drama->id]);
 
         $book11 = Book::create([
-            'category_id' => $nonFiction->id,
             'title' => 'Rich Dad Poor Dad',
             'author' => 'Robert T. Kiyosaki',
             'publisher' => 'Gramedia',
@@ -168,7 +155,6 @@ class BookSeeder extends Seeder
         $book11->genres()->attach([$sejarah->id]);
 
         $book12 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Dilan: Dia adalah Dilanku Tahun 1990',
             'author' => 'Pidi Baiq',
             'publisher' => 'Pastel Books',
@@ -181,8 +167,7 @@ class BookSeeder extends Seeder
         $book12->genres()->attach([$drama->id]);
 
         $book13 = Book::create([
-            'category_id' => $nonFiction->id,
-            'title' => 'Man\'s Search for Meaning',
+            'title' => "Man's Search for Meaning",
             'author' => 'Viktor E. Frankl',
             'publisher' => 'Beacon Press',
             'year' => '1946',
@@ -194,7 +179,6 @@ class BookSeeder extends Seeder
         $book13->genres()->attach([$sejarah->id]);
 
         $book14 = Book::create([
-            'category_id' => $novel->id,
             'title' => 'Harry Potter dan Batu Bertuah',
             'author' => 'J.K. Rowling',
             'publisher' => 'Gramedia',

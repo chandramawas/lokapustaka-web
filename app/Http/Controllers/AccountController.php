@@ -27,7 +27,7 @@ class AccountController extends Controller
     //Handle Account Data Update
     public function update(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'gender' => 'required|in:Laki-Laki,Perempuan,Lainnya',
             'birthdate' => 'required|date|date_format:Y-m-d',
@@ -42,11 +42,7 @@ class AccountController extends Controller
             'birthdate.date_format' => 'Format tanggal lahir tidak sesuai. Gunakan format YYYY-MM-DD.',
         ]);
 
-        $user = auth()->user();
-        $user->name = $request->name;
-        $user->gender = $request->gender;
-        $user->birthdate = $request->birthdate;
-        $user->save();
+        auth()->user()->update($validated);
 
         return redirect()->route('account.settings')->with('update-success', 'Profil berhasil diperbarui!');
     }
