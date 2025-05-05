@@ -23,6 +23,11 @@ class Book extends Model
         'cover_url',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'isbn';
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);

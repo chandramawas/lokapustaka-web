@@ -19,7 +19,7 @@
                 {{ session('update-success') }}
             </x-forms.label>
         @endif
-        <div class="space-y-2">
+        <div class="flex flex-col gap-2">
             @csrf
             <!-- Nama -->
             <x-forms.input type="text" name="name" :value="$user->name" size="sm" label="Nama" placeholder="Masukkan Nama"

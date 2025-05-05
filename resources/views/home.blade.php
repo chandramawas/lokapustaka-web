@@ -9,22 +9,23 @@
 
             {{-- Trending --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'secondary', 'content' => 'Trending #1']]" />
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'trending', 'rank' => '1', 'href' => '#']]" />
             </div>
 
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'primary', 'content' => 'Baru']]" />
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'new', 'href' => '#']]" />
             </div>
 
             {{-- Rating Tertinggi --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['color' => 'secondary', 'content' => 'Rating #1']]" />
+                <x-ui.book-highlight sectionName="highest-rating-book" :badges="[['variant' => 'rating', 'rank' => '1', 'href' => '#']]" />
             </div>
 
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['color' => 'tertiary', 'content' => 'Rekomendasi Tim Loka']]" :id="$recommendationBook->id" :author="$recommendationBook->author"
+                <x-ui.book-highlight sectionName="recommendation-book" :badges="[['variant' => 'recommend']]"
+                    :isbn="$recommendationBook->isbn" :author="$recommendationBook->author"
                     :title="$recommendationBook->title"
                     description="{{ $recommendationBook->description ?? 'Deskripsi tidak tersedia.' }}"
                     poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"

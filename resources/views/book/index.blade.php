@@ -6,17 +6,17 @@
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
             ['label' => $book->category->name, 'url' => route('account.index')],
-            ['label' => $book->title, 'url' => route('book.detail', $book->id)],
+            ['label' => $book->title, 'url' => route('book.detail', $book->isbn)],
         ]" />
 @endsection
 
 @section('first-content')
-    <img src="{{ $book->cover_url }}"
+    <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
         class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
 @endsection
 
 @section('second-content')
-    <x-ui.badge href="#" color="secondary">Trending #1</x-ui.badge>
+    <x-ui.badge variant="trending" rank="1" href="#" />
     {{-- Core --}}
     <div class="space-y-0.5">
         <h3
@@ -34,7 +34,7 @@
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
         <x-buttons.button href="#" variant="primary">Baca Sekarang</x-buttons.button>
-        <x-buttons.button :href="route('book.reviews', $book->id)" variant="custom" icon
+        <x-buttons.button :href="route('book.reviews', $book->isbn)" variant="custom" icon
             class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
             <x-icons.star />
             <span>
@@ -91,10 +91,10 @@
             </div>
             <div>
                 <h5 class="font-medium text-label text-on-surface-variant dark:text-on-surface-variant-dark">
-                    ISBN/ISSN
+                    ISBN
                 </h5>
                 <p class="line-clamp-1">
-                    {{ $book->isbn_issn }}
+                    {{ $book->isbn }}
                 </p>
             </div>
             <div>

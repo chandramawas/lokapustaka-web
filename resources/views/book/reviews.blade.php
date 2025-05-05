@@ -6,14 +6,14 @@
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
             ['label' => $book->category->name, 'url' => route('account.index')],
-            ['label' => $book->title, 'url' => route('book.detail', $book->id)],
-            ['label' => 'Ulasan', 'url' => route('book.reviews', $book->id)],
+            ['label' => $book->title, 'url' => route('book.detail', $book->isbn)],
+            ['label' => 'Ulasan', 'url' => route('book.reviews', $book->isbn)],
         ]" />
 @endsection
 
 @section('first-content')
     {{-- Cover Buku --}}
-    <img src="https://drive.google.com/thumbnail?id=1W4j-hRkaHwqzcFFjDLIgYXxIUoiIvXoC&sz=w1000"
+    <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
         class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
 
     {{-- Core Buku --}}
@@ -67,6 +67,11 @@
                     <p class="font-medium text-body-sm">Ulasan Kamu</p>
                     <p class="text-label text-on-surface-variant dark:text-on-surface-variant-dark">
                         {{ $userReview->created_at->diffForHumans() }}
+                        @if ($userReview->updated_at->gt($userReview->created_at))
+                            <span class="italic">
+                                (diedit {{ $userReview->updated_at->diffForHumans() }})
+                            </span>
+                        @endif
                     </p>
                 </div>
 
@@ -95,7 +100,7 @@
             </div>
 
             {{-- Edit Form --}}
-            <form method="POST" action="{{ route('book.review.update', [$book->id, $userReview->id]) }}" x-show="editMode"
+            <form method="POST" action="{{ route('book.review.update', [$book->isbn, $userReview->id]) }}" x-show="editMode"
                 class="space-y-2" x-cloak>
                 @csrf
                 @method('PUT')
@@ -177,8 +182,8 @@
     @else {{-- Jika Belum Review => Buat Review --}}
         <div
             class="bg-surface dark:bg-surface-dark border border-outline-variant dark:border-outline-variant-dark rounded-xl p-3 space-y-2">
-            <form method="POST" action="{{ route('book.review.store', $book->id) }}"
-                class="space-y-2 md:space-y-4 text-body-md md:text-body-lg lg:text-body-xl">
+            <form method="POST" action="{{ route('book.review.store', $book->isbn) }}"
+                class="flex flex-col gap-2 md:gap-4 text-body-md md:text-body-lg lg:text-body-xl">
                 @csrf
                 {{-- Rating (bintang) --}}
                 <div class="space-y-1">
@@ -261,9 +266,10 @@
     <hr class="border-outline-variant dark:border-outline-variant-dark" />
 
     {{-- Daftar Ulasan --}}
-    <div class="space-y-3 max-h-[50vh] overflow-y-auto dropdown-scroll">
+    <div class="space-y-3 max-h-[500px] overflow-y-auto dropdown-scroll">
         @forelse ($book->reviews as $review)
-            <div class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 rounded-xl shadow-sm space-y-1">
+            <div
+                class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 mr-1 rounded-xl shadow-sm border border-outline-variant dark:border-outline-variant-dark space-y-1">
                 {{-- Header Review --}}
                 <div class="flex justify-between items-center">
                     <div>
@@ -275,6 +281,11 @@
                         </p>
                         <p class="text-label text-on-surface-variant dark:text-on-surface-variant-dark">
                             {{ $review->created_at->diffForHumans() }}
+                            @if ($review->updated_at->gt($review->created_at))
+                                <span class="italic">
+                                    (diedit {{ $review->updated_at->diffForHumans() }})
+                                </span>
+                            @endif
                         </p>
                     </div>
                     {{-- Rating --}}

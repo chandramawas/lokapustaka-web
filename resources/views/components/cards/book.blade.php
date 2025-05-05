@@ -1,5 +1,5 @@
 @props([
-'href' => '#',
+'isbn' => '#',
 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.',
 'badge' => null,
 'author' => 'Penulis',
@@ -8,7 +8,7 @@
 'description' => 'Deskripsi belum tersedia.',
 ])
 
-<a href="{{ $href }}" aria-label="{{ $author }}'s {{ $title }}"
+<a href="{{ route('book.detail', $isbn) }}" aria-label="{{ $author }}'s {{ $title }}"
     class="group relative block w-full h-full rounded-lg overflow-hidden transition border border-outline-variant">
 
     {{-- POSTER --}}
@@ -17,9 +17,8 @@
             class="w-full aspect-[2/3] object-cover">
 
         @if ($badge)
-            <div
-                class="absolute top-1 right-1">
-                <x-ui.badge color="{{ $badge['color'] }}">{{ $badge['content'] }}</x-ui.badge>
+            <div class="absolute top-1 right-1">
+                <x-ui.badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
             </div>
         @endif
     </div>

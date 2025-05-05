@@ -1,13 +1,9 @@
-@props(['sectionName' => null, 'badges' => [], 'id' => '1', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
+@props(['sectionName' => null, 'badges' => [], 'isbn' => '#', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
 
-@php
-
-@endphp
-
-<section id="{{ $sectionName ?? '' }}" class="relative overflow-hidden h-[250px] md:h-[300px]">
-    <svg class="absolute -z-10" xmlns="http://www.w3.org/2000/svg" version="1.1"
-        xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1440" height="300"
-        preserveAspectRatio="none" viewBox="0 0 1440 250">
+<section id="{{ $sectionName ?? '' }}" class="relative overflow-hidden bg-primary dark:bg-primary-dark">
+    <svg class="absolute opacity-90 size-full" xmlns="http://www.w3.org/2000/svg" version="1.1"
+        xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" preserveAspectRatio="none"
+        viewBox="0 0 1440 250">
         <g mask="url(&quot;#SvgjsMask1000&quot;)" fill="none">
             <rect width="1440" height="250" x="0" y="0" fill="#0e2a47"></rect>
             <path d="M37 250L287 0L573.5 0L323.5 250z" fill="url(&quot;#SvgjsLinearGradient1001&quot;)"></path>
@@ -43,8 +39,9 @@
             </linearGradient>
         </defs>
     </svg>
+
     <div
-        class="size-full py-4 px-4 md:px-8 flex gap-4 md:gap-8 justify-between backdrop-blur-sm backdrop-brightness-75 text-on-surface-dark bg-gradient-to-t from-shadow/80 to-transparent">
+        class="size-full py-4 px-4 md:px-8 flex gap-4 md:gap-8 justify-between backdrop-blur-sm text-on-surface-dark bg-gradient-to-t from-shadow/80 to-transparent">
         {{-- Deskripsi --}}
         <div class="flex flex-col justify-between w-full">
             <div class="space-y-1 md:space-y-2">
@@ -52,7 +49,7 @@
                 @if ($badges)
                     <div class="flex gap-1">
                         @foreach ($badges as $badge)
-                            <x-ui.badge color="{{ $badge['color'] }}">{{ $badge['content'] }}</x-ui.badge>
+                            <x-ui.badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
                         @endforeach
                     </div>
                 @endif
@@ -73,17 +70,17 @@
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
                 @if ($avgRating)
-                    <x-buttons.button :href="route('book.reviews', $id)" variant="custom" icon
+                    <x-buttons.button :href="route('book.reviews', $isbn)" variant="custom" icon
                         class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
                         <x-icons.star /><span>{{ $avgRating }}</span>
                     </x-buttons.button>
                 @endif
                 <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
-                <x-buttons.icon-button :href="route('book.detail', $id)"
+                <x-buttons.icon-button :href="route('book.detail', $isbn)"
                     variant="secondary"><x-icons.information /></x-buttons.icon-button>
             </div>
         </div>
         {{-- Poster --}}
-        <img src="{{ $poster }}" loading="lazy" class="rounded-md object-cover aspect-[2/3]">
+        <img src="{{ $poster }}" loading="lazy" class="h-[200px] md:h-[250px] rounded-md object-cover aspect-[2/3]">
     </div>
 </section>

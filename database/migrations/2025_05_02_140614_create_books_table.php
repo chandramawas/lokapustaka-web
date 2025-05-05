@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->string('author');
             $table->string('publisher')->nullable();
             $table->string('year')->nullable();
-            $table->string('isbn_issn')->nullable();
+            $table->string('isbn')->unique()->nullable();
             $table->integer('pages')->nullable();
-            $table->string('language')->nullable();
+            $table->string('language')->default('Bahasa Indonesia');
             $table->text('description')->nullable();
             $table->string('cover_url')->nullable();
             $table->timestamps();

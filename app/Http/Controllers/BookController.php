@@ -17,7 +17,15 @@ class BookController extends Controller
 
     public function reviews(Book $book)
     {
-        $book->load(['category', 'genres', 'reviews.user']);
+        $book->load([
+            'category',
+            'genres',
+            'reviews' => function ($query) {
+                $query->latest();
+            },
+            'reviews.user',
+        ]);
+
         $userReview = $book->reviews->firstWhere('user_id', auth()->id());
 
         return view('book.reviews', compact('book', 'userReview'));

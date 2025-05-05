@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="space-y-2 md:space-y-3 p-2 md:p-3">
+        {{-- Header/page title and sort --}}
         <div class="flex items-center justify-between">
             <div class="space-y-0.5">
                 <h2 class="font-bold text-heading-sm">
@@ -37,8 +38,8 @@
         {{-- Grid hasil buku --}}
         <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
             @forelse ($books as $book)
-                <x-cards.book :href="route('book.detail', $book->id)" :poster="$book->cover_url" :author="$book->author"
-                    :title="$book->title" :description="$book->description"
+                <x-cards.book :isbn="$book->isbn" :poster="$book->cover_url" :author="$book->author" :title="$book->title"
+                    :description="$book->description"
                     category="{{ $book->category->name }}, {{ $book->genres->pluck('name')->join(', ') }}" />
             @empty
                 <p class="text-label">Tidak ada hasil yang ditemukan.</p>
@@ -46,7 +47,7 @@
         </div>
 
         {{-- Pagination --}}
-        <div>
+        <div class="text-body-md">
             {{ $books->links() }}
         </div>
     </div>
