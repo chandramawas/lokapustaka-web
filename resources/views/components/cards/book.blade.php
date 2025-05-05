@@ -29,15 +29,15 @@
         class="absolute inset-0 flex flex-col justify-between p-2 bg-gradient-to-t from-surface-dark to-transparent opacity-0 group-hover:backdrop-brightness-75 group-hover:backdrop-blur-sm group-hover:opacity-100 transition duration-300">
         <div>
             {{-- Penulis --}}
-            <h5 class="text-label truncate text-on-surface-variant-dark">
+            <h5 class="text-label line-clamp-1 text-on-surface-variant-dark">
                 {{ $author }}
             </h5>
             {{-- Judul --}}
-            <h4 class="font-medium text-body-md line-clamp-3 text-on-surface-dark">
+            <h4 class="font-medium text-body-sm md:text-body-md line-clamp-3 text-on-surface-dark">
                 {{ $title }}
             </h4>
             {{-- Kategori --}}
-            <p class="text-label truncate text-on-surface-variant-dark">
+            <p class="text-label line-clamp-1 md:line-clamp-2 text-on-surface-variant-dark">
                 {{ $category }}
             </p>
         </div>

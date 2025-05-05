@@ -54,6 +54,7 @@
     @elseif (session('success'))
         <x-forms.label variant="success" textAlign="center">{{ session('success') }}</x-forms.label>
     @endif
+
     {{-- CTA: Tulis/Edit Review --}}
     {{-- Jika Sudah Review => Edit Review --}}
     @if ($userReview)
@@ -266,7 +267,12 @@
                 {{-- Header Review --}}
                 <div class="flex justify-between items-center">
                     <div>
-                        <p class="font-medium text-body-sm">{{ $review->user->name ?? 'Anonim' }}</p>
+                        <p class="font-medium text-body-sm">
+                            {{ $review->user->name ?? 'Anonim' }}
+                            @if ($review->user->id && $review->user->id === auth()->user()->id)
+                                {{' (kamu)'}}
+                            @endif
+                        </p>
                         <p class="text-label text-on-surface-variant dark:text-on-surface-variant-dark">
                             {{ $review->created_at->diffForHumans() }}
                         </p>

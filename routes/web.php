@@ -90,6 +90,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('home');
 
     // Book Routes
+    Route::get('/book', [BookController::class, 'collection'])
+        ->name('book.collection');
     Route::get('/book/{book}', [BookController::class, 'detail'])
         ->name('book.detail');
     Route::get('/book/{book}/reviews', [BookController::class, 'reviews'])

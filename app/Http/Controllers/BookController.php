@@ -68,4 +68,47 @@ class BookController extends Controller
 
         return redirect()->back()->with('success', 'Ulasan kamu berhasil diperbarui!');
     }
+
+    public function collection(Request $request)
+    {
+        $query = Book::query();
+
+        // Keyword pencarian
+        if ($request->filled('q')) {
+            $query->where(function ($subquery) use ($request) {
+                $subquery->where('title', 'like', '%' . $request->q . '%')
+                    ->orWhere('author', 'like', '%' . $request->q . '%')
+                    ->orWhere('publisher', 'like', '%' . $request->q . '%');
+            });
+        }
+
+        // Sorting
+        switch ($request->sort) {
+            case 'az':
+                $query->orderBy('title', 'asc');
+                break;
+            case 'popular':
+                $query->orderBy('views', 'desc'); // TODO
+                break;
+            case 'rating':
+                $query->withAvg('reviews', 'rating')
+                    ->orderBy('reviews_avg_rating', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                // default sorting kalau nggak ada
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        // Pagination
+        $books = $query->paginate(12)->withQueryString();
+
+        return view('book.collection', [
+            'books' => $books,
+            'searchQuery' => $request->q,
+        ]);
+    }
 }

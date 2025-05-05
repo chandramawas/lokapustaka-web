@@ -7,8 +7,8 @@
         </x-buttons.text-button>
         @auth
             {{-- MENU --}}
-            <span class="hidden md:flex space-x-2 font-medium">
-                <x-buttons.text-button href="#">Menu 1</x-buttons.text-button>
+            <span class="hidden md:flex space-x-3 font-medium">
+                <x-buttons.text-button :href="route('book.collection')">Semua Koleksi</x-buttons.text-button>
                 <x-buttons.text-button href="#">Menu 2</x-buttons.text-button>
                 <x-buttons.text-button href="#">Menu 3</x-buttons.text-button>
             </span>
@@ -26,9 +26,12 @@
 
                 <x-ui.modal>
                     <div class="text-label">
-                        <x-forms.input type="text" name="search" placeholder="Cari buku..." leadingIcon required>
-                            <x-icons.search />
-                        </x-forms.input>
+                        <form action="{{ route('book.collection') }}" method="get">
+                            <x-forms.input type="text" name="q" placeholder="Cari buku..." value="{{ request('q') }}"
+                                leadingIcon required>
+                                <x-icons.search />
+                            </x-forms.input>
+                        </form>
                     </div>
                 </x-ui.modal>
             </div>
