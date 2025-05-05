@@ -1,4 +1,4 @@
-@props(['sectionName' => null, 'badges' => [], 'id' => '1', 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
+@props(['sectionName' => null, 'badges' => [], 'id' => '1', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
 
 @php
 
@@ -72,10 +72,12 @@
             {{-- Button --}}
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
-                <x-buttons.button href="#" variant="custom" icon
-                    class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
-                    <x-icons.star /><span>4.7</span>
-                </x-buttons.button>
+                @if ($avgRating)
+                    <x-buttons.button :href="route('book.reviews', $id)" variant="custom" icon
+                        class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
+                        <x-icons.star /><span>{{ $avgRating }}</span>
+                    </x-buttons.button>
+                @endif
                 <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
                 <x-buttons.icon-button :href="route('book.detail', $id)"
                     variant="secondary"><x-icons.information /></x-buttons.icon-button>

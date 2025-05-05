@@ -27,7 +27,8 @@
                 <x-ui.book-highlight sectionName="recommendation-book" :badges="[['color' => 'tertiary', 'content' => 'Rekomendasi Tim Loka']]" :id="$recommendationBook->id" :author="$recommendationBook->author"
                     :title="$recommendationBook->title"
                     description="{{ $recommendationBook->description ?? 'Deskripsi tidak tersedia.' }}"
-                    poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}" />
+                    poster="{{ $recommendationBook->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
+                    avgRating="{{ $recommendationBook->rating_summary['average'] ?? '' }}" />
             </div>
 
         </div>
