@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Koleksi ' . $genre->name)
+
 @section('navbar', view('layouts.navbar'))
 
 @section('content')

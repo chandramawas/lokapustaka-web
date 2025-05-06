@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Cari ' . $searchQuery ?? 'Koleksi')
+
 @section('navbar', view('layouts.navbar'))
 
 @section('content')
