@@ -45,7 +45,7 @@
                 <x-ui.dropdown minWidth="200px" center>
                     <div class="p-2 grid grid-cols-2 gap-2">
                         @foreach($genres as $genre)
-                            <x-buttons.text-button href="#{{ $genre->name }}" class="break-all">
+                            <x-buttons.text-button :href="route('book.genre.collection', $genre->slug)" class="break-all">
                                 {{ $genre->name }}
                             </x-buttons.text-button>
                         @endforeach

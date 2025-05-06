@@ -5,7 +5,7 @@
 @section('breadcrumbs')
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
-            ['label' => $book->mainGenre->name, 'url' => route('account.index')],
+            ['label' => $book->mainGenre->name, 'url' => route('book.genre.collection', $book->mainGenre->slug)],
             ['label' => $book->title, 'url' => route('book.detail', $book->isbn)],
         ]" />
 @endsection

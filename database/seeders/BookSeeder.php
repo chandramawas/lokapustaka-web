@@ -19,6 +19,7 @@ class BookSeeder extends Seeder
         $sejarah = Genre::firstOrCreate(['name' => 'Sejarah']);
         $fantasi = Genre::firstOrCreate(['name' => 'Fantasi']);
         $motivasi = Genre::firstOrCreate(['name' => 'Motivasi']);
+        $fiksiKlasik = Genre::firstOrCreate(['name' => 'Fiksi Klasik']);
 
         $book1 = Book::create([
             'title' => 'Sejarah Dunia yang Disembunyikan',
@@ -189,5 +190,65 @@ class BookSeeder extends Seeder
             'description' => 'Petualangan Harry Potter di dunia sihir yang penuh keajaiban.',
         ]);
         $book14->genres()->attach([$drama->id]);
+
+        $book15 = Book::create([
+            'title' => 'The Alchemist',
+            'author' => 'Paulo Coelho',
+            'publisher' => 'HarperOne',
+            'year' => '1988',
+            'isbn' => '9780061122415',
+            'pages' => 208,
+            'language' => 'Indonesia',
+            'description' => 'Kisah inspiratif tentang perjalanan seorang gembala muda mencari harta karun.',
+        ]);
+        $book15->genres()->attach([$motivasi->id]);
+
+        $book16 = Book::create([
+            'title' => '1984',
+            'author' => 'George Orwell',
+            'publisher' => 'Gramedia',
+            'year' => '1949',
+            'isbn' => '9786024526992',
+            'pages' => 328,
+            'language' => 'Indonesia',
+            'description' => 'Novel distopia tentang pengawasan totaliter dan kebebasan individu.',
+        ]);
+        $book16->genres()->attach([$thriller->id]);
+
+        $book17 = Book::create([
+            'title' => 'The Hobbit',
+            'author' => 'J.R.R. Tolkien',
+            'publisher' => 'Gramedia',
+            'year' => '1937',
+            'isbn' => '9786024526993',
+            'pages' => 310,
+            'language' => 'Indonesia',
+            'description' => 'Petualangan Bilbo Baggins di dunia fantasi Middle-earth.',
+        ]);
+        $book17->genres()->attach([$fantasi->id]);
+
+        $book18 = Book::create([
+            'title' => 'To Kill a Mockingbird',
+            'author' => 'Harper Lee',
+            'publisher' => 'Gramedia',
+            'year' => '1960',
+            'isbn' => '9786024526994',
+            'pages' => 281,
+            'language' => 'Indonesia',
+            'description' => 'Kisah tentang keadilan dan prasangka di Amerika Selatan.',
+        ]);
+        $book18->genres()->attach([$drama->id]);
+
+        $book19 = Book::create([
+            'title' => 'The Great Gatsby',
+            'author' => 'F. Scott Fitzgerald',
+            'publisher' => 'Gramedia',
+            'year' => '1925',
+            'isbn' => '9786024526995',
+            'pages' => 180,
+            'language' => 'Indonesia',
+            'description' => 'Kisah tentang mimpi Amerika dan cinta yang tak terbalas.',
+        ]);
+        $book19->genres()->attach([$drama->id]);
     }
 }

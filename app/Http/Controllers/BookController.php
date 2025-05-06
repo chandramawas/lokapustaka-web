@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Genre;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\Book;
@@ -92,18 +93,18 @@ class BookController extends Controller
                 $query->orderBy('title', 'asc');
                 break;
             case 'popular':
-                $query->orderBy('views', 'desc'); // TODO
+                // TODO
                 break;
             case 'rating':
                 $query->withAvg('reviews', 'rating')
                     ->orderBy('reviews_avg_rating', 'desc');
                 break;
             case 'newest':
-                $query->orderBy('created_at', 'desc');
+                $query->latest();
                 break;
             default:
                 // default sorting kalau nggak ada
-                $query->orderBy('created_at', 'desc');
+                $query->orderBy('title', 'asc');
                 break;
         }
 
@@ -113,6 +114,44 @@ class BookController extends Controller
         return view('book.collection', [
             'books' => $books,
             'searchQuery' => $request->q,
+        ]);
+    }
+
+    public function genreCollection(Request $request, $slug)
+    {
+        $genreModel = Genre::where('slug', $slug)->firstOrFail();
+
+        // Query awal: semua buku dengan genre itu
+        $booksQuery = $genreModel->books()->with('genres');
+
+        // Sorting
+        switch ($request->sort) {
+            case 'az':
+                $booksQuery->orderBy('title', 'asc');
+                break;
+            case 'popular':
+                // TODO
+                break;
+            case 'rating':
+                $booksQuery->withAvg('reviews', 'rating')
+                    ->orderBy('reviews_avg_rating', 'desc');
+                break;
+            case 'newest':
+                $booksQuery->latest();
+                break;
+            default:
+                // default sorting kalau nggak ada
+                $booksQuery->orderBy('title', 'asc');
+                break;
+        }
+
+        // Paginate hasilnya
+        $books = $booksQuery->paginate(12)->withQueryString();
+
+        // Kirim ke view
+        return view('book.genre', [
+            'books' => $books,
+            'genre' => $genreModel,
         ]);
     }
 }
