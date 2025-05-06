@@ -77,7 +77,7 @@
                 </section>
             @endif
             <section id="content"
-                class="p-2 md:p-3 space-y-1 md:space-y-2 rounded-lg shadow bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark">
+                class="p-2 md:p-3 space-y-2 rounded-lg shadow bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark">
                 <div class="font-bold text-heading-sm md:text-heading-md">
                     @yield('bookshelf-title', 'Koleksi Saya')
                 </div>

@@ -16,19 +16,47 @@ class BookController extends Controller
         return view('book.index', compact('book'));
     }
 
-    public function reviews(Book $book)
+    public function reviews(Request $request, Book $book)
     {
-        $book->load([
-            'genres',
-            'reviews' => function ($query) {
-                $query->latest();
-            },
-            'reviews.user',
-        ]);
+        $book->load('genres');
+
+        $reviewsQuery = $book->reviews()->with('user');
+
+        // Filter rating
+        if ($request->filled('rating')) {
+            $reviewsQuery->where('rating', $request->rating);
+        }
+
+        // Filter yang ada teks review
+        if ($request->filled('text')) {
+            if ($request->text === 'yes') {
+                $reviewsQuery->whereNotNull('review')->where('review', '!=', '');
+            } elseif ($request->text === 'no') {
+                $reviewsQuery->whereNull('review')->orWhere('review', '');
+            }
+        }
+
+        // Sorting
+        switch ($request->sort) {
+            case 'oldest':
+                $reviewsQuery->orderBy('updated_at', 'asc');
+                break;
+            case 'highest':
+                $reviewsQuery->orderBy('rating', 'desc');
+                break;
+            case 'lowest':
+                $reviewsQuery->orderBy('rating', 'asc');
+                break;
+            default:
+                $reviewsQuery->orderBy('updated_at', 'desc');
+                break;
+        }
+
+        $reviews = $reviewsQuery->paginate(5)->withQueryString();
 
         $userReview = $book->reviews->firstWhere('user_id', auth()->id());
 
-        return view('book.reviews', compact('book', 'userReview'));
+        return view('book.reviews', compact('book', 'reviews', 'userReview'));
     }
 
     public function reviewStore(Request $request, Book $book)

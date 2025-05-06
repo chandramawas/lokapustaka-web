@@ -20,7 +20,7 @@ class ReviewSeeder extends Seeder
 
         foreach ($books as $book) {
             // Setiap buku dikasih 0-7 review random
-            $numReviews = rand(0, 7);
+            $numReviews = rand(10, 15);
             $reviewSent = rand(70, 200);
 
             for ($i = 0; $i < $numReviews; $i++) {

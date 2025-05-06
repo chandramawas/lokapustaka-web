@@ -264,11 +264,51 @@
     {{-- Divider --}}
     <hr class="border-outline-variant dark:border-outline-variant-dark" />
 
+    {{-- Filter Ulasan --}}
+    <div class="space-y-1">
+        <h3 class="font-medium text-body-md">Filter Ulasan</h3>
+
+        {{-- Filter --}}
+        <form method="GET" class="flex gap-2 items-center text-label font-normal justify-between">
+            <div class="flex flex-wrap gap-2 items-center">
+                {{-- Filter Rating --}}
+                <x-forms.select name="rating" :value="request('rating')" size="sm" :options="[
+            '' => 'Semua Rating',
+            '1' => '1 Bintang',
+            '2' => '2 Bintang',
+            '3' => '3 Bintang',
+            '4' => '4 Bintang',
+            '5' => '5 Bintang',
+        ]" />
+
+                {{-- Filter Sort --}}
+                <x-forms.select name="sort" :value="request('sort')" size="sm" :options="[
+            'latest' => 'Terbaru',
+            'oldest' => 'Terlama',
+            'highest' => 'Tertinggi',
+            'lowest' => 'Terendah',
+        ]" />
+
+                {{-- Filter Review Teks --}}
+                <x-forms.select name="text" :value="request('text')" size="sm" :options="[
+            '' => 'Semua Ulasan',
+            'yes' => 'Dengan Teks',
+            'no' => 'Tanpa Teks',
+        ]" />
+
+            </div>
+            <x-buttons.button type="submit" variant="secondary">
+                Terapkan Filter
+            </x-buttons.button>
+        </form>
+    </div>
+
+
     {{-- Daftar Ulasan --}}
-    <div class="space-y-3 max-h-[500px] overflow-y-auto dropdown-scroll">
-        @forelse ($book->reviews as $review)
+    <div class="space-y-2">
+        @forelse ($reviews as $review)
             <div
-                class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 mr-1 rounded-xl shadow-sm border border-outline-variant dark:border-outline-variant-dark space-y-1">
+                class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 rounded-xl shadow-sm border border-outline-variant dark:border-outline-variant-dark space-y-1">
                 {{-- Header Review --}}
                 <div class="flex justify-between items-center">
                     <div>
@@ -305,8 +345,42 @@
             </div>
         @empty
             <p class="text-sm text-center text-on-surface-variant dark:text-on-surface-variant-dark">
-                Belum ada ulasan.
+                Tidak ada data.
             </p>
         @endforelse
+    </div>
+
+    {{-- Pagination --}}
+    <div class="flex items-center text-label">
+        {{-- Tombol Previous --}}
+        <div class="w-1/3 flex justify-start">
+            @if (!$reviews->onFirstPage())
+                <a href="{{ $reviews->previousPageUrl() }}"
+                    class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
+                    <x-icons.chevron-left />
+                    <span class="hidden md:block">Sebelumnya</span>
+                </a>
+            @endif
+        </div>
+
+        {{-- Info Halaman di Tengah --}}
+        <div class="w-1/3 flex justify-center">
+            <div
+                class="w-fit rounded-md text-center px-3 py-1 bg-surface-dim dark:bg-surface-dim-dark text-on-surface dark:text-on-surface-dark">
+                <span class="hidden md:inline-block">Halaman</span>
+                {{ $reviews->currentPage() }} / {{ $reviews->lastPage() }}
+            </div>
+        </div>
+
+        {{-- Tombol Next --}}
+        <div class="w-1/3 flex justify-end">
+            @if ($reviews->hasMorePages())
+                <a href="{{ $reviews->nextPageUrl() }}"
+                    class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
+                    <span class="hidden md:block">Berikutnya</span>
+                    <x-icons.chevron-right />
+                </a>
+            @endif
+        </div>
     </div>
 @endsection
