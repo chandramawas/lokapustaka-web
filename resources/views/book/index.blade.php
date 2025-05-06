@@ -41,7 +41,7 @@
         <x-buttons.bookmark-toggle :book="$book" />
 
         {{-- Share Buku --}}
-        <x-buttons.icon-button variant="outline"><x-icons.share /></x-buttons.icon-button>
+        <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
     </div>
     {{-- Deskripsi Buku --}}
     <div class="space-y-0.5">
@@ -54,7 +54,7 @@
 
                 <x-ui.modal showClose>
                     <div class="space-y-1 text-pretty">
-                        <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi Judul Buku</h4>
+                        <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi {{ $book->title }}</h4>
                         <p class="text-body-sm md:text-body-md">
                             {{ $book->description }}
                         </p>

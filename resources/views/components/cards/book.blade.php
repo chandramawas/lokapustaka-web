@@ -31,7 +31,7 @@
             </h4>
             {{-- Genre --}}
             <p class="text-label line-clamp-1 md:line-clamp-2 text-on-surface-variant-dark">
-                {{ $book->genres ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
+                {{ $book && $book->genres ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
             </p>
         </div>
         {{-- Deskripsi --}}

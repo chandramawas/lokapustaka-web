@@ -20,7 +20,7 @@
             <div class="swiper-wrapper">
                 @foreach ($books as $book)
                     <div class="swiper-slide max-w-[125px] md:max-w-[150px]">
-                        <x-cards.book :badge="$book['badge'] ?? null" :book="$book" />
+                        <x-cards.book :book="$book" />
                     </div>
                 @endforeach
             </div>

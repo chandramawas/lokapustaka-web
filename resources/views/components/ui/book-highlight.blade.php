@@ -64,7 +64,7 @@
                             {{ $book->title ?? 'Title' }}
                         </h2>
                         <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-1 md:line-clamp-2">
-                            {{ $book ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
+                            {{ $book && $book->genres ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
                         </p>
                     </div>
                     <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-2 md:line-clamp-3">
@@ -76,6 +76,7 @@
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
                 <x-buttons.bookmark-toggle :book="$book ?? null" />
+                <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
                 <x-buttons.icon-button :href="route('book.detail', $book->slug ?? '#')" variant="outline">
                     <x-icons.information />
                 </x-buttons.icon-button>
