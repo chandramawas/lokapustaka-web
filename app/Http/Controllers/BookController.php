@@ -154,4 +154,17 @@ class BookController extends Controller
             'genre' => $genreModel,
         ]);
     }
+
+    public function bookmark(Book $book)
+    {
+        $user = auth()->user();
+
+        if ($user->savedBooks()->where('book_id', $book->id)->exists()) {
+            $user->savedBooks()->detach($book->id); // unbookmark
+        } else {
+            $user->savedBooks()->attach($book->id); // bookmark
+        }
+
+        return back();
+    }
 }

@@ -20,10 +20,7 @@
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
                 <x-ui.book-highlight sectionName="recommendation" :badges="[['variant' => 'recommend']]"
-                    :isbn="$recommendationBook->isbn" :author="$recommendationBook->author"
-                    :genre="$recommendationBook->genres->pluck('name')->join(', ')" :title="$recommendationBook->title"
-                    :description="$recommendationBook->description" :poster="$recommendationBook->cover_url"
-                    avgRating="{{ $recommendationBook->rating_summary['average'] }}" />
+                    :book="$recommendationBook" />
             </div>
 
         </div>
@@ -43,26 +40,15 @@
     </section>
 
     {{-- Section Buku --}}
-    <div class="max-w-6xl mx-auto mt-2 mb-6 px-4 space-y-4">
-        @php
-            $books = [];
-            for ($i = 1; $i <= 7; $i++) {
-                $books[] = [
-                    'author' => 'Penulis ' . $i,
-                    'title' => 'Judul Buku ' . $i,
-                    'genre' => 'Genre',
-                ];
-            }
-        @endphp
-
-        <x-ui.book-carousel sectionName="reading" title="Riwayat Baca" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="saved" title="Disimpan" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="history" title="Sejarah" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="fantasy" title="Fantasi" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="science-fiction" title="Fiksi Ilmiah" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="technology" title="Teknologi" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="science" title="Sains" href="#" :books="$books" />
-        <x-ui.book-carousel sectionName="thriller" title="Thriller" href="#" :books="$books" />
+    <div class="max-w-6xl mx-auto w-full mt-2 mb-6 px-4 space-y-4">
+        <x-ui.book-carousel sectionName="reading" title="Lanjutkan Baca" href="#" />
+        <x-ui.book-carousel sectionName="saved" title="Disimpan" href="#" />
+        <x-ui.book-carousel sectionName="history" title="Sejarah" href="#" />
+        <x-ui.book-carousel sectionName="fantasy" title="Fantasi" href="#" />
+        <x-ui.book-carousel sectionName="science-fiction" title="Fiksi Ilmiah" href="#" />
+        <x-ui.book-carousel sectionName="technology" title="Teknologi" href="#" />
+        <x-ui.book-carousel sectionName="science" title="Sains" href="#" />
+        <x-ui.book-carousel sectionName="thriller" title="Thriller" href="#" />
     </div>
 @endsection
 

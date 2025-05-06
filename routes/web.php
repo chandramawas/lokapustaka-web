@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\BookshelfController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HomeController;
@@ -102,4 +103,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('book.review.store');
     Route::put('/book/{book}/reviews/{review}', [BookController::class, 'reviewUpdate'])
         ->name('book.review.update');
+    Route::post('/book/{book}/bookmark', [BookController::class, 'bookmark'])
+        ->name('book.bookmark');
+
+    // Bookshelf Routes
+    Route::get('/bookshelf', [BookshelfController::class, 'index'])
+        ->name('bookshelf.index');
+    Route::get('/bookshelf/continue', [BookshelfController::class, 'continue'])
+        ->name('bookshelf.continue');
+    Route::get('/bookshelf/reviews', [BookshelfController::class, 'reviews'])
+        ->name('bookshelf.reviews');
 });

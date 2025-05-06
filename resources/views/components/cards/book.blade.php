@@ -1,19 +1,13 @@
-@props([
-'isbn' => '#',
-'poster' => 'https://placehold.co/150x220?text=Poster+not+available.',
-'badge' => null,
-'author' => 'Penulis',
-'title' => 'Judul',
-'genre' => 'Genre',
-'description' => 'Deskripsi belum tersedia.',
-])
+@props(['book' => null, 'badge' => null])
 
-<a href="{{ route('book.detail', $isbn) }}" aria-label="{{ $author }}'s {{ $title }}"
+<a href="{{ route('book.detail', $book->isbn ?? '#') }}"
+    aria-label="{{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}"
     class="group relative block w-full h-full rounded-lg overflow-hidden transition border border-outline-variant">
 
     {{-- POSTER --}}
     <div class="relative transition">
-        <img src="{{ $poster }}" alt="Poster {{ $author }}'s {{ $title }}" loading="lazy"
+        <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Cover+not+available.' }}"
+            alt="Cover {{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}" loading="lazy"
             class="w-full aspect-[2/3] object-cover">
 
         @if ($badge)
@@ -29,20 +23,20 @@
         <div>
             {{-- Penulis --}}
             <h5 class="text-label line-clamp-1 text-on-surface-variant-dark">
-                {{ $author }}
+                {{ $book->author ?? 'Author' }}
             </h5>
             {{-- Judul --}}
             <h4 class="font-medium text-body-sm md:text-body-md line-clamp-3 text-on-surface-dark">
-                {{ $title }}
+                {{ $book->title ?? 'Title' }}
             </h4>
             {{-- Genre --}}
             <p class="text-label line-clamp-1 md:line-clamp-2 text-on-surface-variant-dark">
-                {{ $genre }}
+                {{ $book->genres ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
             </p>
         </div>
         {{-- Deskripsi --}}
         <p class="text-label line-clamp-3 text-on-surface-variant-dark">
-            {{ $description }}
+            {{ $book->description ?? 'Description belum tersedia.' }}
         </p>
     </div>
 </a>

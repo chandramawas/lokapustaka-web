@@ -53,18 +53,8 @@
         </div>
 
         {{-- Koleksi Terkait --}}
-        @php
-            $books = [];
-            for ($i = 1; $i <= 12; $i++) {
-                $books[] = [
-                    'author' => 'Penulis ' . $i,
-                    'title' => 'Judul Buku ' . $i,
-                    'genre' => 'Genre',
-                ];
-            }
-        @endphp
-        <div class="max-w-6xl mx-auto p-2">
-            <x-ui.book-carousel sectionName="other" title="Koleksi Terkait" :books="$books" />
+        <div class="max-w-6xl w-full mx-auto p-2">
+            <x-ui.book-carousel sectionName="other" title="Koleksi Terkait" />
         </div>
     </div>
 @endsection

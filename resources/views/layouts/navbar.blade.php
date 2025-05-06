@@ -102,14 +102,9 @@
                     <hr class="border-outline-variant dark:border-outline-variant-dark">
                     {{-- SEC 2 --}}
                     <div class="p-2 space-y-2">
-                        <x-buttons.text-button icon>
+                        <x-buttons.text-button :href="route('bookshelf.index')" icon>
                             <x-icons.bookmark />
-                            <span>Disimpan</span>
-                        </x-buttons.text-button>
-
-                        <x-buttons.text-button icon>
-                            <x-icons.history />
-                            <span>Riwayat Baca</span>
+                            <span>Koleksi Saya</span>
                         </x-buttons.text-button>
                     </div>
 

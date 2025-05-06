@@ -1,4 +1,4 @@
-@props(['books', 'href' => null, 'sectionName', 'title' => null])
+@props(['books' => [], 'href' => null, 'sectionName', 'title' => null])
 
 @php
     $swiperId = 'bookSwiper-' . $sectionName;
@@ -14,24 +14,25 @@
             @endif
         </div>
     @endif
-    {{-- Swiper container --}}
-    <div class="swiper bookSwiper" id="{{ $swiperId }}">
-        <div class="swiper-wrapper">
-            @foreach ($books as $book)
-                <div class="swiper-slide max-w-[125px] md:max-w-[150px]">
-                    <x-cards.book href="{{ $book['href'] ?? '#' }}"
-                        poster="{{ $book['poster'] ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
-                        :badge="$book['badge'] ?? null" author="{{ $book['author'] }}" title="{{ $book['title'] }}"
-                        genre="{{ $book['genre'] }}"
-                        description="{{ $book['description'] ?? 'Deskripsi belum tersedia.' }}" />
-                </div>
-            @endforeach
-        </div>
+    @if ($books)
+        {{-- Swiper container --}}
+        <div class="swiper bookSwiper" id="{{ $swiperId }}">
+            <div class="swiper-wrapper">
+                @foreach ($books as $book)
+                    <div class="swiper-slide max-w-[125px] md:max-w-[150px]">
+                        <x-cards.book :badge="$book['badge'] ?? null" :book="$book" />
+                    </div>
+                @endforeach
+            </div>
 
-        <!-- Navigation buttons -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-    </div>
+            <!-- Navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    @else
+        <p class="text-label">Tidak ada koleksi.</p>
+    @endif
+
 </section>
 
 @push('scripts')

@@ -45,8 +45,7 @@
         {{-- Grid hasil buku --}}
         <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
             @forelse ($books as $book)
-                <x-cards.book :isbn="$book->isbn" :poster="$book->cover_url" :author="$book->author" :title="$book->title"
-                    :description="$book->description" :genre="$book->genres->pluck('name')->join(', ')" />
+                <x-cards.book :book="$book" />
             @empty
                 <p class="text-label">Tidak ada hasil yang ditemukan.</p>
             @endforelse

@@ -1,6 +1,6 @@
-@props(['sectionName' => null, 'badges' => [], 'isbn' => '#', 'avgRating' => null, 'author' => 'Penulis', 'title' => 'Judul', 'genre' => 'Genre', 'description' => 'Deskripsi tidak tersedia.', 'poster' => 'https://placehold.co/150x220?text=Poster+not+available.'])
+@props(['sectionName' => null, 'badges' => [], 'book' => null])
 
-<section id="{{ $sectionName }}-book-highlight"
+<section id="{{ $sectionName ?? 'section' }}-book-highlight"
     class="size-full relative overflow-hidden bg-primary dark:bg-primary-dark">
     <svg class="absolute opacity-90 size-full" xmlns="http://www.w3.org/2000/svg" version="1.1"
         xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" preserveAspectRatio="none"
@@ -47,43 +47,44 @@
         <div class="flex flex-col justify-between w-full gap-1">
             <div class="space-y-1 md:space-y-2">
                 {{-- Badge --}}
-                @if ($badges || $avgRating)
-                    <div class="flex gap-1">
-                        @if ($avgRating)
-                            <x-ui.book-badge variant="rating" :rank="$avgRating" :href="route('book.reviews', $isbn)" />
-                        @endif
-                        @foreach ($badges as $badge)
-                            <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
-                        @endforeach
-                    </div>
-                @endif
+                <div class="flex gap-1">
+                    <x-ui.book-badge variant="rating" :rank="$book->rating_summary['average'] ?? '5'"
+                        :href="route('book.reviews', $book->isbn ?? '#')" />
+                    @foreach ($badges as $badge)
+                        <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
+                    @endforeach
+                </div>
                 {{-- Deskripsi --}}
                 <div class="flex flex-col gap-2">
                     <div class="space-y-0.5">
                         <h3 class="font-medium text-body-sm lg:text-body-lg text-on-surface-variant-dark line-clamp-1">
-                            {{ $author }}
+                            {{ $book->author ?? 'Author' }}
                         </h3>
                         <h2 class="font-bold text-heading-sm md:text-heading-lg line-clamp-1">
-                            {{ $title }}
+                            {{ $book->title ?? 'Title' }}
                         </h2>
                         <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-1 md:line-clamp-2">
-                            {{ $genre }}
+                            {{ $book ? $book->genres->pluck('name')->join(', ') : 'Genres' }}
                         </p>
                     </div>
                     <p class="text-label text-pretty text-on-surface-variant-dark line-clamp-2 md:line-clamp-3">
-                        {{ $description }}
+                        {{ $book->description ?? 'Deskripsi tidak tersedia.' }}
                     </p>
                 </div>
             </div>
             {{-- Button --}}
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
-                <x-buttons.icon-button href="#" variant="secondary"><x-icons.add /></x-buttons.icon-button>
-                <x-buttons.icon-button :href="route('book.detail', $isbn)"
-                    variant="secondary"><x-icons.information /></x-buttons.icon-button>
+                <x-buttons.bookmark-toggle :book="$book ?? null" />
+                <x-buttons.icon-button :href="route('book.detail', $book->isbn ?? '#')" variant="outline">
+                    <x-icons.information />
+                </x-buttons.icon-button>
             </div>
         </div>
-        {{-- Poster --}}
-        <img src="{{ $poster }}" loading="lazy" class="h-[200px] md:h-[250px] rounded-md object-cover aspect-[2/3]">
+
+        {{-- Cover --}}
+        <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Cover+not+available.' }}" loading="lazy"
+            class="h-[200px] md:h-[250px] rounded-md object-cover aspect-[2/3]"
+            alt="Cover {{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}">
     </div>
 </section>

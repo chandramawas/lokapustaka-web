@@ -108,18 +108,8 @@
     <hr class="md:hidden my-3 border-outline-variant dark:border-outline-variant-dark">
 
     {{-- FEATURED BOOKS --}}
-    <div class="max-w-6xl mx-auto p-3 md:p-4 lg:p-5 xl:p-6 space-y-2 md:space-y-3">
-        @php
-            $books = [];
-            for ($i = 1; $i <= 12; $i++) {
-                $books[] = [
-                    'author' => 'Penulis ' . $i,
-                    'title' => 'Judul Buku ' . $i,
-                    'genre' => 'Genre',
-                ];
-            }
-        @endphp
-        <x-ui.book-carousel sectionName="featured" title="Koleksi Unggulan" :books="$books" />
+    <div class="max-w-6xl w-full mx-auto p-3 md:p-4 lg:p-5 xl:p-6 space-y-2 md:space-y-3">
+        <x-ui.book-carousel sectionName="featured" title="Koleksi Unggulan" />
     </div>
 
 @endsection

@@ -56,4 +56,9 @@ class Book extends Model
     {
         return self::inRandomOrder()->first();
     }
+
+    public function bookmarkedBy()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 }
