@@ -1,6 +1,6 @@
 @props(['book' => null])
 
-<form action="{{ route('book.bookmark', $book->isbn ?? '#') }}" method="post">
+<form action="{{ route('book.bookmark', $book->slug ?? '#') }}" method="post">
     @csrf
     @if(auth()->user()->savedBooks->contains($book->id ?? '#'))
         <x-buttons.icon-button type="submit" variant="secondary">

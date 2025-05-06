@@ -6,8 +6,8 @@
     <x-ui.breadcrumbs :items="[
             ['label' => 'Beranda', 'url' => route('home')],
             ['label' => $book->mainGenre->name, 'url' => route('book.genre.collection', $book->mainGenre->slug)],
-            ['label' => $book->title, 'url' => route('book.detail', $book->isbn)],
-            ['label' => 'Ulasan', 'url' => route('book.reviews', $book->isbn)],
+            ['label' => $book->title, 'url' => route('book.detail', $book->slug)],
+            ['label' => 'Ulasan', 'url' => route('book.reviews', $book->slug)],
         ]" />
 @endsection
 
@@ -99,7 +99,7 @@
             </div>
 
             {{-- Edit Form --}}
-            <form method="POST" action="{{ route('book.review.update', [$book->isbn, $userReview->id]) }}" x-show="editMode"
+            <form method="POST" action="{{ route('book.review.update', [$book->slug, $userReview->id]) }}" x-show="editMode"
                 class="space-y-2" x-cloak>
                 @csrf
                 @method('PUT')
@@ -181,7 +181,7 @@
     @else {{-- Jika Belum Review => Buat Review --}}
         <div
             class="bg-surface dark:bg-surface-dark border border-outline-variant dark:border-outline-variant-dark rounded-xl p-3 space-y-2">
-            <form method="POST" action="{{ route('book.review.store', $book->isbn) }}"
+            <form method="POST" action="{{ route('book.review.store', $book->slug) }}"
                 class="flex flex-col gap-2 md:gap-4 text-body-md md:text-body-lg lg:text-body-xl">
                 @csrf
                 {{-- Rating (bintang) --}}

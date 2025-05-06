@@ -98,14 +98,14 @@
                             <x-buttons.button variant="secondary" @click="editingId = reviewId">
                                 Edit Ulasan
                             </x-buttons.button>
-                            <x-buttons.button :href="route('book.detail', $review->book->isbn)" variant="outline">
+                            <x-buttons.button :href="route('book.detail', $review->book->slug)" variant="outline">
                                 Lihat Buku
                             </x-buttons.button>
                         </div>
                     </div>
 
                     {{-- Edit Form --}}
-                    <form method="POST" action="{{ route('book.review.update', [$review->book->isbn, $review->id]) }}"
+                    <form method="POST" action="{{ route('book.review.update', [$review->book->slug, $review->id]) }}"
                         x-show="editingId === reviewId" class="space-y-2" x-cloak>
                         @csrf
                         @method('PUT')

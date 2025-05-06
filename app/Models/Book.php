@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 
 class Book extends Model
 {
@@ -12,6 +14,7 @@ class Book extends Model
 
     protected $fillable = [
         'isbn',
+        'slug',
         'title',
         'author',
         'publisher',
@@ -22,9 +25,24 @@ class Book extends Model
         'cover_url',
     ];
 
+    // Slugify
+    protected static function booted()
+    {
+        static::created(function ($book) {
+            $book->slug = Str::slug($book->title . '-' . $book->id);
+            $book->save();
+        });
+
+        static::updating(function ($book) {
+            if ($book->isDirty('title')) {
+                $book->slug = Str::slug($book->title . '-' . $book->id);
+            }
+        });
+    }
+
     public function getRouteKeyName()
     {
-        return 'isbn';
+        return 'slug';
     }
 
     public function genres()

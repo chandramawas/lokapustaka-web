@@ -1,6 +1,6 @@
 @props(['book' => null])
 
-<x-buttons.button :href="route('book.reviews', $book->isbn)" variant="custom" icon
+<x-buttons.button :href="route('book.reviews', $book->slug)" variant="custom" icon
     class="shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark hover:bg-secondary-container/80 dark:hover:bg-secondary-container-dark/80 hover:text-on-secondary-container/80 dark:hover:text-on-secondary-container-dark/80">
     <x-icons.star />
     <span>

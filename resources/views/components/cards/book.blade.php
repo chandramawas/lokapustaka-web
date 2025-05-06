@@ -1,6 +1,6 @@
 @props(['book' => null, 'badge' => null])
 
-<a href="{{ route('book.detail', $book->isbn ?? '#') }}"
+<a href="{{ route('book.detail', $book->slug ?? '#') }}"
     aria-label="{{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}"
     class="group relative block w-full h-full rounded-lg overflow-hidden transition border border-outline-variant">
 

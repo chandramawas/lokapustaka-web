@@ -49,7 +49,7 @@
                 {{-- Badge --}}
                 <div class="flex gap-1">
                     <x-ui.book-badge variant="rating" :rank="$book->rating_summary['average'] ?? '5'"
-                        :href="route('book.reviews', $book->isbn ?? '#')" />
+                        :href="route('book.reviews', $book->slug ?? '#')" />
                     @foreach ($badges as $badge)
                         <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
                     @endforeach
@@ -76,7 +76,7 @@
             <div class="flex gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full">Baca Sekarang</x-buttons.button>
                 <x-buttons.bookmark-toggle :book="$book ?? null" />
-                <x-buttons.icon-button :href="route('book.detail', $book->isbn ?? '#')" variant="outline">
+                <x-buttons.icon-button :href="route('book.detail', $book->slug ?? '#')" variant="outline">
                     <x-icons.information />
                 </x-buttons.icon-button>
             </div>
