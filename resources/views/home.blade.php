@@ -14,13 +14,14 @@
 
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="newest" :badges="[['variant' => 'new', 'href' => '#']]" />
+                <x-ui.book-highlight sectionName="newest" :badges="[['variant' => 'new', 'href' => '#']]"
+                    :book="$highlights['newest']" />
             </div>
 
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
                 <x-ui.book-highlight sectionName="recommendation" :badges="[['variant' => 'recommend']]"
-                    :book="$recommendationBook" />
+                    :book="$highlights['recommendation']" />
             </div>
 
         </div>
@@ -32,12 +33,14 @@
     </section>
 
     {{-- Chip Genre --}}
-    <section id="genreChip" class="p-3 lg:px-6 grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
-        <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Novel</x-buttons.button>
-        <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Non-Fiksi</x-buttons.button>
-        <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Pendidikan</x-buttons.button>
-        <x-buttons.button href="#" variant="secondary-lg" class="hover:scale-105">Teknologi & Sains</x-buttons.button>
-    </section>
+    @if ($topGenres)
+        <section id="genreChip" class="p-3 lg:px-6 grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-2">
+            @foreach ($topGenres as $genre)
+                <x-buttons.button :href="route('book.genre.collection', $genre->slug)" variant="secondary-lg"
+                    class="hover:scale-105">{{ $genre->name }}</x-buttons.button>
+            @endforeach
+        </section>
+    @endif
 
     {{-- Section Buku --}}
     <div class="max-w-6xl mx-auto w-full mt-2 mb-6 px-4 space-y-4">
@@ -58,6 +61,7 @@
             const highlightSwiper = new Swiper('.highlightSwiper', {
                 slidesPerView: 1,
                 centeredSlides: true,
+                autoHeight: true,
                 loop: true,
                 pagination: {
                     el: '.swiper-pagination',
@@ -72,28 +76,6 @@
                     pauseOnMouseEnter: true,
                 },
             });
-
-            // ===== Tinggi Dinamis untuk Swiper Slide =====
-            const slides = document.querySelectorAll('.highlightSwiper .swiper-slide');
-            // Hitung tinggi konten dalam slide
-            let maxHeight = 0;
-            slides.forEach(slide => {
-                const content = slide.firstElementChild; // ambil elemen pertama (komponen highlight)
-                if (content) {
-                    const contentHeight = content.offsetHeight + parseFloat(getComputedStyle(slide).paddingTop) + parseFloat(getComputedStyle(slide).paddingBottom);
-                    if (contentHeight > maxHeight) {
-                        maxHeight = contentHeight;
-                    }
-                }
-            });
-
-            // Terapkan min-height biar padding tetap ngaruh
-            slides.forEach(slide => {
-                slide.style.minHeight = maxHeight + 'px';
-            });
-
-            // Optional: container utama juga
-            document.querySelector('.highlightSwiper').style.minHeight = maxHeight + 'px';
         });
     </script>
 @endpush

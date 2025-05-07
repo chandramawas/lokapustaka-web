@@ -32,7 +32,10 @@
     </div>
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
-        <x-buttons.button href="#" variant="primary">Baca Sekarang</x-buttons.button>
+        <x-buttons.button href="#" variant="primary" icon>
+            <x-icons.book-read />
+            <span>Baca Sekarang</span>
+        </x-buttons.button>
 
         {{-- Review Buku --}}
         <x-buttons.rating-button :book="$book" />
@@ -43,6 +46,7 @@
         {{-- Share Buku --}}
         <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
     </div>
+
     {{-- Deskripsi Buku --}}
     <div class="space-y-0.5">
         <div class="flex justify-between items-center">

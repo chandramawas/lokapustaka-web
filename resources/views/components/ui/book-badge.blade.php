@@ -4,7 +4,7 @@
     $variants = [
         'new' => [
             'color' => 'bg-primary dark:bg-primary-dark text-on-primary dark:text-on-primary-dark',
-            'text' => 'Baru',
+            'text' => 'Baru Ditambahkan',
         ],
         'trending' => [
             'color' => 'bg-secondary dark:bg-secondary-dark text-on-secondary dark:text-on-secondary-dark',

@@ -9,8 +9,8 @@
             {{-- MENU --}}
             <span class="hidden md:flex space-x-3 font-medium">
                 <x-buttons.text-button :href="route('book.collection')">Semua Koleksi</x-buttons.text-button>
-                <x-buttons.text-button href="#">Menu 2</x-buttons.text-button>
-                <x-buttons.text-button href="#">Menu 3</x-buttons.text-button>
+                <x-buttons.text-button :href="route('bookshelf.index')">Koleksi Saya</x-buttons.text-button>
+                <x-buttons.text-button href="#">Koleksi Populer</x-buttons.text-button>
             </span>
         @endauth
     </div>
@@ -42,8 +42,8 @@
                     <x-icons.more />
                 </x-buttons.icon-button>
 
-                <x-ui.dropdown minWidth="200px" center>
-                    <div class="p-2 grid grid-cols-2 gap-2">
+                <x-ui.dropdown minWidth="300px" right>
+                    <div class="p-2 grid grid-cols-3 gap-2">
                         @foreach($genres as $genre)
                             <x-buttons.text-button :href="route('book.genre.collection', $genre->slug)" class="break-all">
                                 {{ $genre->name }}

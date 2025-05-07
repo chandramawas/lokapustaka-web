@@ -19,6 +19,12 @@ class BookSeeder extends Seeder
         $sejarah = Genre::firstOrCreate(['name' => 'Sejarah']);
         $fantasi = Genre::firstOrCreate(['name' => 'Fantasi']);
         $motivasi = Genre::firstOrCreate(['name' => 'Motivasi']);
+        $sains = Genre::firstOrCreate(['name' => 'Sains']);
+        $fiksiIlmiah = Genre::firstOrCreate(['name' => 'Fiksi Ilmiah']);
+        $teknologi = Genre::firstOrCreate(['name' => 'Teknologi']);
+        $pendidikan = Genre::firstOrCreate(['name' => 'Pendidikan']);
+        $komik = Genre::firstOrCreate(['name' => 'Komik']);
+        $psikologi = Genre::firstOrCreate(['name' => 'Psikologi']);
         $fiksiKlasik = Genre::firstOrCreate(['name' => 'Fiksi Klasik']);
 
         $book1 = Book::create([
