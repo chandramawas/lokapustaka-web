@@ -3,7 +3,7 @@
 | Lokapustaka - Layout Template
 |--------------------------------------------------------------------------------
 | Deskripsi:
-| Layout ini adalah template dasar untuk semua halaman di aplikasi Lokapustaka.
+| Template dasar untuk semua halaman di aplikasi Lokapustaka.
 |--------------------------------------------------------------------------------
 | Cara Pakai:
 | @extends('layouts.app')
@@ -11,21 +11,22 @@
 | Bagian yang bisa diisi:
 |
 | 1. @section('title', 'Judul Halaman')
-| - Ini akan jadi title di tab browser.
-| - Jika tidak diisi, akan pakai default: 'Baca Buku Digital Tanpa Batas'.
+| - Menentukan title di tab browser.
+| - Default: 'Baca Buku Digital Tanpa Batas' jika tidak diisi.
 |
-| 2. @section('navbar', 'view('layouts.navbar'))
-| - Untuk menampilkan navbar di atas halaman.
-| - Bersifat opsional. Kalau tidak diisi, navbar tidak akan muncul.
+| 2. @section('navbar')
+| - Menampilkan navbar di atas halaman.
+| - Opsional. Jika tidak diisi, navbar tidak akan muncul.
 |
 | 3. @section('content')
-| - Ini adalah konten utama halaman.
-| - Wajib diisi di setiap page yang extend layout ini.
+| - Konten utama halaman.
+| - Wajib diisi di setiap halaman yang menggunakan layout ini.
 |
-| Footer:
-| - Footer otomatis ditampilkan di bawah semua halaman.
-| - Tidak perlu diisi manual.
-|---------------------------------------------------------------------------------}}
+| 4. @section('footer')
+| - Menyesuaikan footer halaman.
+| - Default: view('layouts.footer') jika tidak diisi.
+|--------------------------------------------------------------------------------
+--}}
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
@@ -62,7 +63,7 @@
         </main>
     </div>
     <footer>
-        @include('layouts.footer')
+        @yield('footer', view('layouts.footer'))
     </footer>
 </body>
 

@@ -1,8 +1,4 @@
-@props([
-    'variant' => 'iconButton',
-    'iconButton' => 'secondary',
-    'textButton' => 'default',
-])
+@props(['variant' => 'iconButton', 'iconButton' => 'secondary', 'textButton' => 'default'])
 
 @if ($variant === 'text')
     <x-buttons.text-button id="theme-toggle" variant="{{ $textButton }}" aria-label="Ganti Tema Website">
@@ -10,14 +6,14 @@
         <span id="icon-light" class="hidden">
             <span class="flex space-x-0.5">
                 <x-icons.theme variant="light" />
-                <span>Light</span>
+                <span>Terang</span>
             </span>
         </span>
         {{-- Dark Mode --}}
         <span id="icon-dark" class="hidden">
             <span class="flex space-x-0.5">
                 <x-icons.theme variant="dark" />
-                <span>Dark</span>
+                <span>Gelap</span>
             </span>
         </span>
     </x-buttons.text-button>

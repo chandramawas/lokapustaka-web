@@ -32,10 +32,8 @@
     </div>
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
-        <x-buttons.button href="#" variant="primary" icon>
-            <x-icons.book-read />
-            <span>Baca Sekarang</span>
-        </x-buttons.button>
+        {{-- Read Buku --}}
+        <x-buttons.read-button :book="$book" />
 
         {{-- Review Buku --}}
         <x-buttons.rating-button :book="$book" />

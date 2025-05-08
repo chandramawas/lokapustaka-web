@@ -6,6 +6,7 @@ use App\Models\Genre;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -194,5 +195,15 @@ class BookController extends Controller
         }
 
         return back();
+    }
+
+    public function read(Book $book)
+    {
+        if (!$book->epub_path || !Storage::exists('public/' . $book->epub_path)) {
+            abort(404, 'Ebook tidak ditemukan.');
+        }
+
+        $epubUrl = Storage::url($book->epub_path); // URL public ke file .epub
+        return view('book.read', compact('book', 'epubUrl'));
     }
 }

@@ -105,6 +105,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('book.review.update');
     Route::post('/book/{book}/bookmark', [BookController::class, 'bookmark'])
         ->name('book.bookmark');
+    Route::get('/book/{book}/read', [BookController::class, 'read'])
+        ->name('book.read');
 
     // Bookshelf Routes
     Route::get('/bookshelf', [BookshelfController::class, 'index'])

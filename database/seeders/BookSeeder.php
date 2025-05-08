@@ -29,6 +29,7 @@ class BookSeeder extends Seeder
 
         $book1 = Book::create([
             'title' => 'Sejarah Dunia yang Disembunyikan',
+            'epub_path' => 'epubs/1_Pride-and-Prejudice_Austen_1813.epub',
             'author' => 'Jonathan Black',
             'publisher' => 'Gramedia',
             'year' => '2013',
@@ -42,6 +43,7 @@ class BookSeeder extends Seeder
 
         $book2 = Book::create([
             'title' => 'Perahu Kertas',
+            'epub_path' => 'epubs/pg1342.epub',
             'author' => 'Dee Lestari',
             'publisher' => 'Bentang Pustaka',
             'year' => '2009',
@@ -55,6 +57,7 @@ class BookSeeder extends Seeder
 
         $book3 = Book::create([
             'title' => 'Sapiens: Riwayat Singkat Umat Manusia',
+            'epub_path' => 'epubs/jesus-and-muhammad.epub',
             'author' => 'Yuval Noah Harari',
             'publisher' => 'KPG',
             'year' => '2017',
