@@ -76,7 +76,9 @@
             <div class="flex flex-wrap gap-1">
                 <x-buttons.button href="#" variant="primary" class="w-full md:w-auto">Baca Sekarang</x-buttons.button>
                 <div class="flex flex-wrap gap-0.5">
-                    <x-buttons.bookmark-toggle :book="$book ?? null" />
+                    @if ($book)
+                        <livewire:bookmark-toggle :book="$book" />
+                    @endif
                     <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
                     <x-buttons.icon-button :href="route('book.detail', $book->slug ?? '#')" variant="outline">
                         <x-icons.information />

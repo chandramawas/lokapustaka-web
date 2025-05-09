@@ -11,10 +11,10 @@
     $base .= $icon ? ' space-x-0.5' : '';
 
     $variants = [
-        'primary' => "px-3 py-1 text-label shadow-sm hover:shadow-md bg-primary text-on-primary hover:bg-primary/80 hover:text-on-primary/80",
-        'primary-lg' => "px-4 py-2 text-body-sm md:text-body-md shadow-sm hover:shadow-md bg-primary text-on-primary hover:bg-primary/80 hover:text-on-primary/80",
-        'secondary' => "px-3 py-1 text-label shadow-sm hover:shadow-md bg-surface dark:bg-surface-dark text-on-surface dark:text-on-surface-dark hover:bg-surface/80 dark:hover:bg-surface-dark/80 hover:text-on-surface/80 dark:hover:text-on-surface-dark/80",
-        'secondary-lg' => "px-4 py-2 text-body-sm md:text-body-md shadow-sm hover:shadow-md bg-surface dark:bg-surface-dark text-on-surface dark:text-on-surface-dark hover:bg-surface/80 dark:hover:bg-surface-dark/80 hover:text-on-surface/80 dark:hover:text-on-surface-dark/80",
+        'primary' => "px-3 py-1 text-label shadow-sm border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark hover:shadow-md bg-primary text-on-primary hover:bg-primary/80 hover:text-on-primary/80",
+        'primary-lg' => "px-4 py-2 text-body-sm md:text-body-md shadow-sm border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark hover:shadow-md bg-primary text-on-primary hover:bg-primary/80 hover:text-on-primary/80",
+        'secondary' => "px-3 py-1 text-label shadow-sm border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark hover:shadow-md bg-surface dark:bg-surface-dark text-on-surface dark:text-on-surface-dark hover:bg-surface/80 dark:hover:bg-surface-dark/80 hover:text-on-surface/80 dark:hover:text-on-surface-dark/80",
+        'secondary-lg' => "px-4 py-2 text-body-sm md:text-body-md shadow-sm border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark hover:shadow-md bg-surface dark:bg-surface-dark text-on-surface dark:text-on-surface-dark hover:bg-surface/80 dark:hover:bg-surface-dark/80 hover:text-on-surface/80 dark:hover:text-on-surface-dark/80",
         'outline' => "px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark",
         'outline-lg' => "px-4 py-2 text-body-sm md:text-body-md border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark",
         'text' => "px-3 py-1 text-label hover:text-primary/80 dark:hover:text-primary-dark/80",

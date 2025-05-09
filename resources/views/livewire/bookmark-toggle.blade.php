@@ -1,8 +1,6 @@
-@props(['book' => null])
-
-<form action="{{ route('book.bookmark', $book->slug ?? '#') }}" method="post">
+<form wire:submit.prevent="toggle">
     @csrf
-    @if(auth()->user()->savedBooks->contains($book->id ?? '#'))
+    @if ($isBookmarked)
         <x-buttons.icon-button type="submit" variant="secondary">
             <x-icons.bookmark variant="remove" />
         </x-buttons.icon-button>

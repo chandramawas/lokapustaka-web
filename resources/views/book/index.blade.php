@@ -39,7 +39,7 @@
         <x-buttons.rating-button :book="$book" />
 
         {{-- Bookmark Buku --}}
-        <x-buttons.bookmark-toggle :book="$book" />
+        <livewire:bookmark-toggle :book="$book" />
 
         {{-- Share Buku --}}
         <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
