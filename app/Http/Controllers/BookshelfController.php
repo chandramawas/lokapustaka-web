@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReadingProgress;
 use Illuminate\Http\Request;
 use App\Models\Review;
 
@@ -16,7 +17,12 @@ class BookshelfController extends Controller
 
     public function history()
     {
-        return view('bookshelf.history');
+        $histories = ReadingProgress::with('book')
+            ->where('user_id', auth()->user()->id)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return view('bookshelf.history', compact('histories'));
     }
 
     public function reviews(Request $request)

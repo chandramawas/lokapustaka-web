@@ -2,7 +2,9 @@ import ePub from 'epubjs';
 
 document.addEventListener("DOMContentLoaded", function () {
     const reader = document.getElementById('reader');
+    const bookId = reader.dataset.book;
     const epubUrl = reader.dataset.epub;
+    const lastCfi = reader.dataset.cfi;
     const book = ePub(epubUrl);
     const loading = document.getElementById('book-loading');
     let savedFlow = localStorage.getItem("readFlow") || "paginated";
@@ -38,7 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
         book.ready.then(() => {
             return book.locations.generate(1000);
         }).then(() => {
-            rendition.display().then((location) => {
+            const startLocation = lastCfi || undefined;
+            rendition.display(startLocation).then((location) => {
                 loading.style.display = 'none';
                 updateTableOfContents();
                 updateProgress(location);
@@ -269,5 +272,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
         progressBar.style.width = `${progressPercent}%`;
         progressText.textContent = `${progressPercent}%`;
+
+        // Mengirim data CFI dan progress ke server
+        fetch('/save-progress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                cfi: cfi,
+                progress_percent: progressPercent,
+                book_id: bookId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Progress berhasil disimpan:', data);
+        })
+        .catch(error => {
+            console.error('Terjadi kesalahan:', error);
+        });
     }
 });

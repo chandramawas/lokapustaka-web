@@ -204,7 +204,8 @@
                     <span>Sebelumnya</span>
                 </x-buttons.button>
 
-                <div id="reader" data-epub="{{ $epubUrl }}" class="size-full">
+                <div id="reader" data-epub="{{ $epubUrl }}" data-book="{{ $book->id }}" data-cfi="{{ $lastCfi }}"
+                    class="size-full">
                 </div>
 
                 <x-buttons.button variant="outline" id="next-page">

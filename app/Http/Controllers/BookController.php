@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use App\Models\ReadingProgress;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -140,9 +140,18 @@ class BookController extends Controller
         // Pagination
         $books = $query->paginate(12)->withQueryString();
 
+        // Ambil progress milik user untuk buku-buku ini
+        $progress = auth()->check()
+            ? ReadingProgress::where('user_id', auth()->id())
+                ->whereIn('book_id', $books->pluck('id'))
+                ->get()
+                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
+            : collect();
+
         return view('book.collection', [
             'books' => $books,
             'searchQuery' => $request->q,
+            'progress' => $progress,
         ]);
     }
 
@@ -177,10 +186,19 @@ class BookController extends Controller
         // Paginate hasilnya
         $books = $booksQuery->paginate(12)->withQueryString();
 
+        // Ambil progress milik user untuk buku-buku ini
+        $progress = auth()->check()
+            ? ReadingProgress::where('user_id', auth()->id())
+                ->whereIn('book_id', $books->pluck('id'))
+                ->get()
+                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
+            : collect();
+
         // Kirim ke view
         return view('book.genre', [
             'books' => $books,
             'genre' => $genreModel,
+            'progress' => $progress,
         ]);
     }
 
@@ -195,15 +213,5 @@ class BookController extends Controller
         }
 
         return back();
-    }
-
-    public function read(Book $book)
-    {
-        if (!$book->epub_path || !Storage::exists('public/' . $book->epub_path)) {
-            abort(404, 'Ebook Tidak Ditemukan.');
-        }
-
-        $epubUrl = Storage::url($book->epub_path); // URL public ke file .epub
-        return view('book.read', compact('book', 'epubUrl'));
     }
 }

@@ -79,4 +79,9 @@ class Book extends Model
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
+
+    public function readingProgresses()
+    {
+        return $this->hasMany(ReadingProgress::class);
+    }
 }

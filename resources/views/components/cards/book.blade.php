@@ -1,8 +1,8 @@
-@props(['book' => null, 'badge' => null])
+@props(['book' => null, 'badge' => null, 'progress' => null])
 
 <a href="{{ route('book.detail', $book->slug ?? '#') }}"
     aria-label="{{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}"
-    class="group relative block w-full h-full rounded-lg overflow-hidden transition border border-outline-variant">
+    class="group relative block w-full h-full rounded-lg overflow-hidden transition border border-outline-variant dark:border-outline-variant-dark">
 
     {{-- POSTER --}}
     <div class="relative transition">
@@ -13,6 +13,14 @@
         @if ($badge)
             <div class="absolute top-1 right-1">
                 <x-ui.book-badge :variant="$badge['variant']" :rank="$badge['rank'] ?? null" :href="$badge['href'] ?? null" />
+            </div>
+        @endif
+
+        @if ($progress)
+            <div class="absolute z-30 bottom-0 inset-x-0 h-0.5 bg-surface dark:bg-surface-dark">
+                <div id="reading-progress-bar" style="width: {{ $progress->progress_percent }}%;"
+                    class="size-full transition-all duration-500 {{ $progress->progress_percent < 50 ? 'bg-secondary-container' : 'bg-primary-container' }}">
+                </div>
             </div>
         @endif
     </div>

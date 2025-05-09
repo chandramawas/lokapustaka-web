@@ -45,7 +45,7 @@
         {{-- Grid hasil buku --}}
         <div class="grid grid-cols-3 lg:grid-cols-6 gap-3">
             @forelse ($books as $book)
-                <x-cards.book :book="$book" />
+                <x-cards.book :book="$book" :progress="$progress[$book->id] ?? null" />
             @empty
                 <p class="text-label">Tidak ada hasil yang ditemukan.</p>
             @endforelse
