@@ -61,7 +61,7 @@ Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showRese
 Route::post('/reset-password', [ResetPasswordController::class, 'reset'])
     ->name('password.update');
 
-// Route APP User
+// Middleware Auth, Verified
 Route::middleware(['auth', 'verified'])->group(function () {
     // Account Routes
     Route::get('/account', [AccountController::class, 'index'])
@@ -107,11 +107,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/book/{book}/bookmark', [BookController::class, 'bookmark'])
         ->name('book.bookmark');
 
-    // Read Book Routes
-    Route::get('/book/{book}/read', [ReadBookController::class, 'show'])
-        ->name('book.read');
-    Route::post('/save-progress', [ReadBookController::class, 'store']);
-
     // Bookshelf Routes
     Route::get('/bookshelf', [BookshelfController::class, 'index'])
         ->name('bookshelf.index');
@@ -119,4 +114,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('bookshelf.history');
     Route::get('/bookshelf/reviews', [BookshelfController::class, 'reviews'])
         ->name('bookshelf.reviews');
+
+    // Middleware Auth, Verified, Subscription
+    Route::middleware(['subscription'])->group(function () {
+        // Read Book Routes
+        Route::get('/book/{book}/read', [ReadBookController::class, 'show'])
+            ->name('book.read');
+        Route::post('/save-progress', [ReadBookController::class, 'store']);
+    });
 });

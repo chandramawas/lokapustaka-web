@@ -14,7 +14,11 @@ class BookController extends Controller
     {
         $book->load('genres');
 
-        return view('book.index', compact('book'));
+        $progress = ReadingProgress::where('user_id', auth()->id())
+            ->where('book_id', $book->id)
+            ->first();
+
+        return view('book.index', compact('book', 'progress'));
     }
 
     public function reviews(Request $request, Book $book)

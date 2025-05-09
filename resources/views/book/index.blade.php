@@ -33,7 +33,7 @@
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
         {{-- Read Buku --}}
-        <x-buttons.read-button :book="$book" />
+        <x-buttons.read-button :book="$book" :progress="$progress" />
 
         {{-- Review Buku --}}
         <x-buttons.rating-button :book="$book" />

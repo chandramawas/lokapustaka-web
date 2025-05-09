@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'birthdate',
     ];
 
+    protected $appends = ['is_subscribed'];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -69,6 +70,11 @@ class User extends Authenticatable implements MustVerifyEmail
             ->where('is_active', true)
             ->orderBy('start_date', 'desc')
             ->first();
+    }
+
+    public function getIsSubscribedAttribute()
+    {
+        return (bool) $this->activeSubscription();
     }
 
     // Relasi ke model Payment
