@@ -111,8 +111,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Bookshelf Routes
     Route::get('/bookshelf', [BookshelfController::class, 'index'])
         ->name('bookshelf.index');
-    Route::get('/bookshelf/continue', [BookshelfController::class, 'continue'])
-        ->name('bookshelf.continue');
+    Route::get('/bookshelf/history', [BookshelfController::class, 'history'])
+        ->name('bookshelf.history');
     Route::get('/bookshelf/reviews', [BookshelfController::class, 'reviews'])
         ->name('bookshelf.reviews');
 });

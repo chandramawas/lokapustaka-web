@@ -14,9 +14,9 @@ class BookshelfController extends Controller
         return view('bookshelf.index', compact('books'));
     }
 
-    public function continue()
+    public function history()
     {
-        return view('bookshelf.continue');
+        return view('bookshelf.history');
     }
 
     public function reviews(Request $request)

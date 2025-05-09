@@ -190,7 +190,7 @@
             </div>
 
             {{-- Reader Area --}}
-            <main class="flex flex-col size-full overflow-hidden py-1 gap-0.5">
+            <main class="flex flex-col size-full overflow-hidden p-1 gap-0.5">
                 <x-buttons.button variant="outline" id="prev-page">
                     <x-icons.chevron-left />
                     <span>Sebelumnya</span>
@@ -203,10 +203,14 @@
                     <span>Selanjutnya</span>
                     <x-icons.chevron-right />
                 </x-buttons.button>
+
+                <div id="rating-button" class="w-full h-fit hidden">
+                    <x-buttons.rating-button :book="$book" />
+                </div>
             </main>
 
             {{-- BOTTOM: Progress Indicator --}}
-            <div class="fixed z-30 bottom-0 left-0 right-0 h-1 bg-surface dark:bg-surface-dark">
+            <div class="fixed z-30 bottom-0 inset-x-0 h-1 bg-surface dark:bg-surface-dark">
                 <div id="reading-progress-bar" class="size-full transition-all duration-500" style="width: 0%;">
                 </div>
             </div>

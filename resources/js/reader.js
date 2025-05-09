@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Next/Prev Page
     const prevButton = document.getElementById("prev-page");
     const nextButton = document.getElementById("next-page");
+    const ratingButton = document.getElementById("rating-button");
 
     function updateNavigationButtons(location) {
         const atStart = location.atStart;
@@ -30,9 +31,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (atEnd) {
-            nextButton.classList.add("opacity-50", "pointer-events-none");
+            ratingButton.classList.remove("hidden");
+            nextButton.classList.add("hidden");
         } else {
-            nextButton.classList.remove("opacity-50", "pointer-events-none");
+            nextButton.classList.remove("hidden");
+            ratingButton.classList.add("hidden");
         }
     }
 
@@ -43,8 +46,6 @@ document.addEventListener("DOMContentLoaded", function () {
     nextButton.addEventListener("click", function () {
         book.rendition.next();
     });
-
-    rendition.on("relocated", updateNavigationButtons);
 
     function navButton(show) {
         if (show === "show") {
@@ -139,7 +140,9 @@ document.addEventListener("DOMContentLoaded", function () {
         // Event page relocated
         rendition.on("relocated", (location) => {
             updateProgress(location);
-            updateNavigationButtons(location);
+            if (savedFlow === 'paginated') {
+                updateNavigationButtons(location);
+            }
         });
     });
 

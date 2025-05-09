@@ -58,8 +58,8 @@
                 'icon' => 'icons.bookmark',
             ],
             [
-                'label' => 'Lanjut Baca',
-                'url' => 'bookshelf.continue',
+                'label' => 'Riwayat Baca',
+                'url' => 'bookshelf.history',
                 'icon' => 'icons.history',
             ],
             [
