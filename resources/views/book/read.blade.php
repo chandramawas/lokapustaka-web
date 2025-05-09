@@ -159,30 +159,31 @@
             </div>
         </div>
 
-        {{-- TOC Drawer --}}
-        <div x-show="tocOpen" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
-            x-transition:leave-end="translate-x-full"
-            class="fixed inset-y-0 right-0 z-[60] w-[240px] shadow-md p-2 overflow-y-auto dropdown-scroll space-y-1 bg-surface-container dark:bg-surface-container-dark">
-            <x-buttons.icon-button variant="text" @click="tocOpen = false">
-                <x-icons.chevron-right />
-            </x-buttons.icon-button>
-            <div class="px-2 space-y-1">
-                <h2 class="text-body-xl font-bold">Daftar Isi</h2>
-                <ul class="toc-list space-y-0.5 text-body-md">
-                    <p class="text-center text-on-surface-dark animate-pulse">
-                        Memuat daftar isi...
-                    </p>
-                </ul>
-            </div>
-        </div>
-        {{-- Overlay gelap saat TOC drawer dibuka --}}
-        <div x-show="tocOpen" @click="tocOpen = false" class="fixed inset-0 bg-shadow/50 z-50">
-        </div>
 
         {{-- MAIN CONTENT --}}
         <div id="reader-parent" class="flex size-full overflow-hidden mb-1">
+            {{-- TOC Drawer --}}
+            <div x-show="tocOpen" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+                x-transition:leave="transition ease-in duration-200" x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                class="fixed inset-y-0 right-0 z-[60] w-[240px] shadow-md p-2 overflow-y-auto dropdown-scroll space-y-1 bg-surface-container dark:bg-surface-container-dark text-on-surface dark:text-on-surface-dark">
+                <x-buttons.icon-button variant="text" @click="tocOpen = false">
+                    <x-icons.chevron-right />
+                </x-buttons.icon-button>
+                <div class="px-2 space-y-1">
+                    <h2 class="text-body-xl font-bold">Daftar Isi</h2>
+                    <ul class="toc-list space-y-0.5 text-body-md">
+                        <p class="text-center text-on-surface-dark animate-pulse">
+                            Memuat daftar isi...
+                        </p>
+                    </ul>
+                </div>
+            </div>
+            {{-- Overlay gelap saat TOC drawer dibuka --}}
+            <div x-show="tocOpen" @click="tocOpen = false" class="fixed inset-0 bg-shadow/50 z-50">
+            </div>
+
             <div id="book-loading" class="fixed inset-0 bg-shadow/90 z-40 flex justify-center items-center">
                 <p class="text-center text-on-surface-dark animate-pulse">
                     Memuat buku...
@@ -191,6 +192,13 @@
 
             {{-- Reader Area --}}
             <main class="flex flex-col size-full overflow-hidden p-1 gap-0.5">
+                {{-- TOC Button --}}
+                <div class="justify-end" id="fullscreen-toc-button" style="display: none">
+                    <x-buttons.icon-button @click="tocOpen = true">
+                        <x-icons.menu />
+                    </x-buttons.icon-button>
+                </div>
+
                 <x-buttons.button variant="outline" id="prev-page">
                     <x-icons.chevron-left />
                     <span>Sebelumnya</span>
@@ -233,6 +241,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const readerParent = document.getElementById('reader-parent');
             const fullscreenBtn = document.getElementById('toggle-fullscreen');
+            const fullscreenTocBtn = document.getElementById('fullscreen-toc-button');
             const progressText = document.getElementById('reading-progress-text');
 
             // Toggle fullscreen mode
@@ -251,9 +260,11 @@
                 if (document.fullscreenElement) {
                     // Hide progress text in fullscreen mode
                     progressText.style.display = 'none';
+                    fullscreenTocBtn.style.display = 'flex';
                 } else {
                     // Show progress text when exiting fullscreen
                     progressText.style.display = 'block';
+                    fullscreenTocBtn.style.display = 'none';
                 }
             });
         });
