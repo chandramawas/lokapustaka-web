@@ -1,4 +1,4 @@
-@props(['books' => [], 'href' => null, 'sectionName', 'title' => null, 'progress' => null])
+@props(['books' => [], 'href' => null, 'sectionName', 'title' => null])
 
 @php
     $swiperId = 'bookSwiper-' . $sectionName;
@@ -19,8 +19,8 @@
         <div class="swiper bookSwiper" id="{{ $swiperId }}">
             <div class="swiper-wrapper">
                 @foreach ($books as $book)
-                    <div class="swiper-slide max-w-[125px] md:max-w-[150px]">
-                        <x-cards.book :book="$book" :progress="$progress[$book->id] ?? null" />
+                    <div class="swiper-slide max-w-[150px] md:max-w-[175px] lg:max-w-[190px]">
+                        <x-cards.book :book="$book" />
                     </div>
                 @endforeach
             </div>
@@ -40,7 +40,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const swiper = new Swiper('#{{ $swiperId }}', {
                 slidesPerView: 'auto',
-                spaceBetween: 16,
+                spaceBetween: 8,
                 centeredSlides: false,
                 navigation: {
                     nextEl: '.swiper-button-next',
@@ -53,12 +53,6 @@
                     slideChange: function () {
                         updateNavButtons(this);
                     },
-                    reachEnd: function () {
-                        updateNavButtons(this);
-                    },
-                    reachBeginning: function () {
-                        updateNavButtons(this);
-                    }
                 }
             });
 
@@ -68,7 +62,13 @@
 
                 // Atur display-nya langsung
                 prev.style.display = swiper.isBeginning ? 'none' : 'flex';
-                next.style.display = swiper.isEnd ? 'none' : 'flex';
+                if (swiper.isLocked) {
+                    next.style.display = 'none';
+                } else if (swiper.isEnd) {
+                    next.style.display = 'none';
+                } else {
+                    next.style.display = 'flex';
+                }
             }
         });
     </script>

@@ -10,7 +10,7 @@
             <span class="hidden md:flex space-x-3 font-medium">
                 <x-buttons.text-button :href="route('book.collection')">Semua Koleksi</x-buttons.text-button>
                 <x-buttons.text-button :href="route('bookshelf.index')">Koleksi Saya</x-buttons.text-button>
-                <x-buttons.text-button href="#">Koleksi Populer</x-buttons.text-button>
+                <x-buttons.text-button :href="route('account.subscription-info')">Info Langganan</x-buttons.text-button>
             </span>
         @endauth
     </div>

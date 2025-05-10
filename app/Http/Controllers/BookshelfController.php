@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\ReadingProgress;
 use Illuminate\Http\Request;
 use App\Models\Review;
@@ -10,26 +11,25 @@ class BookshelfController extends Controller
 {
     public function index()
     {
-        $books = auth()->user()->savedBooks()->latest()->get();
+        $books = auth()->user()->savedBooks()->orderBy('pivot_created_at', 'desc')->get();
 
-        $progress = auth()->check()
-            ? ReadingProgress::where('user_id', auth()->id())
-                ->whereIn('book_id', $books->pluck('id'))
-                ->get()
-                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
-            : collect();
+        foreach ($books as $book) {
+            $book->progress = $book->getReadingProgress(auth()->user());
+        }
 
-        return view('bookshelf.index', compact('books', 'progress'));
+        return view('bookshelf.index', compact('books'));
     }
 
     public function history()
     {
-        $histories = ReadingProgress::with('book')
-            ->where('user_id', auth()->user()->id)
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        // Ambil buku-buku yang sedang dibaca oleh user
+        $books = ReadingProgress::booksBeingRead(auth()->user());
 
-        return view('bookshelf.history', compact('histories'));
+        foreach ($books as $book) {
+            $book->progress = $book->getReadingProgress(auth()->user());
+        }
+
+        return view('bookshelf.history', compact('books'));
     }
 
     public function reviews(Request $request)

@@ -53,8 +53,10 @@
         </div>
 
         {{-- Koleksi Terkait --}}
-        <div class="max-w-6xl w-full mx-auto p-2">
-            <x-ui.book-carousel sectionName="other" title="Koleksi Terkait" />
-        </div>
+        @hasSection('book-carousel')
+            <div class="max-w-6xl w-full mx-auto p-2 space-y-2">
+                @yield('book-carousel')
+            </div>
+        @endif
     </div>
 @endsection

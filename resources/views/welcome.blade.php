@@ -59,12 +59,12 @@
         {{-- KANAN --}}
         <div class="hidden md:flex justify-end p-3 bg-gradient-to-l from-primary">
             <div class="grid grid-cols-3 gap-3 max-h-full my-auto">
-                @for ($i = 1; $i <= 6; $i++)
+                @foreach ($featuredBooks as $book)
                     <div class="rounded-md shadow-sm overflow-hidden hover:scale-105 transition">
-                        <img src="https://placehold.co/150x220?text=Poster+{{ $i }}"
+                        <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Cover+not+available.' }}"
                             class="size-full aspect-[2/3] object-cover">
                     </div>
-                @endfor
+                @endforeach
             </div>
         </div>
     </section>
@@ -109,7 +109,7 @@
 
     {{-- FEATURED BOOKS --}}
     <div class="max-w-6xl w-full mx-auto p-3 md:p-4 lg:p-5 xl:p-6 space-y-2 md:space-y-3">
-        <x-ui.book-carousel sectionName="featured" title="Koleksi Unggulan" />
+        <x-ui.book-carousel sectionName="featured" title="Koleksi Unggulan" :books="$featuredBooks" />
     </div>
 
 @endsection

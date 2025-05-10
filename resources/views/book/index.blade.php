@@ -33,7 +33,7 @@
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
         {{-- Read Buku --}}
-        <x-buttons.read-button :book="$book" :progress="$progress" />
+        <x-buttons.read-button :book="$book" />
 
         {{-- Review Buku --}}
         <x-buttons.rating-button :book="$book" />
@@ -56,8 +56,9 @@
 
                 <x-ui.modal showClose>
                     <div class="space-y-1 text-pretty">
-                        <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi {{ $book->title }}</h4>
-                        <p class="text-body-sm md:text-body-md">
+                        <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi</h4>
+                        <p
+                            class="text-body-sm md:text-body-md text-on-surface-variant dark:text-on-surface-variant-dark text-justify break-words">
                             {{ $book->description }}
                         </p>
                     </div>
@@ -68,6 +69,7 @@
             {{ $book->description }}
         </p>
     </div>
+
     {{-- Detail Buku --}}
     <div class="space-y-0.5">
         <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">
@@ -116,4 +118,8 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('book-carousel')
+    <x-ui.book-carousel sectionName="related" title="Koleksi Terkait" :books="$relatedBooks" />
 @endsection

@@ -1,10 +1,10 @@
-@props(['book' => null, 'progress' => null])
+@props(['book' => null])
 
 @if (auth()->user()->isSubscribed)
     <x-buttons.button :href="route('book.read', $book->slug ?? '#')" variant="primary" icon>
         <x-icons.book-read />
-        @if ($progress)
-            @if ($progress->progress_percent > 99)
+        @if ($book->progress)
+            @if ($book->progress->progress_percent > 99)
                 <span>Baca Lagi</span>
             @else
                 <span>Lanjut Baca</span>

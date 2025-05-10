@@ -12,13 +12,20 @@ class BookController extends Controller
 {
     public function detail(Book $book)
     {
-        $book->load('genres');
+        $book->progress = $book->getReadingProgress(auth()->user());
 
-        $progress = ReadingProgress::where('user_id', auth()->id())
-            ->where('book_id', $book->id)
-            ->first();
+        $relatedBooks = Book::where(function ($query) use ($book) {
+            $query->whereHas('genres', function ($q) use ($book) {
+                $q->whereIn('genres.id', $book->genres->pluck('id'));
+            })
+                ->orWhere('author', $book->author);
+        })
+            ->where('id', '!=', $book->id)
+            ->inRandomOrder()
+            ->limit(10)
+            ->get();
 
-        return view('book.index', compact('book', 'progress'));
+        return view('book.index', compact('book', 'relatedBooks'));
     }
 
     public function reviews(Request $request, Book $book)
@@ -121,41 +128,19 @@ class BookController extends Controller
         }
 
         // Sorting
-        switch ($request->sort) {
-            case 'az':
-                $query->orderBy('title', 'asc');
-                break;
-            case 'popular':
-                // TODO
-                break;
-            case 'rating':
-                $query->withAvg('reviews', 'rating')
-                    ->orderBy('reviews_avg_rating', 'desc');
-                break;
-            case 'newest':
-                $query->latest();
-                break;
-            default:
-                // default sorting kalau nggak ada
-                $query->orderBy('title', 'asc');
-                break;
-        }
+        $query->sort($request->sort);
 
         // Pagination
-        $books = $query->paginate(12)->withQueryString();
+        $books = $query->paginate(18)->withQueryString();
 
         // Ambil progress milik user untuk buku-buku ini
-        $progress = auth()->check()
-            ? ReadingProgress::where('user_id', auth()->id())
-                ->whereIn('book_id', $books->pluck('id'))
-                ->get()
-                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
-            : collect();
+        foreach ($books as $book) {
+            $book->progress = $book->getReadingProgress(auth()->user());
+        }
 
         return view('book.collection', [
             'books' => $books,
             'searchQuery' => $request->q,
-            'progress' => $progress,
         ]);
     }
 
@@ -164,45 +149,23 @@ class BookController extends Controller
         $genreModel = Genre::where('slug', $slug)->firstOrFail();
 
         // Query awal: semua buku dengan genre itu
-        $booksQuery = $genreModel->books()->with('genres');
+        $query = Book::filterByGenre($genreModel->id);
 
         // Sorting
-        switch ($request->sort) {
-            case 'az':
-                $booksQuery->orderBy('title', 'asc');
-                break;
-            case 'popular':
-                // TODO
-                break;
-            case 'rating':
-                $booksQuery->withAvg('reviews', 'rating')
-                    ->orderBy('reviews_avg_rating', 'desc');
-                break;
-            case 'newest':
-                $booksQuery->latest();
-                break;
-            default:
-                // default sorting kalau nggak ada
-                $booksQuery->orderBy('title', 'asc');
-                break;
-        }
+        $query->sort($request->sort);
 
         // Paginate hasilnya
-        $books = $booksQuery->paginate(12)->withQueryString();
+        $books = $query->paginate(18)->withQueryString();
 
         // Ambil progress milik user untuk buku-buku ini
-        $progress = auth()->check()
-            ? ReadingProgress::where('user_id', auth()->id())
-                ->whereIn('book_id', $books->pluck('id'))
-                ->get()
-                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
-            : collect();
+        foreach ($books as $book) {
+            $book->progress = $book->getReadingProgress(auth()->user());
+        }
 
         // Kirim ke view
         return view('book.genre', [
             'books' => $books,
             'genre' => $genreModel,
-            'progress' => $progress,
         ]);
     }
 }

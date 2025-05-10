@@ -93,7 +93,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Book::class)->withTimestamps();
     }
 
-    public function readingProgresses()
+    public function readingProgress()
     {
         return $this->hasMany(ReadingProgress::class);
     }

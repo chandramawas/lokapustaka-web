@@ -1,4 +1,4 @@
-@props(['book' => null, 'badge' => null, 'progress' => null])
+@props(['book' => null, 'badge' => null])
 
 <a href="{{ route('book.detail', $book->slug ?? '#') }}"
     aria-label="{{ $book->author ?? 'Author' }}'s {{ $book->title ?? 'Title' }}"
@@ -16,10 +16,10 @@
             </div>
         @endif
 
-        @if ($progress)
+        @if ($book->progress)
             <div class="absolute z-30 bottom-0 inset-x-0 h-0.5 bg-surface dark:bg-surface-dark">
-                <div id="reading-progress-bar" style="width: {{ $progress->progress_percent }}%;"
-                    class="size-full transition-all duration-500 {{ $progress->progress_percent < 50 ? 'bg-secondary-container' : 'bg-primary-container' }}">
+                <div id="reading-progress-bar" style="width: {{ $book->progress->progress_percent }}%;"
+                    class="size-full transition-all duration-500 {{ $book->progress->progress_percent < 50 ? 'bg-secondary-container' : 'bg-primary-container' }}">
                 </div>
             </div>
         @endif

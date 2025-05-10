@@ -71,18 +71,41 @@ class Book extends Model
         });
     }
 
-    public static function recommendationBook()
-    {
-        return self::inRandomOrder()->first();
-    }
-
     public function bookmarkedBy()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
-    public function readingProgresses()
+    public function readingProgress()
     {
         return $this->hasMany(ReadingProgress::class);
+    }
+
+    public function scopeSort($query, $sort)
+    {
+        switch ($sort) {
+            case 'az':
+                return $query->orderBy('title', 'asc');
+            case 'popular':
+                return $query->withCount('readingProgress')->orderBy('reading_progress_count', 'desc');
+            case 'rating':
+                return $query->withAvg('reviews', 'rating')->orderBy('reviews_avg_rating', 'desc');
+            case 'newest':
+                return $query->latest();
+            default:
+                return $query->orderBy('title', 'asc');
+        }
+    }
+
+    public function scopeFilterByGenre($query, $genreId)
+    {
+        return $query->whereHas('genres', function ($q) use ($genreId) {
+            $q->where('genres.id', $genreId);
+        });
+    }
+
+    public function getReadingProgress(User $user)
+    {
+        return $user->readingProgress()->where('book_id', $this->id)->first();
     }
 }

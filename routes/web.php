@@ -10,6 +10,7 @@ use App\Http\Controllers\ReadBookController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,9 +25,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome Page
-Route::get('/welcome', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/welcome', [WelcomeController::class, 'index'])
+    ->name('welcome');
 
 // Auth Routes
 Route::post('/register', [AuthController::class, 'register']);

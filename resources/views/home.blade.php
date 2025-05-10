@@ -9,19 +9,20 @@
 
             {{-- Trending --}}
             <div class="swiper-slide">
-                <x-ui.book-highlight sectionName="trending" :badges="[['variant' => 'trending', 'rank' => '1', 'href' => '#']]" />
+                <x-ui.book-highlight sectionName="trending" :badges="[['variant' => 'trending', 'rank' => '1', 'href' => '#']]"
+                    :book="$books['highlights']['trending']" />
             </div>
 
             {{-- Baru Rilis --}}
             <div class="swiper-slide">
                 <x-ui.book-highlight sectionName="newest" :badges="[['variant' => 'new', 'href' => '#']]"
-                    :book="$highlights['newest']" />
+                    :book="$books['highlights']['newest']" />
             </div>
 
             {{-- Rekomendasi Tim Loka --}}
             <div class="swiper-slide">
                 <x-ui.book-highlight sectionName="recommendation" :badges="[['variant' => 'recommend']]"
-                    :book="$highlights['recommendation']" />
+                    :book="$books['highlights']['recommendation']" />
             </div>
 
         </div>
@@ -44,14 +45,13 @@
 
     {{-- Section Buku --}}
     <div class="max-w-6xl mx-auto w-full mt-2 mb-6 px-4 space-y-4">
-        <x-ui.book-carousel sectionName="reading" title="Lanjutkan Baca" href="#" />
-        <x-ui.book-carousel sectionName="saved" title="Disimpan" href="#" />
-        <x-ui.book-carousel sectionName="history" title="Sejarah" href="#" />
-        <x-ui.book-carousel sectionName="fantasy" title="Fantasi" href="#" />
-        <x-ui.book-carousel sectionName="science-fiction" title="Fiksi Ilmiah" href="#" />
-        <x-ui.book-carousel sectionName="technology" title="Teknologi" href="#" />
-        <x-ui.book-carousel sectionName="science" title="Sains" href="#" />
-        <x-ui.book-carousel sectionName="thriller" title="Thriller" href="#" />
+        <x-ui.book-carousel sectionName="reading" title="Lanjutkan Baca" :href="route('bookshelf.history')"
+            :books="$books['notCompleted']" />
+        <x-ui.book-carousel sectionName="saved" title="Disimpan" :href="route('bookshelf.index')"
+            :books="$books['saved']" />
+        @foreach ($booksByGenre as $genre)
+            <x-ui.book-carousel sectionName="{{ $genre->name }}" :title="$genre->name" :href="route('book.genre.collection', $genre->slug)" :books="$genre->books" />
+        @endforeach
     </div>
 @endsection
 
