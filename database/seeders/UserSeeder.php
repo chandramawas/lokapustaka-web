@@ -57,5 +57,8 @@ class UserSeeder extends Seeder
             'end_date' => now()->addMonth(),
             'is_active' => true,
         ]);
+
+        User::factory()->count(15)->create();
+        User::factory()->count(5)->unverified()->create();
     }
 }

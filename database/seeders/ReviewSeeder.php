@@ -18,18 +18,22 @@ class ReviewSeeder extends Seeder
         $users = User::all();
         $books = Book::all();
 
-        foreach ($books as $book) {
-            // Setiap buku dikasih 0-7 review random
-            $numReviews = rand(10, 15);
-            $reviewSent = rand(70, 200);
+        foreach ($users as $user) {
+            // Ambil beberapa buku secara acak (1-5 buku)
+            $reviewedBooks = $books->random(rand(1, 40));
 
-            for ($i = 0; $i < $numReviews; $i++) {
-                Review::create([
-                    'book_id' => $book->id,
-                    'user_id' => $users->random()->id,
-                    'rating' => rand(1, 5),
-                    'review' => fake()->boolean(60) ? fake()->sentence($reviewSent) : null, // 70% ada review
-                ]);
+            foreach ($reviewedBooks as $book) {
+                // Cek dulu apakah user sudah review buku ini
+                $alreadyReviewed = Review::where('user_id', $user->id)
+                    ->where('book_id', $book->id)
+                    ->exists();
+
+                if (!$alreadyReviewed) {
+                    Review::factory()->create([
+                        'user_id' => $user->id,
+                        'book_id' => $book->id,
+                    ]);
+                }
             }
         }
     }

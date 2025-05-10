@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('cfi');  // Kolom untuk menyimpan CFI
             $table->integer('progress_percent');
             $table->timestamps();
+            $table->unique(['user_id', 'book_id']);
         });
     }
 

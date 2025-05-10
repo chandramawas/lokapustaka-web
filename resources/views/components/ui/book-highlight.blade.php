@@ -74,7 +74,7 @@
             </div>
             {{-- Button --}}
             <div class="flex flex-wrap gap-1">
-                <x-buttons.button href="#" variant="primary" class="w-full md:w-auto">Baca Sekarang</x-buttons.button>
+                <x-buttons.read-button :book="$book ?? null" />
                 <div class="flex flex-wrap gap-0.5">
                     @if ($book)
                         <livewire:bookmark-toggle :book="$book" />

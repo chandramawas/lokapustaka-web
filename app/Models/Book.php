@@ -15,6 +15,7 @@ class Book extends Model
     protected $fillable = [
         'isbn',
         'slug',
+        'epub_path',
         'title',
         'author',
         'publisher',

@@ -1,7 +1,7 @@
 @props(['book' => null, 'progress' => null])
 
 @if (auth()->user()->isSubscribed)
-    <x-buttons.button :href="route('book.read', $book->slug)" variant="primary" icon>
+    <x-buttons.button :href="route('book.read', $book->slug ?? '#')" variant="primary" icon>
         <x-icons.book-read />
         @if ($progress)
             @if ($progress->progress_percent > 99)
