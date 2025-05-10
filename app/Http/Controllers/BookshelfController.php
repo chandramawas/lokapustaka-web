@@ -12,7 +12,14 @@ class BookshelfController extends Controller
     {
         $books = auth()->user()->savedBooks()->latest()->get();
 
-        return view('bookshelf.index', compact('books'));
+        $progress = auth()->check()
+            ? ReadingProgress::where('user_id', auth()->id())
+                ->whereIn('book_id', $books->pluck('id'))
+                ->get()
+                ->keyBy('book_id') // supaya bisa diakses cepat pakai $progress[$book->id]
+            : collect();
+
+        return view('bookshelf.index', compact('books', 'progress'));
     }
 
     public function history()

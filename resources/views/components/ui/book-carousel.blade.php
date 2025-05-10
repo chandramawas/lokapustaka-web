@@ -1,4 +1,4 @@
-@props(['books' => [], 'href' => null, 'sectionName', 'title' => null])
+@props(['books' => [], 'href' => null, 'sectionName', 'title' => null, 'progress' => null])
 
 @php
     $swiperId = 'bookSwiper-' . $sectionName;
@@ -20,7 +20,7 @@
             <div class="swiper-wrapper">
                 @foreach ($books as $book)
                     <div class="swiper-slide max-w-[125px] md:max-w-[150px]">
-                        <x-cards.book :book="$book" />
+                        <x-cards.book :book="$book" :progress="$progress[$book->id] ?? null" />
                     </div>
                 @endforeach
             </div>
