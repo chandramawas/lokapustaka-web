@@ -7,6 +7,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
@@ -17,6 +21,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
 use Mokhosh\FilamentRating\Components\Rating;
+use Mokhosh\FilamentRating\Entries\RatingEntry;
+use Mokhosh\FilamentRating\RatingTheme;
 
 class ReviewsRelationManager extends RelationManager
 {
@@ -26,38 +32,74 @@ class ReviewsRelationManager extends RelationManager
     protected static ?string $label = 'Ulasan';
     protected static ?string $icon = 'heroicon-o-chat-bubble-bottom-center-text';
 
-    public function form(Form $form): Form
+    public function infolist(Infolist $infolist): Infolist
     {
-        return $form
-            ->schema([
-                Select::make('user_id')
-                    ->label('Pengguna')
-                    ->placeholder('Pilih pengguna...')
-                    ->relationship('user', 'name')
-                    ->options(function ($livewire) {
-                        $book = $livewire->ownerRecord;
+        return $infolist
+            ->schema(components: [
+                // View Bagian 1 - Buku 
+                Section::make('Buku')
+                    ->schema([
+                        TextEntry::make('book.title')
+                            ->label('Judul'),
+                        TextEntry::make('book.author')
+                            ->label('Penulis'),
+                        TextEntry::make('review_count')
+                            ->label('Jumlah Ulasan')
+                            ->state(fn($record) => $record->book->reviews->count())
+                            ->suffix(' ulasan'),
+                        RatingEntry::make('avg_rating')
+                            ->label('Rating')
+                            ->theme(RatingTheme::HalfStars)
+                            ->state(fn($record) => round($record->book->reviews->avg('rating'), 1))
+                            ->tooltip(fn($state) => $state),
+                    ])
+                    ->icon('heroicon-o-book-open')
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed(),
 
-                        return \App\Models\User::whereDoesntHave('reviews', function ($query) use ($book) {
-                            $query->where('book_id', $book->id);
-                        })->pluck('name', 'id');
-                    })
-                    ->disabled(fn($context) => $context === 'edit')
-                    ->default(fn($livewire) => $livewire->record->user_id ?? null)
-                    ->searchable()
-                    ->preload()
-                    ->required(),
+                // View Bagian 2 - Pengguna 
+                Section::make('Pengguna')
+                    ->schema([
+                        TextEntry::make('user.name')
+                            ->label('Nama'),
+                        TextEntry::make('user_book_progress')
+                            ->label('Progress Buku Ini')
+                            ->state(function ($record) {
+                                return optional(
+                                    $record->user
+                                        ->readingProgress()
+                                        ->where('book_id', $record->book_id)
+                                        ->first(),
+                                )->progress_percent ?? 0;
+                            })
+                            ->badge()
+                            ->colors([
+                                'danger' => fn($state) => $state <= 20,
+                                'warning' => fn($state) => $state > 20 && $state <= 75,
+                                'info' => fn($state) => $state > 75 && $state < 99,
+                                'success' => fn($state) => $state >= 99,
+                            ])
+                            ->suffix('%'),
+                        TextEntry::make('user_reading_count')
+                            ->label('Jumlah Baca')
+                            ->state(fn($record) => $record->user->readingProgress()->count())
+                            ->suffix(' baca'),
+                        TextEntry::make('user_reviews_count')
+                            ->label('Jumlah Ulasan')
+                            ->state(fn($record) => $record->user->reviews()->count())
+                            ->suffix(' ulasan'),
+                    ])
+                    ->icon('heroicon-o-user')
+                    ->columns(4)
+                    ->collapsible(),
 
-                Rating::make('rating')
-                    ->label('Rating')
-                    ->default(5)
-                    ->required(),
+                RatingEntry::make('rating')
+                    ->label('Rating'),
 
-                Textarea::make('review')
+                TextEntry::make('review')
                     ->label('Ulasan')
-                    ->maxLength(1000)
                     ->placeholder('-')
-                    ->autosize()
-                    ->nullable()
                     ->columnSpanFull(),
             ]);
     }
@@ -70,8 +112,26 @@ class ReviewsRelationManager extends RelationManager
                 TextColumn::make('user.name')
                     ->label('Pengguna')
                     ->limit(30)
-                    ->weight(FontWeight::Bold)
+                    ->weight(FontWeight::SemiBold)
                     ->searchable(),
+                TextColumn::make('user_book_progress')
+                    ->label('Progress Buku Ini')
+                    ->state(function ($record) {
+                        return optional(
+                            $record->user
+                                ->readingProgress()
+                                ->where('book_id', $record->book_id)
+                                ->first(),
+                        )->progress_percent ?? 0;
+                    })
+                    ->badge()
+                    ->colors([
+                        'danger' => fn($state) => $state <= 20,
+                        'warning' => fn($state) => $state > 20 && $state <= 75,
+                        'info' => fn($state) => $state > 75 && $state < 99,
+                        'success' => fn($state) => $state >= 99,
+                    ])
+                    ->suffix('%'),
                 TextColumn::make('review')
                     ->label('Ulasan')
                     ->placeholder('-')
@@ -81,9 +141,18 @@ class ReviewsRelationManager extends RelationManager
                     ->label('Rating')
                     ->size('sm')
                     ->sortable(),
-                TextColumn::make('updated_at')
-                    ->label('Terakhir Diperbarui')
+                TextColumn::make('created_at')
+                    ->label('Tanggal Ditambahkan')
                     ->dateTime()
+                    ->sinceTooltip()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+
+                TextColumn::make('updated_at')
+                    ->label('Tanggal Diperbarui')
+                    ->dateTime()
+                    ->sinceTooltip()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
@@ -97,21 +166,14 @@ class ReviewsRelationManager extends RelationManager
                         1 => '1 Bintang',
                     ]),
             ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->icon('heroicon-m-plus'),
-            ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 }

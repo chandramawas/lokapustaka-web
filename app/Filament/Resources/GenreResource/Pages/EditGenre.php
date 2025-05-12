@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\BookResource\Pages;
+namespace App\Filament\Resources\GenreResource\Pages;
 
-use App\Filament\Resources\BookResource;
+use App\Filament\Resources\GenreResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditBook extends EditRecord
+class EditGenre extends EditRecord
 {
-    protected static string $resource = BookResource::class;
+    protected static string $resource = GenreResource::class;
 
     protected function getHeaderActions(): array
     {

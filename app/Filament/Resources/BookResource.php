@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BookResource\Pages;
 use App\Filament\Resources\BookResource\RelationManagers;
 use App\Models\Book;
-use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MultiSelect;
 use Filament\Forms\Components\Section;
@@ -20,6 +19,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
@@ -41,6 +41,11 @@ class BookResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $activeNavigationIcon = 'heroicon-s-book-open';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -152,7 +157,7 @@ class BookResource extends Resource
                 TextColumn::make('title')
                     ->label('Judul')
                     ->wrap()
-                    ->weight(FontWeight::Bold)
+                    ->weight(FontWeight::SemiBold)
                     ->sortable()
                     ->searchable(),
 
@@ -165,15 +170,24 @@ class BookResource extends Resource
                     ->label('Genre'),
 
                 TextColumn::make('reading_progress_count')
-                    ->label('Dibaca')
+                    ->label('Jumlah Baca')
                     ->counts('readingProgress')
+                    ->tooltip(fn($record) => $record->readingProgress()->where('progress_percent', '>=', 99)->count() . ' selesai')
+                    ->suffix(' baca')
                     ->sortable(),
 
                 TextColumn::make('reading_progress_avg_progress_percent')
-                    ->label('Rata-Rata')
+                    ->label('Rata-Rata Baca')
                     ->avg('readingProgress', 'progress_percent')
                     ->numeric(1)
                     ->default(0)
+                    ->badge()
+                    ->colors([
+                        'danger' => fn($state) => $state <= 20,
+                        'warning' => fn($state) => $state > 20 && $state <= 75,
+                        'info' => fn($state) => $state > 75 && $state < 99,
+                        'success' => fn($state) => $state >= 99,
+                    ])
                     ->suffix('%')
                     ->sortable(),
 
@@ -185,14 +199,22 @@ class BookResource extends Resource
                     ->tooltip(function ($state, $record) {
                         $formatted = number_format($state, 1);
                         $count = $record->reviews()->count();
-                        return "{$formatted} dari {$count} reviews";
+                        return "★ {$formatted} dari {$count} reviews";
                     })
                     ->sortable(),
 
+                TextColumn::make('created_at')
+                    ->label('Tanggal Ditambahkan')
+                    ->dateTime()
+                    ->sinceTooltip()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->sortable(),
+
                 TextColumn::make('updated_at')
-                    ->label('Diperbarui')
-                    ->since()
-                    ->dateTimeTooltip()
+                    ->label('Tanggal Diperbarui')
+                    ->dateTime()
+                    ->sinceTooltip()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
@@ -227,6 +249,7 @@ class BookResource extends Resource
                             ->label('URL')
                             ->state(fn($record) => route('book.detail', $record->slug))
                             ->badge()
+                            ->copyable()
                             ->prefixAction(
                                 Action::make('view_epub')
                                     ->icon('heroicon-m-eye')
@@ -269,6 +292,14 @@ class BookResource extends Resource
                             ->placeholder('-')
                             ->alignJustify()
                             ->columnSpanFull(),
+
+                        TextEntry::make('created_at')
+                            ->label('Ditambahkan')
+                            ->dateTime(),
+
+                        TextEntry::make('updated_at')
+                            ->label('Terakhir Diperbarui')
+                            ->dateTime(),
                     ])
                     ->icon('heroicon-o-information-circle')
                     ->collapsible()
@@ -292,31 +323,38 @@ class BookResource extends Resource
                                 TextEntry::make('avg_reading_progress')
                                     ->label('Rata-Rata Progress')
                                     ->state(fn($record) => round($record->readingProgress()->avg('progress_percent'), 1))
+                                    ->badge()
+                                    ->colors([
+                                        'danger' => fn($state) => $state <= 20,
+                                        'warning' => fn($state) => $state > 20 && $state <= 75,
+                                        'info' => fn($state) => $state > 75 && $state < 99,
+                                        'success' => fn($state) => $state >= 99,
+                                    ])
                                     ->suffix('%'),
                             ])
-                            ->columns(2),
+                            ->columns(4),
                         Fieldset::make('Ulasan')
                             ->schema([
                                 TextEntry::make('reviews_count')
-                                    ->label('Total Ulasan')
+                                    ->label('Total')
                                     ->state(fn($record) => $record->reviews()->count())
                                     ->suffix(' ulasan'),
                                 TextEntry::make('reviews_with_text_count')
                                     ->label('Dengan Text')
                                     ->state(fn($record) => $record->reviews()->where('review', '!=', null)->count())
                                     ->suffix(' ulasan'),
+                                TextEntry::make('reviews_rating_count')
+                                    ->label('Jumlah Bintang')
+                                    ->state(fn($record) => $record->reviews()->sum('rating'))
+                                    ->prefix('★ '),
                                 RatingEntry::make('avg_rating')
-                                    ->label('Rata-Rata Rating')
-                                    ->helperText(fn($state) => number_format($state, 1) . ' bintang')
+                                    ->label('Rating')
+                                    ->tooltip(fn($state) => '★ ' . number_format($state, 1))
                                     ->state(fn($record) => $record->reviews()->avg('rating'))
                                     ->size('sm')
                                     ->theme(RatingTheme::HalfStars),
-                                TextEntry::make('reviews_rating_count')
-                                    ->label('Total Rating')
-                                    ->state(fn($record) => $record->reviews()->sum('rating'))
-                                    ->suffix(' bintang'),
                             ])
-                            ->columns(2),
+                            ->columns(4),
                         Fieldset::make('Disimpan')
                             ->schema([
                                 TextEntry::make('bookmark_count')
@@ -324,7 +362,7 @@ class BookResource extends Resource
                                     ->state(fn($record) => $record->bookmarkedBy()->count())
                                     ->suffix(' pengguna'),
                             ])
-                            ->columns(2),
+                            ->columns(4),
                     ])
                     ->icon('heroicon-o-chart-bar')
                     ->collapsed()
