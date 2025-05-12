@@ -44,7 +44,7 @@
         </div>
         {{-- Deskripsi --}}
         <p class="text-label line-clamp-3 text-on-surface-variant-dark">
-            {{ $book->description ?? 'Description belum tersedia.' }}
+            {{ $book->description ?? 'Deskripsi belum tersedia.' }}
         </p>
     </div>
 </a>

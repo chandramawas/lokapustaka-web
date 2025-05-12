@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'name' => 'John Doe',
             'email' => '17230726@bsi.ac.id',
             'password' => Hash::make('root'),
+            'role' => 'admin',
             'gender' => 'Laki-Laki',
             'birthdate' => '2000-01-01',
             'email_verified_at' => Carbon::now(),

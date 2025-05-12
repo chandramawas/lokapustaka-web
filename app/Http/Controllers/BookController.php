@@ -25,6 +25,14 @@ class BookController extends Controller
             ->limit(10)
             ->get();
 
+        // Kalau hasil relatedBooks kosong, fallback ke buku random lain
+        if ($relatedBooks->isEmpty()) {
+            $relatedBooks = Book::where('id', '!=', $book->id)
+                ->inRandomOrder()
+                ->limit(10)
+                ->get();
+        }
+
         return view('book.index', compact('book', 'relatedBooks'));
     }
 

@@ -12,17 +12,17 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('isbn')->unique()->nullable();
             $table->string('slug')->unique()->nullable();
-            $table->string('epub_path')->nullable();
+            $table->string('isbn')->unique()->nullable();
+            $table->string('epub_path');
             $table->string('title');
             $table->string('author');
             $table->string('publisher')->nullable();
-            $table->string('year')->nullable();
-            $table->integer('pages')->nullable();
+            $table->string('year');
+            $table->integer('pages');
             $table->string('language')->default('Bahasa Indonesia');
             $table->text('description')->nullable();
-            $table->string('cover_url')->nullable();
+            $table->string('cover_url');
             $table->timestamps();
         });
     }

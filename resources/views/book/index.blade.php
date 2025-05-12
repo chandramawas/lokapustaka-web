@@ -11,7 +11,7 @@
 @endsection
 
 @section('first-content')
-    <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
+    <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Cover+not+available.' }}"
         class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
 @endsection
 
@@ -59,14 +59,14 @@
                         <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi</h4>
                         <p
                             class="text-body-sm md:text-body-md text-on-surface-variant dark:text-on-surface-variant-dark text-justify break-words">
-                            {{ $book->description }}
+                            {{ $book->description ?? 'Deskripsi belum tersedia.' }}
                         </p>
                     </div>
                 </x-ui.modal>
             </div>
         </div>
         <p class="text-body-sm md:text-body-md text-justify line-clamp-3">
-            {{ $book->description }}
+            {{ $book->description ?? 'Deskripsi belum tersedia.' }}
         </p>
     </div>
 
@@ -81,7 +81,7 @@
                     Penerbit
                 </h5>
                 <p class="line-clamp-1">
-                    {{ $book->publisher }}
+                    {{ $book->publisher ?? '-' }}
                 </p>
             </div>
             <div>
@@ -89,7 +89,7 @@
                     Tahun Terbit
                 </h5>
                 <p class="line-clamp-1">
-                    {{ $book->year }}
+                    {{ $book->year ?? '-' }}
                 </p>
             </div>
             <div>
@@ -97,7 +97,7 @@
                     ISBN
                 </h5>
                 <p class="line-clamp-1">
-                    {{ $book->isbn }}
+                    {{ $book->isbn ?? '-' }}
                 </p>
             </div>
             <div>
@@ -105,7 +105,7 @@
                     Halaman
                 </h5>
                 <p class="line-clamp-1">
-                    {{ $book->pages }}
+                    {{ $book->pages ?? '-' }}
                 </p>
             </div>
             <div>

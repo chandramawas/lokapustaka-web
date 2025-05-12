@@ -4,7 +4,7 @@
     <x-buttons.button :href="route('book.read', $book->slug ?? '#')" variant="primary" icon>
         <x-icons.book-read />
         @if ($book->progress)
-            @if ($book->progress->progress_percent > 99)
+            @if ($book->progress->progress_percent > 98)
                 <span>Baca Lagi</span>
             @else
                 <span>Lanjut Baca</span>
