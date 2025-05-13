@@ -184,8 +184,8 @@ class BookResource extends Resource
                     ->badge()
                     ->colors([
                         'danger' => fn($state) => $state <= 20,
-                        'warning' => fn($state) => $state > 20 && $state <= 75,
-                        'info' => fn($state) => $state > 75 && $state < 99,
+                        'warning' => fn($state) => $state > 20 && $state <= 60,
+                        'info' => fn($state) => $state > 60 && $state < 99,
                         'success' => fn($state) => $state >= 99,
                     ])
                     ->suffix('%')
@@ -326,8 +326,8 @@ class BookResource extends Resource
                                     ->badge()
                                     ->colors([
                                         'danger' => fn($state) => $state <= 20,
-                                        'warning' => fn($state) => $state > 20 && $state <= 75,
-                                        'info' => fn($state) => $state > 75 && $state < 99,
+                                        'warning' => fn($state) => $state > 20 && $state <= 60,
+                                        'info' => fn($state) => $state > 60 && $state < 99,
                                         'success' => fn($state) => $state >= 99,
                                     ])
                                     ->suffix('%'),

@@ -48,8 +48,8 @@ class ReadingProgressRelationManager extends RelationManager
                             ->badge()
                             ->colors([
                                 'danger' => fn($state) => $state <= 20,
-                                'warning' => fn($state) => $state > 20 && $state <= 75,
-                                'info' => fn($state) => $state > 75 && $state < 99,
+                                'warning' => fn($state) => $state > 20 && $state <= 60,
+                                'info' => fn($state) => $state > 60 && $state < 99,
                                 'success' => fn($state) => $state >= 99,
                             ])
                             ->suffix('%'),
@@ -74,8 +74,8 @@ class ReadingProgressRelationManager extends RelationManager
                             ->badge()
                             ->colors([
                                 'danger' => fn($state) => $state <= 20,
-                                'warning' => fn($state) => $state > 20 && $state <= 75,
-                                'info' => fn($state) => $state > 75 && $state < 99,
+                                'warning' => fn($state) => $state > 20 && $state <= 60,
+                                'info' => fn($state) => $state > 60 && $state < 99,
                                 'success' => fn($state) => $state >= 99,
                             ])
                             ->suffix('%'),
@@ -89,8 +89,8 @@ class ReadingProgressRelationManager extends RelationManager
                     ->badge()
                     ->colors([
                         'danger' => fn($state) => $state <= 20,
-                        'warning' => fn($state) => $state > 20 && $state <= 75,
-                        'primary' => fn($state) => $state > 75,
+                        'warning' => fn($state) => $state > 20 && $state <= 60,
+                        'primary' => fn($state) => $state > 60,
                     ])
                     ->suffix('%'),
                 TextEntry::make('cfi')
@@ -124,19 +124,13 @@ class ReadingProgressRelationManager extends RelationManager
                     ->badge()
                     ->colors([
                         'danger' => fn($state) => $state <= 20,
-                        'warning' => fn($state) => $state > 20 && $state <= 75,
-                        'info' => fn($state) => $state > 75 && $state < 99,
+                        'warning' => fn($state) => $state > 20 && $state <= 60,
+                        'info' => fn($state) => $state > 60 && $state < 99,
                         'success' => fn($state) => $state >= 99,
                     ])
                     ->suffix('%')
                     ->sortable(),
-                BadgeColumn::make('status')
-                    ->label('Status')
-                    ->state(fn($record) => $record->progress_percent >= 99 ? 'Selesai' : 'Belum Selesai')
-                    ->colors([
-                        'success' => 'Selesai',
-                        'warning' => 'Belum Selesai',
-                    ]),
+
                 TextColumn::make('created_at')
                     ->label('Tanggal Awal Baca')
                     ->dateTime()
@@ -148,22 +142,33 @@ class ReadingProgressRelationManager extends RelationManager
                     ->label('Tanggal Terakhir Baca')
                     ->dateTime()
                     ->sinceTooltip()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->sortable(),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
-                SelectFilter::make('status')
-                    ->label('Status Baca')
+                SelectFilter::make('progress_percent')
+                    ->label('Progress Baca')
                     ->options([
-                        'selesai' => 'Selesai',
-                        'belum' => 'Belum Selesai',
+                        'belum' => '0% (Belum Baca)',
+                        'baru' => '1-20% (Baru Mulai)',
+                        'masih' => '21-60% (Masih Baca)',
+                        'hampir' => '61-98% (Hampir Selesai)',
+                        'selesai' => '99-100% (Selesai)',
                     ])
                     ->query(function (Builder $query, array $data) {
-                        if ($data['value'] === 'selesai') {
+                        $value = $data['value'] ?? null;
+
+                        if ($value === 'belum') {
+                            $query->where('progress_percent', 0);
+                        } elseif ($value === 'baru') {
+                            $query->whereBetween('progress_percent', [1, 20]);
+                        } elseif ($value === 'masih') {
+                            $query->whereBetween('progress_percent', [21, 60]);
+                        } elseif ($value === 'hampir') {
+                            $query->whereBetween('progress_percent', [61, 98]);
+                        } elseif ($value === 'selesai') {
                             $query->where('progress_percent', '>=', 99);
-                        } elseif ($data['value'] === 'belum') {
-                            $query->where('progress_percent', '<', 99);
                         }
                     }),
             ])

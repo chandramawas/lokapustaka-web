@@ -1,41 +1,46 @@
 <?php
 
-namespace App\Filament\Resources\BookResource\RelationManagers;
+namespace App\Filament\Resources;
 
+use App\Filament\Resources\ReviewResource\Pages;
+use App\Filament\Resources\ReviewResource\RelationManagers;
+use App\Models\Review;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
-use Mokhosh\FilamentRating\Components\Rating;
 use Mokhosh\FilamentRating\Entries\RatingEntry;
 use Mokhosh\FilamentRating\RatingTheme;
 
-class ReviewsRelationManager extends RelationManager
+class ReviewResource extends Resource
 {
-    protected static string $relationship = 'reviews';
+    protected static ?string $model = Review::class;
 
-    protected static ?string $title = 'Ulasan';
     protected static ?string $label = 'Ulasan';
-    protected static ?string $icon = 'heroicon-o-chat-bubble-bottom-center-text';
 
-    public function infolist(Infolist $infolist): Infolist
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-chat-bubble-bottom-center-text';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
-            ->schema(components: [
+            ->schema([
                 // View Bagian 1 - Buku 
                 Section::make('Buku')
                     ->schema([
@@ -104,18 +109,26 @@ class ReviewsRelationManager extends RelationManager
             ]);
     }
 
-    public function table(Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('user.name')
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Pengguna')
-                    ->limit(30)
+                    ->limit(20)
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),
+                ImageColumn::make('book.cover_url')
+                    ->label(false)
+                    ->square()
+                    ->height(30)
+                    ->defaultImageUrl('https://placehold.co/150x220?text=Cover+not+available'),
+                TextColumn::make('book.title')
+                    ->label('Buku')
+                    ->limit(20)
+                    ->searchable(),
                 TextColumn::make('user_book_progress')
-                    ->label('Progress Buku Ini')
+                    ->label('Progress')
                     ->state(function ($record) {
                         return optional(
                             $record->user
@@ -137,7 +150,8 @@ class ReviewsRelationManager extends RelationManager
                     ->label('Ulasan')
                     ->placeholder('-')
                     ->limit(200)
-                    ->wrap(),
+                    ->wrap()
+                    ->toggleable(isToggledHiddenByDefault: false),
                 RatingColumn::make('rating')
                     ->label('Rating')
                     ->size('sm')
@@ -170,10 +184,10 @@ class ReviewsRelationManager extends RelationManager
                     ->label('Progress Baca')
                     ->options([
                         '0' => '0% (Belum Baca)',
-                        '1-20' => '1-20% (Baru Mulai)',
-                        '21-60' => '21-60% (Masih Baca)',
-                        '61-98' => '61-98% (Hampir Selesai)',
-                        '99-100' => '99-100% (Selesai)',
+                        '1-20' => '1-20% (Baru mulai)',
+                        '21-60' => '21-60% (Masih baca)',
+                        '61-98' => '61-98% (Hampir selesai)',
+                        '99-100' => '99-100% (Tamat)',
                     ])
                     ->query(function ($query, array $data) {
                         $value = $data['value'] ?? null;
@@ -205,5 +219,19 @@ class ReviewsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListReviews::route('/'),
+        ];
     }
 }
