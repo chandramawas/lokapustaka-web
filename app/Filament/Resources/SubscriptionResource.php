@@ -1,51 +1,57 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Resources;
 
-use Carbon\Carbon;
+use App\Filament\Resources\SubscriptionResource\Pages;
+use App\Models\Subscription;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class SubscriptionsRelationManager extends RelationManager
+class SubscriptionResource extends Resource
 {
-    protected static string $relationship = 'subscriptions';
+    protected static ?string $model = Subscription::class;
 
-    protected static ?string $title = 'Langganan';
     protected static ?string $label = 'Langganan';
-    protected static ?string $icon = 'heroicon-o-identification';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-identification';
 
-    public function form(Form $form): Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('user_id')
+                    ->label('Pengguna')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->required(),
                 Forms\Components\Select::make('type')
                     ->label('Paket')
                     ->options([
                         'bulanan' => 'Bulanan',
                         'tahunan' => 'Tahunan',
                     ])
-                    ->default('bulanan')
                     ->native(false)
+                    ->default('bulanan')
                     ->reactive()
                     ->afterStateUpdated(fn($state, callable $set) => static::setEndDate($state, $set))
-                    ->required()
-                    ->columnSpanFull(),
+                    ->required(),
 
                 Forms\Components\DateTimePicker::make('start_date')
                     ->label('Tanggal Mulai')
                     ->default(now())
                     ->readOnly()
-                    ->seconds(false)
                     ->helperText('Langganan berlaku mulai dari tanggal ini.')
+                    ->seconds(false)
                     ->required(),
 
                 Forms\Components\DateTimePicker::make('end_date')
@@ -69,13 +75,18 @@ class SubscriptionsRelationManager extends RelationManager
         $set('end_date', $endDate->format('Y-m-d H:i'));
     }
 
-    public function table(Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
                     ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Pengguna')
+                    ->limit(30)
+                    ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
                     ->label('Paket')
@@ -103,7 +114,7 @@ class SubscriptionsRelationManager extends RelationManager
                     ->dateTime()
                     ->sinceTooltip()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('updated_at', 'desc')
             ->filters([
@@ -112,10 +123,12 @@ class SubscriptionsRelationManager extends RelationManager
                     ->options([
                         'bulanan' => 'Bulanan',
                         'tahunan' => 'Tahunan',
-                    ])
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                    ]),
+                Tables\Filters\TernaryFilter::make('is_active')
+                    ->label('Status Langganan')
+                    ->placeholder('Semua')
+                    ->trueLabel('Aktif')
+                    ->falseLabel('Tidak Aktif'),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -164,7 +177,7 @@ class SubscriptionsRelationManager extends RelationManager
             ]);
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
@@ -189,9 +202,15 @@ class SubscriptionsRelationManager extends RelationManager
                             ])
                             ->suffix('%'),
                     ])
+                    ->headerActions([
+                        Action::make('user_view')
+                            ->label('Lihat')
+                            ->icon('heroicon-o-eye')
+                            ->color('gray')
+                            ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
+                    ])
                     ->columns(3)
-                    ->collapsible()
-                    ->collapsed(),
+                    ->collapsible(),
 
 //                View Bagian 2 - Payment
                 Section::make('Pembayaran')
@@ -237,5 +256,12 @@ class SubscriptionsRelationManager extends RelationManager
                     ->sinceTooltip(),
             ])
             ->columns(3);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ManageSubscriptions::route('/'),
+        ];
     }
 }
