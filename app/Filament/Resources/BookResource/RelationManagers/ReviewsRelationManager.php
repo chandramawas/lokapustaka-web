@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -36,7 +37,7 @@ class ReviewsRelationManager extends RelationManager
     {
         return $infolist
             ->schema(components: [
-                // View Bagian 1 - Buku 
+                // View Bagian 1 - Buku
                 Section::make('Buku')
                     ->schema([
                         TextEntry::make('book.title')
@@ -53,12 +54,11 @@ class ReviewsRelationManager extends RelationManager
                             ->state(fn($record) => round($record->book->reviews->avg('rating'), 1))
                             ->tooltip(fn($state) => $state),
                     ])
-                    ->icon('heroicon-o-book-open')
                     ->columns(2)
                     ->collapsible()
                     ->collapsed(),
 
-                // View Bagian 2 - Pengguna 
+                // View Bagian 2 - Pengguna
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
@@ -90,7 +90,13 @@ class ReviewsRelationManager extends RelationManager
                             ->state(fn($record) => $record->user->reviews()->count())
                             ->suffix(' ulasan'),
                     ])
-                    ->icon('heroicon-o-user')
+                    ->headerActions([
+                        Action::make('user_view')
+                            ->label('Lihat')
+                            ->icon('heroicon-o-eye')
+                            ->color('gray')
+                            ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
+                    ])
                     ->columns(4)
                     ->collapsible(),
 
@@ -115,7 +121,7 @@ class ReviewsRelationManager extends RelationManager
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),
                 TextColumn::make('user_book_progress')
-                    ->label('Progress Buku Ini')
+                    ->label('Progress Baca')
                     ->state(function ($record) {
                         return optional(
                             $record->user
@@ -131,8 +137,7 @@ class ReviewsRelationManager extends RelationManager
                         'info' => fn($state) => $state > 60 && $state < 99,
                         'success' => fn($state) => $state >= 99,
                     ])
-                    ->suffix('%')
-                    ->sortable(),
+                    ->suffix('%'),
                 TextColumn::make('review')
                     ->label('Ulasan')
                     ->placeholder('-')
@@ -192,7 +197,7 @@ class ReviewsRelationManager extends RelationManager
 
                         return $query->whereHas('user.readingProgress', function ($q) use ($min, $max) {
                             $q->whereColumn('book_id', 'reviews.book_id')
-                                ->whereBetween('progress_percent', [(int) $min, (int) $max]);
+                                ->whereBetween('progress_percent', [(int)$min, (int)$max]);
                         });
                     }),
             ])

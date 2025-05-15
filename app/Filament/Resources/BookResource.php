@@ -28,17 +28,16 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\MultiSelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
 use Mokhosh\FilamentRating\Entries\RatingEntry;
 use Mokhosh\FilamentRating\RatingTheme;
-use Storage;
 
 class BookResource extends Resource
 {
     protected static ?string $model = Book::class;
 
     protected static ?string $label = 'Buku';
-
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $activeNavigationIcon = 'heroicon-s-book-open';
 
@@ -172,14 +171,14 @@ class BookResource extends Resource
                 TextColumn::make('reading_progress_count')
                     ->label('Jumlah Baca')
                     ->counts('readingProgress')
-                    ->tooltip(fn($record) => $record->readingProgress()->where('progress_percent', '>=', 99)->count() . ' selesai')
+                    ->tooltip(fn($record) => $record->readingProgress->count() !== 0 ? $record->readingProgress->where('progress_percent', '>=', 99)->count() . ' selesai' : false)
                     ->suffix(' baca')
                     ->sortable(),
 
                 TextColumn::make('reading_progress_avg_progress_percent')
                     ->label('Rata-Rata Baca')
                     ->avg('readingProgress', 'progress_percent')
-                    ->numeric(1)
+                    ->numeric(maxDecimalPlaces: 1)
                     ->default(0)
                     ->badge()
                     ->colors([
@@ -307,7 +306,46 @@ class BookResource extends Resource
                     ->id('book_detail')
                     ->columns(2),
 
-                // View Bagian 2 - Statistik
+                // View Bagian 2 - File & Media
+                \Filament\Infolists\Components\Section::make('File & Media')
+                    ->schema([
+                        TextEntry::make('cover_url')
+                            ->label('Sampul Buku')
+                            ->badge()
+                            ->prefixAction(
+                                Action::make('view_cover')
+                                    ->icon('heroicon-m-eye')
+                                    ->color('gray')
+                                    ->url(fn($record) => $record->cover_url)
+                                    ->openUrlInNewTab()
+                                    ->tooltip('Lihat Gambar'),
+                            ),
+                        TextEntry::make('epub_path')
+                            ->label('EPUB Files')
+                            ->badge()
+                            ->prefixAction(
+                                Action::make('view_epub')
+                                    ->icon('heroicon-m-eye')
+                                    ->color('gray')
+                                    ->url(fn($record) => route('book.read', $record->slug))
+                                    ->openUrlInNewTab()
+                                    ->tooltip('Baca Buku'),
+                            )
+                            ->suffixAction(
+                                Action::make('download_epub')
+                                    ->icon('heroicon-m-arrow-down-tray')
+                                    ->url(fn($record) => url(Storage::url($record->epub_path)))
+                                    ->tooltip('Download File EPUB')
+                                    ->extraAttributes(['download' => '']),
+                            ),
+                    ])
+                    ->icon('heroicon-o-document-duplicate')
+                    ->collapsed()
+                    ->collapsible()
+                    ->persistCollapsed()
+                    ->id('book_file'),
+
+                // View Bagian 3 - Statistik
                 \Filament\Infolists\Components\Section::make('Statistik')
                     ->schema([
                         Fieldset::make('Baca')
@@ -369,45 +407,6 @@ class BookResource extends Resource
                     ->collapsible()
                     ->persistCollapsed()
                     ->id('book_statistics'),
-
-                // View Bagian 3 - File & Media
-                \Filament\Infolists\Components\Section::make('File & Media')
-                    ->schema([
-                        TextEntry::make('cover_url')
-                            ->label('Sampul Buku')
-                            ->badge()
-                            ->prefixAction(
-                                Action::make('view_cover')
-                                    ->icon('heroicon-m-eye')
-                                    ->color('gray')
-                                    ->url(fn($record) => $record->cover_url)
-                                    ->openUrlInNewTab()
-                                    ->tooltip('Lihat Gambar'),
-                            ),
-                        TextEntry::make('epub_path')
-                            ->label('EPUB Files')
-                            ->badge()
-                            ->prefixAction(
-                                Action::make('view_epub')
-                                    ->icon('heroicon-m-eye')
-                                    ->color('gray')
-                                    ->url(fn($record) => route('book.read', $record->slug))
-                                    ->openUrlInNewTab()
-                                    ->tooltip('Baca Buku'),
-                            )
-                            ->suffixAction(
-                                Action::make('download_epub')
-                                    ->icon('heroicon-m-arrow-down-tray')
-                                    ->url(fn($record) => url(Storage::url($record->epub_path)))
-                                    ->tooltip('Download File EPUB')
-                                    ->extraAttributes(['download' => '']),
-                            ),
-                    ])
-                    ->icon('heroicon-o-document-duplicate')
-                    ->collapsed()
-                    ->collapsible()
-                    ->persistCollapsed()
-                    ->id('book_file'),
             ]);
     }
 

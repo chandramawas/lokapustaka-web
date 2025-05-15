@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\BookResource\RelationManagers;
+namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
@@ -13,7 +11,6 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
-use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -56,8 +53,14 @@ class ReadingProgressRelationManager extends RelationManager
                             ->suffix('%'),
                     ])
                     ->columns(2)
-                    ->collapsible()
-                    ->collapsed(),
+                    ->headerActions([
+                        Action::make('book_view')
+                            ->label('Lihat')
+                            ->icon('heroicon-o-eye')
+                            ->color('gray')
+                            ->url(fn($record) => route('filament.admin.resources.books.view', $record->book)),
+                    ])
+                    ->collapsible(),
 
                 // View Bagian 2 - Pengguna
                 Section::make('Pengguna')
@@ -80,15 +83,9 @@ class ReadingProgressRelationManager extends RelationManager
                             ])
                             ->suffix('%'),
                     ])
-                    ->headerActions([
-                        Action::make('user_view')
-                            ->label('Lihat')
-                            ->icon('heroicon-o-eye')
-                            ->color('gray')
-                            ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
-                    ])
                     ->columns(3)
-                    ->collapsible(),
+                    ->collapsible()
+                    ->collapsed(),
 
                 TextEntry::make('progress_percent')
                     ->label('Progress Baca')
@@ -118,10 +115,15 @@ class ReadingProgressRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('user.name')
+            ->recordTitleAttribute('book.title')
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('Pengguna')
+                Tables\Columns\ImageColumn::make('book.cover_url')
+                    ->label(false)
+                    ->square()
+                    ->size(30)
+                    ->defaultImageUrl('https://placehold.co/150x220?text=Cover+not+available'),
+                TextColumn::make('book.title')
+                    ->label('Buku')
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),

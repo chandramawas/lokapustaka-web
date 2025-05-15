@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\UserResource\RelationManagers;
 
-use App\Filament\Resources\ReviewResource\Pages;
-use App\Models\Review;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,24 +20,18 @@ use Mokhosh\FilamentRating\Columns\RatingColumn;
 use Mokhosh\FilamentRating\Entries\RatingEntry;
 use Mokhosh\FilamentRating\RatingTheme;
 
-class ReviewResource extends Resource
+class ReviewsRelationManager extends RelationManager
 {
-    protected static ?string $model = Review::class;
+    protected static string $relationship = 'reviews';
 
+    protected static ?string $title = 'Ulasan';
     protected static ?string $label = 'Ulasan';
+    protected static ?string $icon = 'heroicon-o-chat-bubble-bottom-center-text';
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
-    protected static ?string $activeNavigationIcon = 'heroicon-s-chat-bubble-bottom-center-text';
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
-    public static function infolist(Infolist $infolist): Infolist
+    public function infolist(Infolist $infolist): Infolist
     {
         return $infolist
-            ->schema([
+            ->schema(components: [
                 // View Bagian 1 - Buku
                 Section::make('Buku')
                     ->schema([
@@ -58,6 +49,7 @@ class ReviewResource extends Resource
                             ->state(fn($record) => round($record->book->reviews->avg('rating'), 1))
                             ->tooltip(fn($state) => $state),
                     ])
+                    ->columns(2)
                     ->headerActions([
                         Action::make('book_view')
                             ->label('Lihat')
@@ -65,7 +57,6 @@ class ReviewResource extends Resource
                             ->color('gray')
                             ->url(fn($record) => route('filament.admin.resources.books.view', $record->book)),
                     ])
-                    ->columns(2)
                     ->collapsible(),
 
                 // View Bagian 2 - Pengguna
@@ -100,14 +91,8 @@ class ReviewResource extends Resource
                             ->state(fn($record) => $record->user->reviews()->count())
                             ->suffix(' ulasan'),
                     ])
-                    ->headerActions([
-                        Action::make('user_view')
-                            ->label('Lihat')
-                            ->icon('heroicon-o-eye')
-                            ->color('gray')
-                            ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
-                    ])
                     ->columns(4)
+                    ->collapsed()
                     ->collapsible(),
 
                 RatingEntry::make('rating')
@@ -120,26 +105,26 @@ class ReviewResource extends Resource
             ]);
     }
 
-    public static function table(Table $table): Table
+    /**
+     * @throws \Exception
+     */
+    public function table(Table $table): Table
     {
         return $table
+            ->recordTitleAttribute('book.title')
             ->columns([
-                TextColumn::make('user.name')
-                    ->label('Pengguna')
-                    ->limit(20)
-                    ->weight(FontWeight::SemiBold)
-                    ->searchable(),
-                ImageColumn::make('book.cover_url')
+                Tables\Columns\ImageColumn::make('book.cover_url')
                     ->label(false)
                     ->square()
                     ->height(30)
                     ->defaultImageUrl('https://placehold.co/150x220?text=Cover+not+available'),
                 TextColumn::make('book.title')
                     ->label('Buku')
-                    ->limit(20)
+                    ->limit(30)
+                    ->weight(FontWeight::SemiBold)
                     ->searchable(),
                 TextColumn::make('user_book_progress')
-                    ->label('Progress')
+                    ->label('Progress Baca')
                     ->state(function ($record) {
                         return optional(
                             $record->user
@@ -155,14 +140,12 @@ class ReviewResource extends Resource
                         'info' => fn($state) => $state > 60 && $state < 99,
                         'success' => fn($state) => $state >= 99,
                     ])
-                    ->suffix('%')
-                    ->sortable(),
+                    ->suffix('%'),
                 TextColumn::make('review')
                     ->label('Ulasan')
                     ->placeholder('-')
                     ->limit(200)
-                    ->wrap()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->wrap(),
                 RatingColumn::make('rating')
                     ->label('Rating')
                     ->size('sm')
@@ -195,10 +178,10 @@ class ReviewResource extends Resource
                     ->label('Progress Baca')
                     ->options([
                         '0' => '0% (Belum Baca)',
-                        '1-20' => '1-20% (Baru mulai)',
-                        '21-60' => '21-60% (Masih baca)',
-                        '61-98' => '61-98% (Hampir selesai)',
-                        '99-100' => '99-100% (Tamat)',
+                        '1-20' => '1-20% (Baru Mulai)',
+                        '21-60' => '21-60% (Masih Baca)',
+                        '61-98' => '61-98% (Hampir Selesai)',
+                        '99-100' => '99-100% (Selesai)',
                     ])
                     ->query(function ($query, array $data) {
                         $value = $data['value'] ?? null;
@@ -230,12 +213,5 @@ class ReviewResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListReviews::route('/'),
-        ];
     }
 }

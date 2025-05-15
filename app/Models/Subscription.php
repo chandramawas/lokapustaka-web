@@ -17,6 +17,17 @@ class Subscription extends Model
         'is_active',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function ($subscription) {
+            static::where('user_id', $subscription->user_id)
+                ->where('is_active', true)
+                ->update(['is_active' => false]);
+
+            $subscription->is_active = true;
+        });
+    }
+
     // Relasi ke model user
     public function user()
     {

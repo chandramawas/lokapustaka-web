@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Notifications\CustomVerifyEmail;
 use App\Notifications\CustomResetPasswordEmail;
+use Carbon\Carbon;
 use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'role',
         'gender',
         'birthdate',
+        'email_verified_at',
     ];
 
     protected $appends = ['is_subscribed'];
@@ -65,6 +67,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         $this->notify(new CustomResetPasswordEmail($token, $this->email));
     }
 
+    public function getAgeAttribute(): ?int
+    {
+        return $this->birthdate
+            ? Carbon::parse($this->birthdate)->age
+            : null;
+    }
+
     // Relasi ke model Subcription
     public function subscriptions()
     {
@@ -79,9 +88,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             ->first();
     }
 
-    public function getIsSubscribedAttribute()
+    public function getIsSubscribedAttribute(): bool
     {
-        return (bool) $this->activeSubscription();
+        return (bool)$this->activeSubscription();
     }
 
     // Relasi ke model Payment
