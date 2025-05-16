@@ -37,10 +37,12 @@ class BookResource extends Resource
 {
     protected static ?string $model = Book::class;
 
+    protected static ?int $navigationSort = 1;
+
     protected static ?string $label = 'Buku';
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $activeNavigationIcon = 'heroicon-s-book-open';
-    
+
     public static function form(Form $form): Form
     {
         return $form

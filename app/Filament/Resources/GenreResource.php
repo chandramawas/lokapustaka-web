@@ -35,8 +35,9 @@ class GenreResource extends Resource
 {
     protected static ?string $model = Genre::class;
 
-    protected static ?string $label = 'Genre';
+    protected static ?string $navigationGroup = 'Lainnya';
 
+    protected static ?string $label = 'Genre';
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $activeNavigationIcon = 'heroicon-s-tag';
 

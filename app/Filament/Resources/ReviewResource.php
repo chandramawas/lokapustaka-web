@@ -27,11 +27,13 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $label = 'Ulasan';
+    protected static ?string $navigationGroup = 'Aktivitas Pengguna';
+    protected static ?int $navigationSort = 4;
 
+    protected static ?string $label = 'Ulasan';
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
     protected static ?string $activeNavigationIcon = 'heroicon-s-chat-bubble-bottom-center-text';
-    
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist

@@ -24,6 +24,9 @@ class ReadingProgressResource extends Resource
 {
     protected static ?string $model = ReadingProgress::class;
 
+    protected static ?string $navigationGroup = 'Aktivitas Pengguna';
+    protected static ?int $navigationSort = 3;
+
     protected static ?string $label = 'Statistik Baca';
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar-square';
     protected static ?string $activeNavigationIcon = 'heroicon-s-chart-bar-square';
