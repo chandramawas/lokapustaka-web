@@ -88,6 +88,10 @@ class SubscriptionsRelationManager extends RelationManager
                         'primary' => fn($state) => $state,
                         'gray' => fn($state) => !$state,
                     ]),
+                Tables\Columns\TextColumn::make('span')
+                    ->label('Total Durasi')
+                    ->suffix(' hari')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->label('Tanggal Mulai')
                     ->dateTime()

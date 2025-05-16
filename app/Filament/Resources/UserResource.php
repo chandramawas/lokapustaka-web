@@ -413,44 +413,13 @@ class UserResource extends Resource
                                 TextEntry::make('longest_subscription')
                                     ->label('Jangka Waktu Terlama')
                                     ->state(function ($record) {
-                                        $longest = null;
-                                        $longestId = null;
+                                        $longest = $record->subscriptions->sortByDesc('span')->first();
 
-                                        foreach ($record->subscriptions as $sub) {
-                                            if ($sub->start_date && $sub->end_date) {
-                                                $start = Carbon::parse($sub->start_date);
-                                                $end = Carbon::parse($sub->end_date);
-                                                $days = $start->diffInDays($end);
-
-                                                if ($longest === null || $days > $longest) {
-                                                    $longest = $days;
-                                                    $longestId = $sub->id;
-                                                }
-                                            }
+                                        if (!$longest) {
+                                            return 'Tidak ada data langganan';
                                         }
 
-                                        return "ID #$longestId – $longest hari";
-                                    })
-                                    ->tooltip(function ($record) {
-                                        $longest = null;
-                                        $startDate = null;
-                                        $endDate = null;
-
-                                        foreach ($record->subscriptions as $sub) {
-                                            if ($sub->start_date && $sub->end_date) {
-                                                $start = Carbon::parse($sub->start_date);
-                                                $end = Carbon::parse($sub->end_date);
-                                                $days = $start->diffInDays($end);
-
-                                                if ($longest === null || $days > $longest) {
-                                                    $longest = $days;
-                                                    $startDate = $start;
-                                                    $endDate = $end;
-                                                }
-                                            }
-                                        }
-
-                                        return $startDate->format('d F Y') . ' - ' . $endDate->format('d F Y');
+                                        return "ID #{$longest->id} – {$longest->span} hari";
                                     }),
                                 TextEntry::make('total_payment')
                                     ->label('Total Pembayaran')

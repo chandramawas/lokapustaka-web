@@ -17,6 +17,16 @@ class Subscription extends Model
         'is_active',
     ];
 
+    protected $dates = [
+        'start_date',
+        'end_date',
+    ];
+
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+    ];
+
     protected static function booted(): void
     {
         static::creating(function ($subscription) {
@@ -38,5 +48,10 @@ class Subscription extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function getSpanAttribute()
+    {
+        return $this->start_date->diffInDays($this->end_date);
     }
 }

@@ -102,6 +102,10 @@ class SubscriptionResource extends Resource
                         'primary' => fn($state) => $state,
                         'gray' => fn($state) => !$state,
                     ]),
+                Tables\Columns\TextColumn::make('span')
+                    ->label('Total Durasi')
+                    ->suffix(' hari')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->label('Tanggal Mulai')
                     ->dateTime()
@@ -245,6 +249,9 @@ class SubscriptionResource extends Resource
                         'primary' => fn($state) => $state,
                         'gray' => fn($state) => !$state,
                     ]),
+                TextEntry::make('span')
+                    ->label('Total Durasi')
+                    ->suffix(' hari'),
                 TextEntry::make('start_date')
                     ->label('Tanggal Mulai')
                     ->dateTime()
@@ -258,7 +265,7 @@ class SubscriptionResource extends Resource
                     ->dateTime()
                     ->sinceTooltip(),
             ])
-            ->columns(3);
+            ->columns(4);
     }
 
     public static function getPages(): array

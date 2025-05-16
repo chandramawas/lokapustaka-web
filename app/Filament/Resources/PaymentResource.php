@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PaymentResource\Pages;
-use App\Filament\Resources\PaymentResource\RelationManagers;
 use App\Models\Payment;
 use Filament\Actions\Action;
 use Filament\Forms;
@@ -218,7 +217,7 @@ class PaymentResource extends Resource
                     ->collapsible(),
 
 //                View Bagian 2 - Subscriptionn
-                Section::make('Info Langganan')
+                Section::make('Langganan')
                     ->schema([
                         TextEntry::make('id')
                             ->label('ID')
@@ -235,6 +234,10 @@ class PaymentResource extends Resource
                                 'primary' => fn($state) => $state,
                                 'gray' => fn($state) => !$state,
                             ]),
+                        TextEntry::make('span')
+                            ->label('Total Durasi')
+                            ->state(fn($record) => $record->subscription->span)
+                            ->suffix(' hari'),
                         TextEntry::make('start_date')
                             ->label('Tanggal Mulai')
                             ->state(fn($record) => $record->subscription->start_date)
@@ -251,7 +254,7 @@ class PaymentResource extends Resource
                             ->dateTime()
                             ->sinceTooltip(),
                     ])
-                    ->columns(3)
+                    ->columns(4)
                     ->collapsed()
                     ->collapsible(),
 

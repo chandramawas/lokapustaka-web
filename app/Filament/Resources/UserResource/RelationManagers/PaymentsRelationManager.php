@@ -192,7 +192,7 @@ class PaymentsRelationManager extends RelationManager
                     ->collapsed(),
 
 //                View Bagian 2 - Subscriptionn
-                Section::make('Info Langganan')
+                Section::make('Langganan')
                     ->schema([
                         TextEntry::make('id')
                             ->label('ID')
@@ -209,6 +209,10 @@ class PaymentsRelationManager extends RelationManager
                                 'primary' => fn($state) => $state,
                                 'gray' => fn($state) => !$state,
                             ]),
+                        TextEntry::make('span')
+                            ->label('Total Durasi')
+                            ->state(fn($record) => $record->subscription->span)
+                            ->suffix(' hari'),
                         TextEntry::make('start_date')
                             ->label('Tanggal Mulai')
                             ->state(fn($record) => $record->subscription->start_date)
@@ -225,7 +229,7 @@ class PaymentsRelationManager extends RelationManager
                             ->dateTime()
                             ->sinceTooltip(),
                     ])
-                    ->columns(3)
+                    ->columns(4)
                     ->collapsible(),
 
                 TextEntry::make('id')
