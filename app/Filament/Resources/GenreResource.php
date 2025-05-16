@@ -40,11 +40,6 @@ class GenreResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $activeNavigationIcon = 'heroicon-s-tag';
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
     public static function form(Form $form): Form
     {
         return $form
@@ -99,8 +94,7 @@ class GenreResource extends Resource
             ])
             ->defaultSort('books_count', 'desc')
             ->modifyQueryUsing(
-                fn($query) =>
-                $query->withMax('books', 'created_at')
+                fn($query) => $query->withMax('books', 'created_at')
             )
             ->filters([
                 SelectFilter::make('books_count')

@@ -31,12 +31,7 @@ class ReviewResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-bottom-center-text';
     protected static ?string $activeNavigationIcon = 'heroicon-s-chat-bubble-bottom-center-text';
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
+    
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist

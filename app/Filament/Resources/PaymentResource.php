@@ -1,27 +1,32 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\RelationManagers;
+namespace App\Filament\Resources;
 
+use App\Filament\Resources\PaymentResource\Pages;
+use App\Filament\Resources\PaymentResource\RelationManagers;
+use App\Models\Payment;
+use Filament\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
-use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class PaymentsRelationManager extends RelationManager
+class PaymentResource extends Resource
 {
-    protected static string $relationship = 'payments';
+    protected static ?string $model = Payment::class;
 
-    protected static ?string $title = 'Pembayaran';
     protected static ?string $label = 'Pembayaran';
-    protected static ?string $icon = 'heroicon-o-banknotes';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $activeNavigationIcon = 'heroicon-s-banknotes';
 
-    public function form(Form $form): Form
+    public static function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -31,6 +36,11 @@ class PaymentsRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\TextInput::make('subscription_id')
                     ->label('SUB_ID')
+                    ->disabled()
+                    ->required(),
+                Forms\Components\Select::make('user_id')
+                    ->label('Pengguna')
+                    ->relationship('user', 'name')
                     ->disabled()
                     ->required(),
                 Forms\Components\TextInput::make('amount')
@@ -55,7 +65,7 @@ class PaymentsRelationManager extends RelationManager
             ]);
     }
 
-    public function table(Table $table): Table
+    public static function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -68,6 +78,12 @@ class PaymentsRelationManager extends RelationManager
                     ->formatStateUsing(fn($state) => 'SUB_' . $state)
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Pengguna')
+                    ->limit(30)
+                    ->wrap()
+                    ->weight(FontWeight::SemiBold)
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('subscription.type')
                     ->label('Paket')
                     ->formatStateUsing(fn($state) => ucfirst($state)),
@@ -162,7 +178,7 @@ class PaymentsRelationManager extends RelationManager
             ]);
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
             ->schema([
@@ -188,8 +204,15 @@ class PaymentsRelationManager extends RelationManager
                             ->suffix('%'),
                     ])
                     ->columns(3)
-                    ->collapsible()
-                    ->collapsed(),
+                    ->headerActions([
+                        \Filament\Infolists\Components\Actions\Action::make('user_view')
+                            ->label('Lihat')
+                            ->icon('heroicon-o-eye')
+                            ->color('gray')
+                            ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
+                    ])
+                    ->collapsed()
+                    ->collapsible(),
 
 //                View Bagian 2 - Subscriptionn
                 Section::make('Info Langganan')
@@ -226,6 +249,7 @@ class PaymentsRelationManager extends RelationManager
                             ->sinceTooltip(),
                     ])
                     ->columns(3)
+                    ->collapsed()
                     ->collapsible(),
 
                 TextEntry::make('id')
@@ -260,5 +284,12 @@ class PaymentsRelationManager extends RelationManager
                     ->dateTime()
                     ->sinceTooltip(),
             ]);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ManagePayments::route('/'),
+        ];
     }
 }
