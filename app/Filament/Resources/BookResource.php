@@ -40,12 +40,7 @@ class BookResource extends Resource
     protected static ?string $label = 'Buku';
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $activeNavigationIcon = 'heroicon-s-book-open';
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
-
+    
     public static function form(Form $form): Form
     {
         return $form
