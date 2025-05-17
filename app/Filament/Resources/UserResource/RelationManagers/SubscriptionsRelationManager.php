@@ -10,6 +10,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -176,7 +177,12 @@ class SubscriptionsRelationManager extends RelationManager
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama'),
+                            ->label('Nama')
+                            ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                            ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                            ->iconPosition(IconPosition::After)
+                            ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('user_reading_count')
                             ->label('Jumlah Baca')
                             ->state(fn($record) => $record->user->readingProgress()->count())

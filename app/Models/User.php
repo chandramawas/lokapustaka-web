@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'gender',
         'birthdate',
         'email_verified_at',
+        'is_banned',
     ];
 
     protected $appends = ['is_subscribed'];

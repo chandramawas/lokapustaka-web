@@ -14,6 +14,7 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Resources\Resource;
@@ -110,8 +111,11 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
-                    ->color(fn($record) => $record->role === 'admin' ? 'primary' : null)
-                    ->tooltip(fn($record) => $record->role === 'admin' ? 'Admin' : false)
+                    ->color(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null))
+                    ->tooltip(fn($record) => $record->is_banned ? 'Banned' : ($record->role === 'admin' ? 'Admin' : false))
+                    ->icon(fn($record) => $record->role === 'admin' ? 'heroicon-m-building-library' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null))
                     ->weight(FontWeight::SemiBold)
                     ->wrap()
                     ->sortable()
@@ -255,16 +259,56 @@ class UserResource extends Resource
                             'above_50' => $query->whereDate('birthdate', '<=', now()->subYears(50)),
                             default => $query,
                         };
-                    })
+                    }),
+
+                //Banned
+                Tables\Filters\TernaryFilter::make('is_banned')
+                    ->label('User Banned')
+                    ->placeholder('Semua')
+                    ->trueLabel('Dibanned')
+                    ->falseLabel('Tidak Dibanned')
+                    ->default(0),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\Action::make('ban')
-                        ->label('Ban')
-                        ->icon('heroicon-m-no-symbol')
-                        ->color('danger'),
+                    Tables\Actions\Action::make('banned')
+                        ->label('Banned')
+                        ->icon('heroicon-o-no-symbol')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(
+                            function (User $record) {
+                                $record->update([
+                                    'is_banned' => true,
+                                ]);
+
+                                return Notification::make()
+                                    ->title('Pengguna ' . $record->name . ' berhasil dibanned')
+                                    ->success()
+                                    ->send();
+                            }
+                        )
+                        ->visible(fn($record) => !$record->is_banned),
+                    Tables\Actions\Action::make('unbanned')
+                        ->label('Unbanned')
+                        ->icon('heroicon-o-lock-open')
+                        ->color('tertiary')
+                        ->requiresConfirmation()
+                        ->action(
+                            function (User $record) {
+                                $record->update([
+                                    'is_banned' => false,
+                                ]);
+
+                                return Notification::make()
+                                    ->title('Pengguna ' . $record->name . ' berhasil diaktifkan kembali')
+                                    ->success()
+                                    ->send();
+                            }
+                        )
+                        ->visible(fn($record) => $record->is_banned),
                     Tables\Actions\DeleteAction::make(),
                 ])
             ])
@@ -284,9 +328,11 @@ class UserResource extends Resource
                     ->schema([
                         TextEntry::make('name')
                             ->label('Nama')
+                            ->color(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->is_banned ? 'Banned' : ($record->role === 'admin' ? 'Admin' : false))
                             ->icon(fn($record) => $record->role === 'admin' ? 'heroicon-m-building-library' : null)
                             ->iconPosition(IconPosition::After)
-                            ->iconColor('primary'),
+                            ->iconColor(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('is_subscribed')
                             ->label('Status Langganan')
                             ->formatStateUsing(fn(bool $state) => $state ? 'Aktif' : 'Tidak Aktif')

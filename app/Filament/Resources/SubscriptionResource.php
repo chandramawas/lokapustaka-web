@@ -12,6 +12,8 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -88,7 +90,13 @@ class SubscriptionResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Pengguna')
-                    ->limit(30)
+                    ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                    ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                    ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                    ->weight(FontWeight::SemiBold)
+                    ->lineClamp(1)
                     ->wrap()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('type')
@@ -192,7 +200,12 @@ class SubscriptionResource extends Resource
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama'),
+                            ->label('Nama')
+                            ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                            ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                            ->iconPosition(IconPosition::After)
+                            ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('user_reading_count')
                             ->label('Jumlah Baca')
                             ->state(fn($record) => $record->user->readingProgress()->count())
@@ -217,6 +230,7 @@ class SubscriptionResource extends Resource
                             ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
                     ])
                     ->columns(3)
+                    ->collapsed()
                     ->collapsible(),
 
 //                View Bagian 2 - Payment
@@ -234,6 +248,7 @@ class SubscriptionResource extends Resource
                     ])
                     ->visible(fn($record) => $record->payments()->count() > 0)
                     ->columns(2)
+                    ->collapsed()
                     ->collapsible(),
 
                 TextEntry::make('id')

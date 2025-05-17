@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->enum('role', ['user', 'admin'])->default('user');
             $table->enum('gender', ['Laki-Laki', 'Perempuan', 'Lainnya'])->nullable();
             $table->date('birthdate')->nullable();
+            $table->boolean('is_banned')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -12,6 +12,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
@@ -63,13 +64,19 @@ class ReviewResource extends Resource
                             ->url(fn($record) => route('filament.admin.resources.books.view', $record->book)),
                     ])
                     ->columns(2)
+                    ->collapsed()
                     ->collapsible(),
 
                 // View Bagian 2 - Pengguna
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama'),
+                            ->label('Nama')
+                            ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                            ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                            ->iconPosition(IconPosition::After)
+                            ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('user_book_progress')
                             ->label('Progress Buku Ini')
                             ->state(function ($record) {
@@ -105,6 +112,7 @@ class ReviewResource extends Resource
                             ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
                     ])
                     ->columns(4)
+                    ->collapsed()
                     ->collapsible(),
 
                 RatingEntry::make('rating')
@@ -123,6 +131,11 @@ class ReviewResource extends Resource
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Pengguna')
+                    ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                    ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                    ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
                     ->limit(20)
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),
@@ -133,7 +146,7 @@ class ReviewResource extends Resource
                     ->defaultImageUrl('https://placehold.co/150x220?text=Cover+not+available'),
                 TextColumn::make('book.title')
                     ->label('Buku')
-                    ->limit(20)
+                    ->limit(30)
                     ->searchable(),
                 TextColumn::make('user_book_progress')
                     ->label('Progress')
@@ -157,9 +170,9 @@ class ReviewResource extends Resource
                 TextColumn::make('review')
                     ->label('Ulasan')
                     ->placeholder('-')
-                    ->limit(200)
+                    ->lineClamp(3)
                     ->wrap()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->toggleable(),
                 RatingColumn::make('rating')
                     ->label('Rating')
                     ->size('sm')

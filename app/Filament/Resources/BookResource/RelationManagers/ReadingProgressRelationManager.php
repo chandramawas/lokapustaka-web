@@ -12,6 +12,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -63,7 +64,12 @@ class ReadingProgressRelationManager extends RelationManager
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama'),
+                            ->label('Nama')
+                            ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                            ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                            ->iconPosition(IconPosition::After)
+                            ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('user_reading_count')
                             ->label('Jumlah Baca')
                             ->state(fn($record) => $record->user->readingProgress()->count())
@@ -88,6 +94,7 @@ class ReadingProgressRelationManager extends RelationManager
                             ->url(fn($record) => route('filament.admin.resources.users.view', $record->user)),
                     ])
                     ->columns(3)
+                    ->collapsed()
                     ->collapsible(),
 
                 TextEntry::make('progress_percent')
@@ -122,6 +129,12 @@ class ReadingProgressRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Pengguna')
+                    ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                    ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                    ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                    ->lineClamp(1)
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),

@@ -152,6 +152,7 @@ class BookResource extends Resource
 
                 TextColumn::make('title')
                     ->label('Judul')
+                    ->lineClamp(3)
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->sortable()

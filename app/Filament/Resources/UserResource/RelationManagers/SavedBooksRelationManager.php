@@ -45,6 +45,7 @@ class SavedBooksRelationManager extends RelationManager
 
                 TextColumn::make('title')
                     ->label('Judul')
+                    ->lineClamp(1)
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->sortable()

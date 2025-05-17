@@ -77,6 +77,11 @@ class AuthController extends Controller
         // Cari user berdasarkan email
         $user = User::where('email', $request->email)->first();
 
+        if (auth()->check() && auth()->user()->is_banned) {
+            auth()->logout();
+            return redirect()->route('login')->withErrors(['email' => 'Akun Anda telah dibanned.']);
+        }
+
         // Kalau user tidak ditemukan
         if (!$user) {
             throw ValidationException::withMessages([
@@ -108,5 +113,7 @@ class AuthController extends Controller
     }
 
     // Auto nonaktif langganan yang udah expired
-    protected function authenticated(Request $request, $user) {}
+    protected function authenticated(Request $request, $user)
+    {
+    }
 }

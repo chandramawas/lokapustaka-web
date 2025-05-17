@@ -10,6 +10,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
@@ -57,13 +58,19 @@ class ReviewsRelationManager extends RelationManager
                             ->color('gray')
                             ->url(fn($record) => route('filament.admin.resources.books.view', $record->book)),
                     ])
+                    ->collapsed()
                     ->collapsible(),
 
                 // View Bagian 2 - Pengguna
                 Section::make('Pengguna')
                     ->schema([
                         TextEntry::make('user.name')
-                            ->label('Nama'),
+                            ->label('Nama')
+                            ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
+                            ->tooltip(fn($record) => $record->user->is_banned ? 'Banned' : ($record->user->role === 'admin' ? 'Admin' : false))
+                            ->icon(fn($record) => $record->user->role === 'admin' ? 'heroicon-m-building-library' : null)
+                            ->iconPosition(IconPosition::After)
+                            ->iconColor(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null)),
                         TextEntry::make('user_book_progress')
                             ->label('Progress Buku Ini')
                             ->state(function ($record) {
@@ -144,7 +151,7 @@ class ReviewsRelationManager extends RelationManager
                 TextColumn::make('review')
                     ->label('Ulasan')
                     ->placeholder('-')
-                    ->limit(200)
+                    ->lineClamp(3)
                     ->wrap(),
                 RatingColumn::make('rating')
                     ->label('Rating')

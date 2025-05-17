@@ -63,6 +63,7 @@ class GenreResource extends Resource
                 TextColumn::make('name')
                     ->label('Genre')
                     ->weight(FontWeight::SemiBold)
+                    ->wrap()
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('books_count')

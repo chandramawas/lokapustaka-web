@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\User;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -62,6 +63,11 @@ class ActiveUsersTable extends BaseWidget
                     ->state(fn($rowLoop): string => (string)($rowLoop->iteration)),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
+                    ->color(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null))
+                    ->tooltip(fn($record) => $record->is_banned ? 'Banned' : ($record->role === 'admin' ? 'Admin' : false))
+                    ->icon(fn($record) => $record->role === 'admin' ? 'heroicon-m-building-library' : null)
+                    ->iconPosition(IconPosition::After)
+                    ->iconColor(fn($record) => $record->is_banned ? 'danger' : ($record->role === 'admin' ? 'secondary' : null))
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->lineClamp(1),
