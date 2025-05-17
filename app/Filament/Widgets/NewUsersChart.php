@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class NewUsersChart extends ChartWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     protected static ?string $heading = 'Pengguna Baru';
     protected static ?string $description = 'Statistik jumlah pengguna baru dalam 12 bulan terakhir';

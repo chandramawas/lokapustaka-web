@@ -20,7 +20,7 @@ class IncomeTable extends BaseWidget
     {
         return $table
             ->heading('Pendapatan per Bulan')
-            ->description('Tabel rincian pendapatan bulanan beserta tren perubahan dalam 12 bulan terakhir')
+            ->description('Tabel rincian pendapatan bulanan beserta tren perubahan')
             ->query(
                 Payment::query()
                     ->selectRaw("
@@ -42,7 +42,6 @@ class IncomeTable extends BaseWidget
                     ->groupByRaw("YEAR(paid_at), MONTH(paid_at)")
                     ->orderByDesc('year')
                     ->orderByDesc('month_num')
-                    ->limit(12)
             )
             ->columns([
                 TextColumn::make('month')
@@ -68,8 +67,8 @@ class IncomeTable extends BaseWidget
                     })
                     ->tooltip(fn($state, $record) => "Perubahan dari bulan sebelumnya: " . ($record->percentage > 0 ? '+' : '') . $record->percentage . '%'),
             ])
-            ->paginated([3, 6, 'all'])
-            ->defaultPaginationPageOption(3);
+            ->paginated([6, 12])
+            ->defaultPaginationPageOption(6);
     }
 
     public function getTableRecordKey(mixed $record): string

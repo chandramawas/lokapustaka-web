@@ -7,7 +7,7 @@ use Filament\Widgets\ChartWidget;
 
 class IncomeChart extends ChartWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 3;
 
     protected static ?string $heading = 'Pendapatan';
     protected static ?string $description = 'Statistik pendapatan dalam 12 bulan terakhir';
