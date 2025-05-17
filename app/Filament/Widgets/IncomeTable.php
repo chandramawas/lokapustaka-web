@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Payment;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -12,7 +13,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class IncomeTable extends BaseWidget
 {
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 5;
 
     protected int|string|array $columnSpan = 'full';
 
@@ -45,11 +46,13 @@ class IncomeTable extends BaseWidget
             )
             ->columns([
                 TextColumn::make('month')
-                    ->label('Bulan'),
+                    ->label('Bulan')
+                    ->weight(fn($record) => $record->year == now()->year && $record->month_num == now()->month ? FontWeight::Bold : null),
 
                 TextColumn::make('total')
                     ->label('Pendapatan')
-                    ->money(),
+                    ->money()
+                    ->weight(fn($record) => $record->year == now()->year && $record->month_num == now()->month ? FontWeight::Bold : null),
 
                 TextColumn::make('trend')
                     ->label('Tren')
@@ -65,7 +68,8 @@ class IncomeTable extends BaseWidget
                         'down' => 'danger',
                         default => 'gray',
                     })
-                    ->tooltip(fn($state, $record) => "Perubahan dari bulan sebelumnya: " . ($record->percentage > 0 ? '+' : '') . $record->percentage . '%'),
+                    ->tooltip(fn($state, $record) => "Perubahan dari bulan sebelumnya: " . ($record->percentage > 0 ? '+' : '') . $record->percentage . '%')
+                    ->weight(fn($record) => $record->year == now()->year && $record->month_num == now()->month ? FontWeight::Bold : null),
             ])
             ->paginated([6, 12])
             ->defaultPaginationPageOption(6);

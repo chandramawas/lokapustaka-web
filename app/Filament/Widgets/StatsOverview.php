@@ -33,7 +33,7 @@ class StatsOverview extends BaseWidget
     private function bookStat(): Stat
     {
         $totalBooks = Book::count();
-        $newBooksThisMonth = Book::where('created_at', '>=', now()->subMonth())->count();
+        $newBooksThisMonth = Book::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count();
 
         $trend = $this->getTrend('buku', $newBooksThisMonth);
 
@@ -45,8 +45,8 @@ class StatsOverview extends BaseWidget
 
     private function readingStat(): Stat
     {
-        $thisMonth = ReadingProgress::where('updated_at', '>=', now()->subMonth())->count();
-        $lastMonth = ReadingProgress::whereBetween('updated_at', [now()->subMonths(2), now()->subMonth()])->count();
+        $thisMonth = ReadingProgress::whereYear('updated_at', now()->year)->whereMonth('updated_at', now()->month)->count();
+        $lastMonth = ReadingProgress::whereYear('updated_at', now()->subMonth()->year)->whereMonth('updated_at', now()->subMonth()->month)->count();
 
         $trend = $this->getTrend('aktivitas baca', $thisMonth, $lastMonth);
 
@@ -59,7 +59,7 @@ class StatsOverview extends BaseWidget
     private function userStat(): Stat
     {
         $totalUsers = User::count();
-        $newUsersThisMonth = User::where('created_at', '>=', now()->subMonth())->count();
+        $newUsersThisMonth = User::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count();
 
         $trend = $this->getTrend('pengguna', $newUsersThisMonth);
 
@@ -71,8 +71,8 @@ class StatsOverview extends BaseWidget
 
     private function newUserStat(): Stat
     {
-        $newUsersThisMonth = User::where('created_at', '>=', now()->subMonth())->count();
-        $newUsersLastMonth = User::whereBetween('created_at', [now()->subMonths(2), now()->subMonth()])->count();
+        $newUsersThisMonth = User::whereYear('created_at', now()->year)->whereMonth('created_at', now()->month)->count();
+        $newUsersLastMonth = User::whereYear('created_at', now()->subMonth()->year)->whereMonth('created_at', now()->subMonth()->month)->count();
 
         $trend = $this->getTrend('pengguna', $newUsersThisMonth, $newUsersLastMonth);
         return Stat::make('Pengguna Baru Bulan Ini', $newUsersThisMonth)
@@ -101,9 +101,8 @@ class StatsOverview extends BaseWidget
 
     private function incomeStat(): Stat
     {
-        $incomeThisMonth = Payment::where('paid_at', '>=', now()->subMonth())->sum('amount');
-        $incomeLastMonth = Payment::whereBetween('paid_at', [now()->subMonths(2), now()->subMonth()])->sum('amount');
-
+        $incomeThisMonth = Payment::whereYear('paid_at', now()->year)->whereMonth('paid_at', now()->month)->sum('amount');
+        $incomeLastMonth = Payment::whereYear('paid_at', now()->subMonth()->year)->whereMonth('paid_at', now()->subMonth()->month)->sum('amount');
         $formattedIncome = 'Rp ' . number_format($incomeThisMonth, 0, ',', '.');
 
         $trend = $this->getTrend('pendapatan', $incomeThisMonth, $incomeLastMonth);

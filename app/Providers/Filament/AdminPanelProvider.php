@@ -34,6 +34,8 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => '#0070ea',
                 'success' => '#28a745',
                 'warning' => '#ffc107',
+                'secondary' => '#ffb400',
+                'tertiary' => '#00c49a'
             ])
             ->brandLogo(asset('images/logo.svg'))
             ->darkModeBrandLogo(asset('images/dark-logo.svg'))
