@@ -8,7 +8,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
-class activeUsersTable extends BaseWidget
+class ActiveUsersTable extends BaseWidget
 {
     protected static ?int $sort = 4;
 
