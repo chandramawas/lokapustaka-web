@@ -12,20 +12,21 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends BaseWidget
 {
-    protected function getColumns(): int
-    {
-        return 2;
-    }
+    protected static ?int $sort = 3;
+
+    protected ?string $heading = 'Statistik Overview';
+
+    protected ?string $description = 'Ringkasan informasi statistik aktivitas dalam bulan ini.';
 
     protected function getStats(): array
     {
         return [
-            $this->activeSubscriptionStat(),
-            $this->incomeStat(),
             $this->bookStat(),
-            $this->readingStat(),
             $this->userStat(),
+            $this->activeSubscriptionStat(),
+            $this->readingStat(),
             $this->newUserStat(),
+            $this->incomeStat(),
         ];
     }
 

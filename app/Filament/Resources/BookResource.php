@@ -309,6 +309,7 @@ class BookResource extends Resource
                         TextEntry::make('cover_url')
                             ->label('Sampul Buku')
                             ->badge()
+                            ->placeholder('-')
                             ->prefixAction(
                                 Action::make('view_cover')
                                     ->icon('heroicon-m-eye')
