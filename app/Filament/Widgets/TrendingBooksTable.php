@@ -7,7 +7,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
-class ReadingBooksTable extends BaseWidget
+class TrendingBooksTable extends BaseWidget
 {
     protected static ?int $sort = 6;
 
@@ -16,8 +16,8 @@ class ReadingBooksTable extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('Buku Terpopuler')
-            ->description('Berdasarkan total progress terbanyak')
+            ->heading('Buku Trending')
+            ->description('Berdasarkan progress terbanyak')
             ->headerActions([
                 Tables\Actions\Action::make('all')
                     ->label('Semua Waktu')

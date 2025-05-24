@@ -1,4 +1,4 @@
-@props(['variant' => 'new', 'rank' => null, 'href' => null])
+@props(['variant' => 'new', 'rank' => null])
 
 @php
     $variants = [
@@ -20,11 +20,10 @@
     ]
 @endphp
 
-<a @if ($href) href="{{ $href }}" @endif
-    class="font-medium text-label w-fit px-2 py-0.5 rounded-full animate-pulse {{ $variants[$variant]['color'] }}">
+<a class="font-medium text-label w-fit px-2 py-0.5 rounded-full animate-pulse {{ $variants[$variant]['color'] }}">
     @if ($variant === 'rating')
         <div class="flex gap-0.5 font-bold">
-            <x-icons.star />
+            <x-icons.star/>
             <span>
                 {{ $rank }}
             </span>

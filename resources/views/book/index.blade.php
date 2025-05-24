@@ -7,16 +7,15 @@
             ['label' => 'Beranda', 'url' => route('home')],
             ['label' => $book->mainGenre->name, 'url' => route('book.genre.collection', $book->mainGenre->slug)],
             ['label' => $book->title, 'url' => route('book.detail', $book->slug)],
-        ]" />
+        ]"/>
 @endsection
 
 @section('first-content')
     <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Cover+not+available.' }}"
-        class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
+         class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
 @endsection
 
 @section('second-content')
-    <x-ui.book-badge variant="trending" rank="1" href="#" />
     {{-- Core --}}
     <div class="space-y-0.5">
         <h3
@@ -33,16 +32,17 @@
     {{-- CTA BUTTON --}}
     <div class="flex gap-1">
         {{-- Read Buku --}}
-        <x-buttons.read-button :book="$book" />
+        <x-buttons.read-button :book="$book"/>
 
         {{-- Review Buku --}}
-        <x-buttons.rating-button :book="$book" />
+        <x-buttons.rating-button :book="$book"/>
 
         {{-- Bookmark Buku --}}
-        <livewire:bookmark-toggle :book="$book" />
+        <livewire:bookmark-toggle :book="$book"/>
 
         {{-- Share Buku --}}
-        <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')" :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'" />
+        <x-buttons.share-button :url="route('book.detail', $book->slug ?? '#')"
+                                :title="$book && $book->title ? $book->title . ' - Lokapustaka' : 'Lokapustaka'"/>
     </div>
 
     {{-- Deskripsi Buku --}}
@@ -51,7 +51,8 @@
             <h4 class="font-bold text-body-md md:text-body-lg lg:text-body-xl">Deskripsi</h4>
             <div x-data="{ open: false }" class="relative">
                 <x-buttons.text-button @click="open = true" underlineHover icon>
-                    <span>Baca Selengkapnya</span> <x-icons.chevron-right />
+                    <span>Baca Selengkapnya</span>
+                    <x-icons.chevron-right/>
                 </x-buttons.text-button>
 
                 <x-ui.modal showClose>
@@ -121,5 +122,5 @@
 @endsection
 
 @section('book-carousel')
-    <x-ui.book-carousel sectionName="related" title="Koleksi Terkait" :books="$relatedBooks" />
+    <x-ui.book-carousel sectionName="related" title="Koleksi Terkait" :books="$relatedBooks"/>
 @endsection

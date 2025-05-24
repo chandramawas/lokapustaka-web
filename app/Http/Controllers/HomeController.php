@@ -13,11 +13,29 @@ class HomeController extends Controller
     {
         $user = auth()->user();
 
+        $trendingBook = Book::query()
+            ->select('books.*')
+            ->join('reading_progress', 'books.id', '=', 'reading_progress.book_id')
+            ->whereMonth('reading_progress.updated_at', now()->month)
+            ->groupBy('books.id')
+            ->selectRaw('SUM(reading_progress.progress_percent) as total_progress')
+            ->orderByDesc('total_progress')
+            ->first();
+
+        $popularBook = Book::query()
+            ->select('books.*')
+            ->join('reviews', 'books.id', '=', 'reviews.book_id')
+            ->whereMonth('reviews.updated_at', now()->month)
+            ->groupBy('books.id')
+            ->selectRaw('SUM(reviews.rating) as total_rating')
+            ->orderByDesc('total_rating')
+            ->first();
+
         // Untuk Highlights
         $highlightBooks = [
-            "trending" => Book::sort('popular')->first(),
+            "trending" => $trendingBook,
             "newest" => Book::sort('newest')->first(),
-            "recommendation" => Book::sort('rating')->first(),
+            "recommendation" => $popularBook,
         ];
 
         //Lanjutkan Baca
@@ -27,10 +45,17 @@ class HomeController extends Controller
         $savedBooks = $user->savedBooks()->orderBy('pivot_created_at', 'desc')->limit(10)->get();
 
         //Per Genre
-        $booksByGenre = Genre::get();
+        $booksByGenre = Genre::with(['books.readingProgress'])
+            ->get()
+            ->filter(function ($genre) {
+                return $genre->books->count() >= 5;
+            })
+            ->sortByDesc(function ($genre) {
+                return $genre->books->sum(fn($book) => $book->readingProgress->sum('progress_percent'));
+            });
 
         foreach ($booksByGenre as $genre) {
-            $genre->setRelation('books', $genre->books()->sort('popular')->limit(10)->get());
+            $genre->setRelation('books', $genre->books()->inRandomOrder()->limit(10)->get());
 
             foreach ($genre->books as $book) {
                 $book->progress = $book->getReadingProgress($user);

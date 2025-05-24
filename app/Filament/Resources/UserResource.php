@@ -136,8 +136,7 @@ class UserResource extends Resource
                     ->label('Umur')
                     ->tooltip(fn($record) => $record->birthdate?->format('d M Y') ?? false)
                     ->placeholder('-')
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('gender')
                     ->label('Jenis Kelamin')
                     ->sortable()
@@ -145,7 +144,7 @@ class UserResource extends Resource
                 TextColumn::make('reading_progress_count')
                     ->label('Jumlah Baca')
                     ->counts('readingProgress')
-                    ->suffix(' baca')
+                    ->suffix(' buku')
                     ->tooltip(fn($record) => $record->readingProgress->count() !== 0 ? $record->readingProgress->where('progress_percent', '>=', 99)->count() . ' selesai' : false)
                     ->toggleable()
                     ->sortable(),
@@ -469,7 +468,7 @@ class UserResource extends Resource
                                     }),
                                 TextEntry::make('total_payment')
                                     ->label('Total Pembayaran')
-                                    ->state(fn($record) => $record->payments->sum('amount'))
+                                    ->state(fn($record) => $record->payments->where('paid_at', '!=', null)->sum('amount'))
                                     ->money()
                                     ->badge()
                             ])

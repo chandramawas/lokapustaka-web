@@ -10,7 +10,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Mokhosh\FilamentRating\Columns\RatingColumn;
 use Mokhosh\FilamentRating\RatingTheme;
 
-class RatingBooksTable extends BaseWidget
+class PopularBooksTable extends BaseWidget
 {
     protected static ?int $sort = 5;
 
@@ -19,7 +19,7 @@ class RatingBooksTable extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('Buku Terbaik')
+            ->heading('Buku Terpopuler')
             ->description('Berdasarkan bintang terbanyak')
             ->headerActions([
                 Tables\Actions\Action::make('all')

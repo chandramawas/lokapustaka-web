@@ -8,13 +8,13 @@
             ['label' => $book->mainGenre->name, 'url' => route('book.genre.collection', $book->mainGenre->slug)],
             ['label' => $book->title, 'url' => route('book.detail', $book->slug)],
             ['label' => 'Ulasan', 'url' => route('book.reviews', $book->slug)],
-        ]" />
+        ]"/>
 @endsection
 
 @section('first-content')
     {{-- Cover Buku --}}
     <img src="{{ $book->cover_url ?? 'https://placehold.co/150x220?text=Poster+not+available.' }}"
-        class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
+         class="border border-outline-variant dark:border-outline-variant-dark object-cover aspect-[2/3] w-full">
 
     {{-- Core Buku --}}
     <div class="space-y-0.5">
@@ -32,8 +32,8 @@
 
     {{-- Overal Rating --}}
     <x-buttons.button variant="custom" icon
-        class="w-full shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark pointer-events-none">
-        <x-icons.star />
+                      class="w-full shadow-sm hover:shadow-md bg-secondary-container dark:bg-secondary-container-dark text-on-secondary-container dark:text-on-secondary-container-dark pointer-events-none">
+        <x-icons.star/>
         <span>
             {{ $book->rating_summary['average'] . ' (' . $book->rating_summary['count'] . ' Ulasan)' ?? 'Belum ada ulasan' }}
         </span>
@@ -58,7 +58,7 @@
     {{-- Jika Sudah Review => Edit Review --}}
     @if ($userReview)
         <div x-data="{ editMode: false }"
-            class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 rounded-xl shadow-md space-y-2 border border-primary">
+             class="bg-surface-container-low dark:bg-surface-container-low-dark p-3 rounded-xl shadow-md space-y-2 border border-primary">
 
             {{-- Header: Info & Button --}}
             <div class="flex justify-between items-start">
@@ -78,7 +78,7 @@
                 <div class="flex gap-0.5" x-show="!editMode">
                     @for ($j = 1; $j <= 5; $j++)
                         <x-icons.star variant="filled" height="24px"
-                            class="{{ $j <= $userReview->rating ? 'text-secondary-container dark:text-secondary-container-dark' : 'text-outline-variant dark:text-outline-variant-dark' }}" />
+                                      class="{{ $j <= $userReview->rating ? 'text-secondary-container dark:text-secondary-container-dark' : 'text-outline-variant dark:text-outline-variant-dark' }}"/>
                     @endfor
                 </div>
             </div>
@@ -99,8 +99,9 @@
             </div>
 
             {{-- Edit Form --}}
-            <form method="POST" action="{{ route('book.review.update', [$book->slug, $userReview->id]) }}" x-show="editMode"
-                class="space-y-2" x-cloak>
+            <form method="POST" action="{{ route('book.review.update', [$book->slug, $userReview->id]) }}"
+                  x-show="editMode"
+                  class="space-y-2" x-cloak>
                 @csrf
                 @method('PUT')
 
@@ -110,12 +111,12 @@
                     <div class="flex items-center gap-1" id="edit-rating-stars">
                         @for ($i = 1; $i <= 5; $i++)
                             <x-icons.star height="32px" variant="filled"
-                                class="star-edit text-outline-variant dark:text-outline-variant-dark cursor-pointer transition-colors duration-150"
-                                :data-rating="$i" />
+                                          class="star-edit text-outline-variant dark:text-outline-variant-dark cursor-pointer transition-colors duration-150"
+                                          :data-rating="$i"/>
                         @endfor
                     </div>
                     @error('rating')
-                        <x-forms.label textAlign="left">{{ $message }}</x-forms.label>
+                    <x-forms.label textAlign="left">{{ $message }}</x-forms.label>
                     @enderror
                     <input type="hidden" name="rating" id="edit-rating-input" value="{{ $userReview->rating }}">
                 </div>
@@ -123,7 +124,7 @@
                 {{-- Textarea --}}
                 <div class="space-y-1">
                     <h4 class="font-medium">Ulasan</h4>
-                    <x-forms.text-area name="review" rows="3" value="{{ $userReview->review }}" />
+                    <x-forms.text-area name="review" rows="3" value="{{ $userReview->review }}"/>
                 </div>
 
                 <div class="flex justify-end gap-2">
@@ -178,11 +179,12 @@
                 });
             </script>
         @endpush
-    @else {{-- Jika Belum Review => Buat Review --}}
+    @else
+        {{-- Jika Belum Review => Buat Review --}}
         <div
             class="bg-surface dark:bg-surface-dark border border-outline-variant dark:border-outline-variant-dark rounded-xl p-3 space-y-2">
             <form method="POST" action="{{ route('book.review.store', $book->slug) }}"
-                class="flex flex-col gap-2 md:gap-4 text-body-md md:text-body-lg lg:text-body-xl">
+                  class="flex flex-col gap-2 md:gap-4 text-body-md md:text-body-lg lg:text-body-xl">
                 @csrf
                 {{-- Rating (bintang) --}}
                 <div class="space-y-1">
@@ -190,12 +192,12 @@
                     <div class="flex items-center gap-1" id="rating-stars">
                         @for ($i = 1; $i <= 5; $i++)
                             <x-icons.star height="32px" variant="filled"
-                                class="star text-outline-variant dark:text-outline-variant-dark cursor-pointer transition-colors duration-150"
-                                :data-rating="$i" />
+                                          class="star text-outline-variant dark:text-outline-variant-dark cursor-pointer transition-colors duration-150"
+                                          :data-rating="$i"/>
                         @endfor
                     </div>
                     @error('rating')
-                        <x-forms.label textAlign="left">{{ $message }}</x-forms.label>
+                    <x-forms.label textAlign="left">{{ $message }}</x-forms.label>
                     @enderror
                 </div>
                 <input type="hidden" name="rating" id="rating-input">
@@ -203,7 +205,7 @@
                 {{-- Textarea Review --}}
                 <div class="space-y-1">
                     <h4 class="font-medium">Ulasan</h4>
-                    <x-forms.text-area name="review" placeholder="Bagikan pengalamanmu membaca buku ini..." rows="3" />
+                    <x-forms.text-area name="review" placeholder="Bagikan pengalamanmu membaca buku ini..." rows="3"/>
                 </div>
 
                 {{-- Tombol Submit --}}
@@ -262,7 +264,7 @@
     @endif
 
     {{-- Divider --}}
-    <hr class="border-outline-variant dark:border-outline-variant-dark" />
+    <hr class="border-outline-variant dark:border-outline-variant-dark"/>
 
     {{-- Filter Ulasan --}}
     <div class="space-y-1">
@@ -279,7 +281,7 @@
             '3' => '3 Bintang',
             '4' => '4 Bintang',
             '5' => '5 Bintang',
-        ]" />
+        ]"/>
 
                 {{-- Filter Sort --}}
                 <x-forms.select name="sort" :value="request('sort')" size="sm" :options="[
@@ -287,14 +289,14 @@
             'oldest' => 'Terlama',
             'highest' => 'Tertinggi',
             'lowest' => 'Terendah',
-        ]" />
+        ]"/>
 
                 {{-- Filter Review Teks --}}
                 <x-forms.select name="text" :value="request('text')" size="sm" :options="[
             '' => 'Semua Ulasan',
             'yes' => 'Dengan Teks',
             'no' => 'Tanpa Teks',
-        ]" />
+        ]"/>
 
             </div>
             <x-buttons.button type="submit" variant="secondary">
@@ -315,12 +317,12 @@
                         <p class="font-medium text-body-sm">
                             {{ $review->user->name ?? 'Anonim' }}
                             @if ($review->user->id && $review->user->id === auth()->user()->id)
-                                {{' (kamu)'}}
+                                (kamu)
                             @endif
                         </p>
                         <p class="text-label text-on-surface-variant dark:text-on-surface-variant-dark">
-                            {{ $review->created_at->diffForHumans() }}
-                            @if ($review->updated_at->gt($review->created_at))
+                            {{ $review->created_at ? $review->created_at->diffForHumans() : 'Tanggal tidak diketahui.' }}
+                            @if ($review->created_at && $review->updated_at->gt($review->created_at))
                                 <span class="italic">
                                     (diedit {{ $review->updated_at->diffForHumans() }})
                                 </span>
@@ -331,7 +333,7 @@
                     <div class="flex gap-0.5">
                         @for ($j = 1; $j <= 5; $j++)
                             <x-icons.star variant="filled" height="24px"
-                                class="{{ $j <= $review->rating ? 'text-secondary-container dark:text-secondary-container-dark' : 'text-outline-variant dark:text-outline-variant-dark' }}" />
+                                          class="{{ $j <= $review->rating ? 'text-secondary-container dark:text-secondary-container-dark' : 'text-outline-variant dark:text-outline-variant-dark' }}"/>
                         @endfor
                     </div>
                 </div>
@@ -356,8 +358,8 @@
         <div class="w-1/3 flex justify-start">
             @if (!$reviews->onFirstPage())
                 <a href="{{ $reviews->previousPageUrl() }}"
-                    class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
-                    <x-icons.chevron-left />
+                   class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
+                    <x-icons.chevron-left/>
                     <span class="hidden md:block">Sebelumnya</span>
                 </a>
             @endif
@@ -376,9 +378,9 @@
         <div class="w-1/3 flex justify-end">
             @if ($reviews->hasMorePages())
                 <a href="{{ $reviews->nextPageUrl() }}"
-                    class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
+                   class="w-fit flex items-center justify-center rounded-md text-center space-x-0.5 transition px-3 py-1 text-label border border-outline-variant dark:border-outline-variant-dark hover:border-outline dark:hover:border-outline-dark">
                     <span class="hidden md:block">Berikutnya</span>
-                    <x-icons.chevron-right />
+                    <x-icons.chevron-right/>
                 </a>
             @endif
         </div>

@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use Hash;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -18,25 +17,18 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $created_at = fake()->dateTimeBetween('-1 years', 'now');
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->email(),
-            'password' => Hash::make('root'),
-            'gender' => $this->faker->randomElement(['Laki-Laki', 'Perempuan', 'Lainnya']),
-            'birthdate' => $this->faker->dateTimeInInterval(),
-            'email_verified_at' => now(),
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => fake()->optional()->dateTimeBetween($created_at, 'now'),
+            'role' => 'user',
+            'password' => Hash::make('Lokapustaka2025'),
+            'gender' => fake()->optional()->randomElement(['Laki-Laki', 'Perempuan', 'Lainnya']),
+            'birthdate' => fake()->optional()->date(),
+            'is_banned' => fake()->boolean(5),
+            'created_at' => $created_at,
+            'updated_at' => fake()->dateTimeBetween($created_at, 'now'),
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return $this
-     */
-    public function unverified(): static
-    {
-        return $this->state(fn(array $attributes) => [
-            'email_verified_at' => null,
-        ]);
     }
 }

@@ -110,7 +110,7 @@ class SubscriptionsRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(),
             ])
-            ->defaultSort('updated_at', 'desc')
+            ->defaultSort('is_active', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('type')
                     ->label('Paket Langganan')

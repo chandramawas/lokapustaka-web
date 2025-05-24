@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Book;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +16,23 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
+        $rating = fake()->numberBetween(1, 5);
+
+        $reviewText = match ($rating) {
+            1, 2 => fake()->optional(0.7)->sentence() . ' Buku ini membosankan dan sulit dipahami. Tidak sesuai ekspektasi.',
+            3 => fake()->optional(0.6)->sentence() . ' Cukup menarik tapi ada beberapa bagian yang kurang jelas.',
+            4 => fake()->optional(0.7)->sentence() . ' Alur ceritanya bagus dan karakter-karakternya menarik.',
+            5 => fake()->optional(0.8)->sentence() . ' Buku yang sangat inspiratif dan mendalam. Sangat direkomendasikan!',
+            default => null,
+        };
+
+        $review_at = fake()->dateTimeBetween('-1 years', 'now');
+
         return [
-            'book_id' => Book::inRandomOrder()->first()->id,
-            'user_id' => User::inRandomOrder()->first()->id,
-            'rating' => $this->faker->numberBetween(1, 5),
-            'review' => $this->faker->sentence(12),
+            'rating' => $rating,
+            'review' => $reviewText,
+            'created_at' => $review_at,
+            'updated_at' => fake()->dateTimeBetween($review_at, 'now'),
         ];
     }
 }

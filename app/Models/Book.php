@@ -83,18 +83,13 @@ class Book extends Model
 
     public function scopeSort($query, $sort)
     {
-        switch ($sort) {
-            case 'az':
-                return $query->orderBy('title', 'asc');
-            case 'popular':
-                return $query->withCount('readingProgress')->orderBy('reading_progress_count', 'desc');
-            case 'rating':
-                return $query->withAvg('reviews', 'rating')->orderBy('reviews_avg_rating', 'desc');
-            case 'newest':
-                return $query->latest();
-            default:
-                return $query->orderBy('title', 'asc');
-        }
+        return match ($sort) {
+            'az' => $query->orderBy('title', 'asc'),
+            'popular' => $query->withSum('readingProgress', 'progress_percent')->orderBy('reading_progress_sum_progress_percent', 'desc'),
+            'rating' => $query->withAvg('reviews', 'rating')->orderBy('reviews_avg_rating', 'desc'),
+            'newest' => $query->latest(),
+            default => $query,
+        };
     }
 
     public function scopeFilterByGenre($query, $genreId)
