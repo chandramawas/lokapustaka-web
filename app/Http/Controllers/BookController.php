@@ -135,6 +135,9 @@ class BookController extends Controller
             });
         }
 
+        // Language filter
+        $query->language($request->lang);
+
         // Sorting
         $query->sort($request->sort);
 

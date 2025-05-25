@@ -31,15 +31,31 @@
                     @endif
                 </p>
             </div>
-            <form method="get" onchange="submit()" class="text-body-md">
-                <input type="hidden" name="q" value="{{ request('q') }}">
-                <x-forms.select name="sort" size="sm" :value="request('sort', 'az')" :options="[
+
+            <div class="flex items-center space-x-2">
+                {{-- Language Sort --}}
+                <form method="get" onchange="submit()" class="text-body-md">
+                    <input type="hidden" name="q" value="{{ request('q') }}">
+                    <x-forms.select name="lang" size="sm" :value="request('lang', 'all')" :options="[
+            'all' => 'Semua Bahasa',
+            'id' => 'Bahasa Indonesia',
+            'en' => 'English',
+        ]" />
+                    <input type="hidden" name="sort" value="{{ request('sort') }}">
+                </form>
+
+                {{-- Sort --}}
+                <form method="get" onchange="submit()" class="text-body-md">
+                    <input type="hidden" name="q" value="{{ request('q') }}">
+                    <input type="hidden" name="lang" value="{{ request('lang') }}">
+                    <x-forms.select name="sort" size="sm" :value="request('sort', 'az')" :options="[
             'az' => 'Judul A-Z',
             'newest' => 'Terbaru',
             'popular' => 'Terpopuler',
             'rating' => 'Rating Tertinggi',
         ]" />
-            </form>
+                </form>
+            </div>
         </div>
 
         {{-- Grid hasil buku --}}

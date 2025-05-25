@@ -81,6 +81,15 @@ class Book extends Model
         return $this->hasMany(ReadingProgress::class);
     }
 
+    public function scopeLanguage($query, $lang)
+    {
+        return match ($lang) {
+            'id' => $query->where('language', 'Bahasa Indonesia'),
+            'en' => $query->where('language', 'English'),
+            default => $query,
+        };
+    }
+
     public function scopeSort($query, $sort)
     {
         return match ($sort) {
