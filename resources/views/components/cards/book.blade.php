@@ -27,7 +27,7 @@
 
     {{-- Overlay --}}
     <div
-        class="absolute inset-0 flex flex-col justify-between p-2 bg-gradient-to-t from-surface-dark to-transparent opacity-0 group-hover:backdrop-brightness-75 group-hover:backdrop-blur-sm group-hover:opacity-100 transition duration-300">
+        class="absolute inset-0 flex flex-col justify-between p-2 bg-gradient-to-t from-shadow to-surface-dark/70 opacity-0 group-hover:backdrop-blur-sm group-hover:opacity-100 transition duration-300">
         <div>
             {{-- Penulis --}}
             <h5 class="text-label line-clamp-1 text-on-surface-variant-dark">
