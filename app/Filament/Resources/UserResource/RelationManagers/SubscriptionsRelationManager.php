@@ -61,7 +61,8 @@ class SubscriptionsRelationManager extends RelationManager
 
     protected static function setEndDate($type, callable $set): void
     {
-        if (!$type) return;
+        if (!$type)
+            return;
 
         $endDate = $type === 'bulanan'
             ? now()->addMonth()
@@ -95,12 +96,12 @@ class SubscriptionsRelationManager extends RelationManager
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->label('Tanggal Mulai')
-                    ->dateTime()
+                    ->date()
                     ->sinceTooltip()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
                     ->label('Tanggal Berakhir')
-                    ->dateTime()
+                    ->date()
                     ->sinceTooltip()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
@@ -117,7 +118,7 @@ class SubscriptionsRelationManager extends RelationManager
                     ->options([
                         'bulanan' => 'Bulanan',
                         'tahunan' => 'Tahunan',
-                    ])
+                    ]),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
@@ -160,7 +161,7 @@ class SubscriptionsRelationManager extends RelationManager
                             return Notification::make()->title('Berhasil menonaktifkan langganan')->success()->send();
                         }),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -203,7 +204,7 @@ class SubscriptionsRelationManager extends RelationManager
                     ->collapsible()
                     ->collapsed(),
 
-//                View Bagian 2 - Payment
+                //                View Bagian 2 - Payment
                 Section::make('Pembayaran')
                     ->schema([
                         TextEntry::make('payments.count')

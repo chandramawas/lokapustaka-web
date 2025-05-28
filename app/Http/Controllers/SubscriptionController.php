@@ -56,8 +56,9 @@ class SubscriptionController extends Controller
         $planId = $plan['id'];
         $price = $plan['price'];
         $year = now()->format('Y');
+        $month = now()->format('m');
 
-        $orderId = "{$year}-{$user->id}-{$planId}-" . strtoupper(Str::random(6));
+        $orderId = "{$year}{$month}-{$user->id}-{$planId}-" . strtoupper(Str::random(6));
 
         Payment::create(
             [
@@ -78,6 +79,14 @@ class SubscriptionController extends Controller
                 'first_name' => $user->name,
                 'email' => $user->email,
             ],
+            "item_details" => [
+                [
+                    "id" => $planId,
+                    "price" => $price,
+                    "quantity" => 1,
+                    "name" => $plan['name'],
+                ],
+            ],
         ];
 
         $snapUrl = Snap::createTransaction($payload)->redirect_url;
@@ -97,8 +106,6 @@ class SubscriptionController extends Controller
 
     public function midtransCallback(Request $request)
     {
-        Log::info('Midtrans Callback Hit! Data:', $request->all());
-
         $serverKey = config('midtrans.server_key');
         $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
@@ -174,7 +181,6 @@ class SubscriptionController extends Controller
                 return response()->json(['status' => 'success', 'message' => 'Pembayaran Berhasil!'], 200);
             } catch (\Exception $e) {
                 DB::rollBack();
-                Log::error("Midtrans Callback Error: " . $e->getMessage());
                 return response()->json(['status' => 'error', 'message' => 'Terjadi Kesalahan'], 500);
             }
         } else {
@@ -192,7 +198,6 @@ class SubscriptionController extends Controller
                 return response()->json(['message' => 'Status bukan settlement'], 200);
             } catch (\Exception $e) {
                 DB::rollBack();
-                Log::error("Midtrans Callback Error: " . $e->getMessage());
                 return response()->json(['status' => 'error', 'message' => 'Terjadi Kesalahan'], 500);
             }
         }

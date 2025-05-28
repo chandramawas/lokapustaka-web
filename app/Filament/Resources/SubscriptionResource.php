@@ -15,9 +15,11 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 
 class SubscriptionResource extends Resource
 {
@@ -71,7 +73,8 @@ class SubscriptionResource extends Resource
 
     protected static function setEndDate($type, callable $set): void
     {
-        if (!$type) return;
+        if (!$type)
+            return;
 
         $endDate = $type === 'bulanan'
             ? now()->addMonth()
@@ -116,12 +119,12 @@ class SubscriptionResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->label('Tanggal Mulai')
-                    ->dateTime()
+                    ->date()
                     ->sinceTooltip()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
                     ->label('Tanggal Berakhir')
-                    ->dateTime()
+                    ->date()
                     ->sinceTooltip()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
@@ -131,7 +134,7 @@ class SubscriptionResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('is_active', 'desc')
+            ->defaultSort('start_date', 'asc')
             ->filters([
                 Tables\Filters\SelectFilter::make('type')
                     ->label('Paket Langganan')
@@ -142,6 +145,7 @@ class SubscriptionResource extends Resource
                 Tables\Filters\TernaryFilter::make('is_active')
                     ->label('Status Langganan')
                     ->placeholder('Semua')
+                    ->default('true')
                     ->trueLabel('Aktif')
                     ->falseLabel('Tidak Aktif'),
             ])
@@ -183,11 +187,21 @@ class SubscriptionResource extends Resource
                             return Notification::make()->title('Berhasil menonaktifkan langganan')->success()->send();
                         }),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    BulkAction::make('set_inactive')
+                        ->label('Nonaktifkan')
+                        ->icon('heroicon-o-x-circle')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            $ids = $records->pluck('id')->all();
+                            Subscription::whereIn('id', $ids)->update(['is_active' => false]);
+                            return Notification::make()->title('Berhasil menonaktifkan langganan')->success()->send();
+                        }),
                 ]),
             ]);
     }
@@ -233,7 +247,7 @@ class SubscriptionResource extends Resource
                     ->collapsed()
                     ->collapsible(),
 
-//                View Bagian 2 - Payment
+                //                View Bagian 2 - Payment
                 Section::make('Pembayaran')
                     ->schema([
                         TextEntry::make('payments.count')

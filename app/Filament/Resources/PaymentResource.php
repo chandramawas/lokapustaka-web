@@ -33,18 +33,19 @@ class PaymentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('id')
-                    ->label('ID')
-                    ->disabled()
-                    ->required(),
-                Forms\Components\TextInput::make('subscription_id')
-                    ->label('SUB_ID')
+                Forms\Components\TextInput::make('order_id')
+                    ->label('Order ID')
                     ->disabled()
                     ->required(),
                 Forms\Components\Select::make('user_id')
                     ->label('Pengguna')
                     ->relationship('user', 'name')
                     ->disabled()
+                    ->required(),
+                Forms\Components\Select::make('subscription_id')
+                    ->label('SUB_ID')
+                    ->relationship('subscription', 'id', fn($query, $record) => $query->where('user_id', $record->user_id))
+                    ->native(false)
                     ->required(),
                 Forms\Components\TextInput::make('amount')
                     ->label('Jumlah Pembayaran')
@@ -58,8 +59,19 @@ class PaymentResource extends Resource
                     ->options([
                         'manual' => 'Manual',
                         'qris' => 'QRIS',
+                        'bank_transfer' => 'Virtual Account',
+                        'cstore' => 'Alfamart',
+                        'unknown' => 'Unknown',
                     ])
-                    ->default('manual')
+                    ->native(false)
+                    ->required(),
+                Forms\Components\Select::make('status')
+                    ->label('Metode Pembayaran')
+                    ->options([
+                        'completed' => 'Berhasil',
+                        'pending' => 'Pending',
+                        'failed' => 'Gagal',
+                    ])
                     ->native(false)
                     ->required(),
                 Forms\Components\DateTimePicker::make('paid_at')
@@ -72,15 +84,9 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('subscription_id')
-                    ->label('SUB_ID')
-                    ->formatStateUsing(fn($state) => 'SUB_' . $state)
-                    ->searchable()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('order_id')
+                    ->label('Order ID')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Pengguna')
                     ->color(fn($record) => $record->user->is_banned ? 'danger' : ($record->user->role === 'admin' ? 'secondary' : null))
@@ -92,8 +98,13 @@ class PaymentResource extends Resource
                     ->wrap()
                     ->weight(FontWeight::SemiBold)
                     ->searchable(),
+                Tables\Columns\TextColumn::make('subscription_id')
+                    ->label('SUB_ID')
+                    ->placeholder('-')
+                    ->formatStateUsing(fn($state) => 'SUB_' . $state),
                 Tables\Columns\TextColumn::make('subscription.type')
                     ->label('Paket')
+                    ->placeholder('-')
                     ->formatStateUsing(fn($state) => ucfirst($state)),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Jumlah')
@@ -101,8 +112,11 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('method')
                     ->label('Metode')
                     ->formatStateUsing(fn($state) => match ($state) {
-                        'manual' => 'Manual',
+                        'bank_transfer' => 'VA',
+                        'cstore' => 'Alfa',
                         'qris' => 'QRIS',
+                        'manual' => 'Manual',
+                        default => ucfirst($state),
                     }),
                 Tables\Columns\TextColumn::make('status')
                     ->label('Status')
@@ -120,6 +134,7 @@ class PaymentResource extends Resource
                 Tables\Columns\TextColumn::make('paid_at')
                     ->label('Tanggal Pembayaran')
                     ->dateTime()
+                    ->placeholder('-')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Data Dibuat')
@@ -133,8 +148,11 @@ class PaymentResource extends Resource
                     ->label('Metode Pembayaran')
                     ->native(false)
                     ->options([
-                        'manual' => 'Manual',
+                        'bank_transfer' => 'VA',
+                        'cstore' => 'Alfamart',
                         'qris' => 'QRIS',
+                        'manual' => 'Manual',
+                        'unknown' => 'Lainnya',
                     ])
                     ->query(function (Builder $query, array $data) {
                         if (!empty($data['value'])) {
@@ -177,7 +195,7 @@ class PaymentResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -227,11 +245,12 @@ class PaymentResource extends Resource
                     ->collapsed()
                     ->collapsible(),
 
-//                View Bagian 2 - Subscriptionn
+                //                View Bagian 2 - Subscriptionn
                 Section::make('Langganan')
                     ->schema([
                         TextEntry::make('id')
                             ->label('ID')
+                            ->placeholder('-')
                             ->state(fn($record) => $record->subscription_id),
                         TextEntry::make('type')
                             ->label('Paket Langganan')
@@ -252,12 +271,12 @@ class PaymentResource extends Resource
                         TextEntry::make('start_date')
                             ->label('Tanggal Mulai')
                             ->state(fn($record) => $record->subscription->start_date)
-                            ->dateTime()
+                            ->date()
                             ->sinceTooltip(),
                         TextEntry::make('end_date')
                             ->label('Tanggal Berakhir')
                             ->state(fn($record) => $record->subscription->end_date)
-                            ->dateTime()
+                            ->date()
                             ->sinceTooltip(),
                         TextEntry::make('updated_at')
                             ->label('Tanggal Diperbarui')
@@ -266,19 +285,26 @@ class PaymentResource extends Resource
                             ->sinceTooltip(),
                     ])
                     ->columns(4)
+                    ->visible(fn($record) => $record->subscription)
                     ->collapsed()
                     ->collapsible(),
 
-                TextEntry::make('id')
-                    ->label('ID'),
+                TextEntry::make('order_id')
+                    ->label('Order ID')
+                    ->badge()
+                    ->url(fn($record) => 'https://dashboard.sandbox.midtrans.com/beta/transactions?type=order_id&query=' . $record->order_id)
+                    ->openUrlInNewTab(),
                 TextEntry::make('amount')
                     ->label('Jumlah Pembayaran')
                     ->money(),
                 TextEntry::make('method')
                     ->label('Metode Pembayaran')
                     ->formatStateUsing(fn($state) => match ($state) {
-                        'manual' => 'Manual',
+                        'bank_transfer' => 'Virtual Account',
+                        'cstore' => 'Alfamart',
                         'qris' => 'QRIS',
+                        'manual' => 'Manual',
+                        default => ucfirst($state),
                     }),
                 TextEntry::make('status')
                     ->label('Status Pembayaran')
@@ -295,6 +321,7 @@ class PaymentResource extends Resource
                     ]),
                 TextEntry::make('paid_at')
                     ->label('Tanggal Pembayaran')
+                    ->placeholder('-')
                     ->dateTime(),
                 TextEntry::make('created_at')
                     ->label('Data Dibuat')
