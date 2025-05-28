@@ -6,31 +6,6 @@
 
 @section('content')
     <div class="mx-auto p-4 space-y-4">
-
-        @if (session('status'))
-            <div x-data="{ open: true }" class="relative">
-                <x-ui.modal showClose>
-                    <div class="text-center space-y-3">
-                        <h2 class="text-heading-md md:text-heading-lg font-bold text-primary dark:text-primary-dark">
-                            {{ session('status_title') }}
-                        </h2>
-                        <p class="text-body-md text-pretty text-on-surface-variant dark:text-on-surface-variant-dark">
-                            {{ session('status_message') }}
-                        </p>
-                        @if (session('status') === 'success')
-                            <x-buttons.button href="{{ route('account.subscription-info') }}" variant="primary-lg" class="w-full">
-                                Lihat Info Langganan
-                            </x-buttons.button>
-                        @elseif (session('status') === 'failed')
-                            <x-buttons.button @click="open = false" variant="outline-lg" class="w-full">
-                                Kembali
-                            </x-buttons.button>
-                        @endif
-                    </div>
-                </x-ui.modal>
-            </div>
-        @endif
-
         <h2 class="font-bold text-heading-md md:text-heading-lg lg:text-heading-xl text-center">
             Konfirmasi Langganan
         </h2>

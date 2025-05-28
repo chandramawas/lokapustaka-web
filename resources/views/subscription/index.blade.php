@@ -4,7 +4,18 @@
 
 @section('navbar', view('layouts.navbar'))
 
+
 @section('content')
+    @if (session('error'))
+        <div x-data="{ open: true }" class="relative">
+            <x-ui.modal showClose>
+                <h2 class="text-heading-sm md:text-heading-md font-bold">
+                    {{ session('error') }}
+                </h2>
+            </x-ui.modal>
+        </div>
+    @endif
+
     <div class="flex flex-col space-y-4 p-3 min-h-[calc(100vh-4rem)] justify-center items-center">
         {{-- Title --}}
         <div class="max-w-3xl mx-auto space-y-2">

@@ -86,6 +86,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('subscription.checkout');
     Route::post('/subscription/pay', [SubscriptionController::class, 'pay'])
         ->name('subscription.pay');
+    Route::get('/subscription/finish', [SubscriptionController::class, 'finish'])
+        ->name('subscription.finish');
 
     //Homepage
     Route::get('/', [HomeController::class, 'index'])

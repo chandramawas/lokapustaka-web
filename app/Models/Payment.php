@@ -16,6 +16,7 @@ class Payment extends Model
         'status',
         'method',
         'paid_at',
+        'order_id',
     ];
 
     //Relasi ke model Subscription

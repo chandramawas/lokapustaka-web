@@ -4,7 +4,7 @@
         <!-- Left: Logo / Brand -->
 
         <x-buttons.text-button href="{{ route('home') }}">
-            <x-icons.logo/>
+            <x-icons.logo />
             <span class="ml-2 flex flex-col">
                 <span class="font-medium text-body-md md:text-body-lg">Lokapustaka</span>
                 <span class="font-light text-label">Baca Buku Digital Tanpa Batas</span>
@@ -16,8 +16,10 @@
             <a href="#" class="hover:underline" aria-label="Tentang Lokapustaka">Tentang</a>
             <a href="#" class="hover:underline" aria-label="Kontak Lokapustaka">Kontak</a>
             <a href="#" class="hover:underline" aria-label="Kebijakan Lokapustaka">Kebijakan</a>
-            <a href="{{ route('filament.admin.auth.login') }}" class="hover:underline"
-               aria-label="Login sebagai Admin Lokapustaka">Login Admin</a>
+            @guest
+                <a href="{{ route('filament.admin.auth.login') }}" class="hover:underline"
+                    aria-label="Login sebagai Admin Lokapustaka">Login Admin</a>
+            @endguest
         </div>
 
         <!-- Right: Copyright -->
