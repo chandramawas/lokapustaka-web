@@ -13,12 +13,13 @@
 
         <!-- Center: Links -->
         <div class="flex space-x-4 text-body-sm md:text-body-md">
-            <a href="#" class="hover:underline" aria-label="Tentang Lokapustaka">Tentang</a>
-            <a href="#" class="hover:underline" aria-label="Kontak Lokapustaka">Kontak</a>
-            <a href="#" class="hover:underline" aria-label="Kebijakan Lokapustaka">Kebijakan</a>
+            <x-buttons.text-button href="#" onclick="alert('Coming Soon')" underlineHover>Tentang
+                Lokapustaka</x-buttons.text-button>
+            <x-buttons.text-button href="#" onclick="alert('Coming Soon')"
+                underlineHover>Kebijakan</x-buttons.text-button>
             @guest
-                <a href="{{ route('filament.admin.auth.login') }}" class="hover:underline"
-                    aria-label="Login sebagai Admin Lokapustaka">Login Admin</a>
+                <x-buttons.text-button :href="route('filament.admin.auth.login')" underlineHover>Login
+                    Admin</x-buttons.text-button>
             @endguest
         </div>
 

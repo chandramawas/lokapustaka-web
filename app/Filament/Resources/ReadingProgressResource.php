@@ -15,6 +15,7 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -35,6 +36,13 @@ class ReadingProgressResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()->exports([
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                ])
+                    ->label('Ekspor Semua'),
+            ])
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Pengguna')
@@ -110,6 +118,15 @@ class ReadingProgressResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+            ])
+            ->bulkActions([
+                BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make()->exports([
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                    ])
+                        ->label('Ekspor yang dipilih'),
+                ]),
             ]);
     }
 

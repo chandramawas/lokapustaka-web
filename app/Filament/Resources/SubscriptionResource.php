@@ -86,6 +86,13 @@ class SubscriptionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()->exports([
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                ])
+                    ->label('Ekspor Semua'),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('ID')
@@ -191,6 +198,11 @@ class SubscriptionResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make()->exports([
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                    ])
+                        ->label('Ekspor yang dipilih'),
                     Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('set_inactive')
                         ->label('Nonaktifkan')

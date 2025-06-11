@@ -15,6 +15,7 @@ use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\IconPosition;
 use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -128,6 +129,13 @@ class ReviewResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()->exports([
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                ])
+                    ->label('Ekspor Semua'),
+            ])
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Pengguna')
@@ -227,7 +235,7 @@ class ReviewResource extends Resource
 
                         return $query->whereHas('user.readingProgress', function ($q) use ($min, $max) {
                             $q->whereColumn('book_id', 'reviews.book_id')
-                                ->whereBetween('progress_percent', [(int)$min, (int)$max]);
+                                ->whereBetween('progress_percent', [(int) $min, (int) $max]);
                         });
                     }),
             ])
@@ -238,7 +246,14 @@ class ReviewResource extends Resource
                 ]),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make()->exports([
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                    ])
+                        ->label('Ekspor yang dipilih'),
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 

@@ -107,7 +107,13 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('title')
+            ->headerActions([
+                \pxlrbt\FilamentExcel\Actions\Tables\ExportAction::make()->exports([
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                    \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                ])
+                    ->label('Ekspor Semua'),
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama')
@@ -309,10 +315,15 @@ class UserResource extends Resource
                         )
                         ->visible(fn($record) => $record->is_banned),
                     Tables\Actions\DeleteAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    \pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction::make()->exports([
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('tabel')->fromTable()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Tabel)'),
+                        \pxlrbt\FilamentExcel\Exports\ExcelExport::make('model')->fromModel()->withFilename(fn($resource) => date('Y-m-d') . ' - ' . $resource::getLabel() . ' (Model)'),
+                    ])
+                        ->label('Ekspor yang dipilih'),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
@@ -322,7 +333,7 @@ class UserResource extends Resource
     {
         return $infolist
             ->schema([
-//                View Bagian 1 - Detail
+                //                View Bagian 1 - Detail
                 Section::make('Detail Pengguna')
                     ->schema([
                         TextEntry::make('name')
@@ -367,7 +378,7 @@ class UserResource extends Resource
                     ->id('user_detail')
                     ->columns(2),
 
-//                View Bagian 2 - Langganan Terkini / Terakhir
+                //                View Bagian 2 - Langganan Terkini / Terakhir
                 Section::make('Langganan Terkini')
                     ->schema([
                         TextEntry::make('subscription_type')
@@ -405,7 +416,7 @@ class UserResource extends Resource
                     ->visible(fn($record) => $record->subscriptions->count() > 0)
                     ->columns(4),
 
-//                 View Bagian 3 - Statistik
+                //                 View Bagian 3 - Statistik
                 Section::make('Statistik')
                     ->schema([
                         Fieldset::make('Baca')
@@ -470,7 +481,7 @@ class UserResource extends Resource
                                     ->label('Total Pembayaran')
                                     ->state(fn($record) => $record->payments->where('paid_at', '!=', null)->sum('amount'))
                                     ->money()
-                                    ->badge()
+                                    ->badge(),
                             ])
                             ->visible(fn($record) => $record->subscriptions->count() > 0)
                             ->columns(4),

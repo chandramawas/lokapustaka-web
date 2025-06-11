@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Route;
 // Welcome Page
 Route::get('/welcome', [WelcomeController::class, 'index'])
     ->name('welcome');
+Route::get('/about', [WelcomeController::class, 'about'])
+    ->name('about');
 
 // Auth Routes
 Route::post('/register', [AuthController::class, 'register']);
